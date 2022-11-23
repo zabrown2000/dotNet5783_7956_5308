@@ -1,10 +1,35 @@
 ﻿namespace DO;
 
+/// <summary>
+/// Structure for a product entity
+/// </summary>
 public struct Products
 {
+    /// <summary>
+    /// Unique id for a product
+    /// </summary>
     public int ID { get; set; }
-    public string Name { get; set; }
-    public Category Category {get; set;}
-    public int Amount { get; set; }
-    //need to add the in stock thing
-    }
+    /// <summary>
+    /// Name of product
+    /// </summary>
+    public String Name { get; set; }
+    /// <summary>
+    /// Category of product
+    /// </summary>
+    public Categories Category {get; set;}
+    /// <summary>
+    /// Cost of product
+    /// </summary>
+    public int Price { get; set; }
+    /// <summary>
+    /// Quantity of product in stock
+    /// </summary>
+    public int InStock { get; set; }
+
+    public override String ToString() => $@"
+        Product ID={ID}: {Name},
+        Category - {Category}
+        Price: {Price}
+        Amount in stock: {InStock}
+        ";
+}

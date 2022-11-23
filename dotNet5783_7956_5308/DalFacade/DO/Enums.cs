@@ -1,8 +1,14 @@
-﻿namespace DO;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.ComponentModel;
 
-public Enums{
-public enum Category {b,a };
+namespace DO;
+
+
+public enum Categories {mixer, blender, oven, fridge, freezer, stove, kettle};
 
 public enum OrderStatus { };
 
-}
