@@ -16,7 +16,7 @@ public struct Products
     /// <summary>
     /// Category of product
     /// </summary>
-    public Categories Category {get; set;}
+    public Enums.Categories Category {get; set;}
     /// <summary>
     /// Cost of product
     /// </summary>
