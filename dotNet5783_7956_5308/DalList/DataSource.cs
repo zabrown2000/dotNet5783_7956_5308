@@ -8,7 +8,7 @@ static internal class DataSource
     /// <summary>
     /// Readonly static field for generating random numbers
     /// </summary>
-    static readonly Random randNumGen = new Random();
+    static internal readonly Random randNumGen = new Random();
 
     /*Note to Grader: Prof. Kelman said we can go straight to lists instead of doing the array now and list later*/
 
@@ -88,20 +88,9 @@ static internal class DataSource
     /// </summary>
     static private void PushOrders()
     {
-        /*
-         ○ For 80% of the orders, a shipping date should be registered to a later time
-            than the order’s creation time. Otherwise no date.
-         ○ A delivery date will be added to 60% of the shipped orders. Otherwise - no date.
-        
-         ○ Dates:
-            ■ All missing values of type DateTime should be initialized with DateTime.MinValue
-            ■ Ordered date values - use TimeSpan and add an interval chosen at random. Again, be reasonable with the interval range.
-       */
-        //#region arrays:customerName,customerEmail, and address.
-
         //Setting up initial 20 orders for our store
         String[] CustomerName = { "Adam", "Boris", "Cara", "David", "Edgar", "Franny", "Greg", "Hannah", "Iris", "Joey", "Kate", "Luke", "Morgan", "Nancy", "Oswald", "Peter", "Queeny", "Roberta", "Shira", "Tevye", "Uriel", "Violet", "Walter", "Xena", "Yuri", "Zahava"  };
-        String[] CustomerEmail = {"aaa@mail.com", "bbb@mail.com", "ccc@mail.com", "ddd@mail.com", "eee@mail.com", "fff@mail.com", "ggg@mail.com", "hh@gamil.com",  "ii@gamil.com", "jj@gamil.com", "kk@gamil.com", "lll@mail.com",
+        String[] CustomerEmail = {"aaa@mail.com", "bbb@mail.com", "ccc@mail.com", "ddd@mail.com", "eee@mail.com", "fff@mail.com", "ggg@mail.com", "hhh@mail.com",  "iii@mail.com", "jjj@mail.com", "kkk@mail.com", "lll@mail.com",
                                  "mmm@mail.com", "ooo@mail.com", "ppp@mail.com", "qqq@mail.com", "rrr@mail.com", "sss@mail.com","ttt@mail.com", "uuu@mail.com", "vvv@mail.com", "www@mail.com", "xxx@mail.com", "yyy@mail.com", "zzz@mail.com"};
         String[] CustomerAddress = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
 
@@ -114,12 +103,23 @@ static internal class DataSource
                 CustomerName = CustomerName[randNumGen.Next(CustomerName.Length)],
                 CustomerEmail = CustomerEmail[randNumGen.Next(CustomerEmail.Length)],
                 CustomerAddress = CustomerAddress[randNumGen.Next(CustomerAddress.Length)],
-                OrderDate = DateTime.Now - new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L)),
+                OrderDate = DateTime.Now - new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L)), //using TimeSpan to add an interval chosen at random
                 ShipDate = DateTime.MinValue,
                 DeliveryDate = DateTime.MinValue
             };
-            myOrder.ShipDate = myOrder.OrderDate + new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L));//
-            myOrder.DeliveryDate = myOrder.ShipDate + new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L));//
+            if (i < 4) //hardcoding the 20% of current orders to not have been shipped yet 
+            {
+               _orderList.Add(myOrder);
+                return;
+            }
+            myOrder.ShipDate = myOrder.OrderDate + new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L)); //using TimeSpan to add an interval chosen at random
+            
+            if (i >= 4 && i < 10) //hardcoding 40% of current shipped items to not have a delivery date yet
+            {
+                _orderList.Add(myOrder);
+                return;
+            }
+            myOrder.DeliveryDate = myOrder.ShipDate + new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L)); //using TimeSpan to add an interval chosen at random
             _orderList.Add(myOrder); 
         }
     }
