@@ -5,7 +5,7 @@
 /// </summary>
 public struct Enums
 {
-    public enum Categories { mixer, blender, oven, fridge, freezer, stove, kettle };
+    public enum Categories { Mixer, Blender, Oven, Fridge, Freezer, Stove, Kettle };
 
     public enum OrderStatus { };
 }

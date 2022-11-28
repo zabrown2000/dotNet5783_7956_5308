@@ -1,5 +1,5 @@
 ﻿using DO;
-
+              //NEED TO ADD COMMENTS - should the 10,20,40 be parameters? Maor's fns are hardcoded with these, he says they should be arguments?
 namespace Dal;
 
 static internal class DataSource
@@ -8,66 +8,87 @@ static internal class DataSource
     /// <summary>
     /// Readonly static field for generating random numbers
     /// </summary>
-    static readonly Random randNumGen = new Random(); //"This field should be initialized in the class’s declaration" - how?
+    static readonly Random randNumGen = new Random();
+
+    /*Note to Grader: Prof. Kelman said we can go straight to lists instead of doing the array now and list later*/
 
     /// <summary>
-    /// Array to hold list of products
+    /// List to hold the products
     /// </summary>
-    static internal Products[] _productList = new Products[50];
+    static internal List<Products> _productList = new List<Products> { }; //total of 50 products
 
     /// <summary>
-    /// Array to hold list of orders
+    ///List to hold the orders
     /// </summary>
-    static internal Order[] _orderList = new Order[100];
+    static internal List<Order> _orderList = new List<Order> { }; //total of 100 orders
 
     /// <summary>
-    /// Array to hold list of orderItems
+    /// List to hold the orderItems
     /// </summary>
-    static internal OrderItem[] _orderItemList = new OrderItem[200];
+    static internal List<OrderItem> _orderItemList = new List<OrderItem> { }; //total of 200 order-items
 
-    /*○ Add a nested class Config, declared internal.
-■ Add internal static fields to index the first available element in each entity
-array. These should be initialized with zero values.
-■ Add private static fields for the last available running (integer) identifier in
-each object where an auto-incremental identifier field exists. These should be
-initialized with the next available identifier in each entity array.
-■ For every such index field, add only a get()interface that will increment the
-field’s value by 1 with each call.*/
-
+    /// <summary>
+    /// Internal class to help us automate the creation of order, product, and orderItem IDs
+    /// </summary>
+    internal static class Config
+    {
+        //Order numbers setup
+        internal const int s_startOrderNumber = 1000; //decided to make order numbers 4 digits
+        private static int s_nextOrderNumber = s_startOrderNumber;
+        internal static int NextOrderNumber { get => ++s_nextOrderNumber; } //each time the value is "get-ed" it will increment the value by 1
+        //Product numbers setup
+        internal const int s_startProductNumber = 100000; //needs to be a 6 digit number, so this is the minimum it can be
+        public static int s_nextProductNumber = s_startProductNumber; 
+        internal static int NextProductNumber { get => ++s_nextProductNumber; } //each time the value is "get-ed" it will increment the value by 1
+        //OrderItem numbers setup
+        internal const int s_startOrderItemNumber = 0;
+        public static int s_nextOrderItemNumber = s_startOrderItemNumber;
+        internal static int NextOrderItemNumber { get => ++s_nextOrderItemNumber; } //each time the value is "get-ed" it will increment the value by 1
+    }
 
     /*--------Class Methods--------*/
-    static public DataSource() { s_Initialize(); } 
+    /// <summary>
+    /// Default constructor
+    /// </summary>
+    static DataSource() { s_Initialize(); } 
 
     /// <summary>
     /// Method to fill up the data entities with initial values
     /// </summary>
-    private void s_Initialize()
+    static private void s_Initialize()
     {
         PushProducts();
         PushOrders();
         PushOrderItems();
     }
 
-    private void PushProducts()
+    /// <summary>
+    /// Initializing our products list with the first 10 products
+    /// </summary>
+    static private void PushProducts()
     {
-        /*10 items
-         ○ Each product should own a unique 6-digit identifier, chosen at random or manually.
-         ○ The products should be grouped into categories.
-         ○ Each product will carry a (reasonable) retail price, and a name
-         ○ Each product will be stocked according to the following prescription: 5% of the
-            products are out of stock (quantity=0). The remainder will be stocked at
-            quantities greater than zero*/
+        //Setting up the initial 10 products in our store
+        String[] NameOfApplicance = { "Kitchen Aid Mixer", "Ninja Blender", "Masimo Oven", "LG Fridge", "Samsung Freezer", "Electra Stove", "GoldLine Kettle" }; //The names of our products
+        
+        for (int i = 0; i < 10; i++)
+        {
+            _productList.Add( new() //creating a new product and setting the values to go in our array
+            {
+                ID = Config.NextProductNumber,
+                Price = randNumGen.Next(50, 3000),
+                Name = NameOfApplicance[randNumGen.Next(NameOfApplicance.Length)],
+                Category = (Enums.Categories)randNumGen.Next(0, 8),
+                InStock = (i < 3) ? 0 : randNumGen.Next(19, 48) //hardcoding first 5% of products to have 0 stock
+            });
+        }
     }
 
-    private void PushOrders()
+    /// <summary>
+    /// Initializing our orders list with the first 20 orders
+    /// </summary>
+    static private void PushOrders()
     {
-        /*20 items
-         ○ Each order should own a serial identifier (utilizing a Config class). Each
-            order should also register a customer’s name, physical address and email.
-            One customer may own several orders, however, please make sure that the
-            system stores more than one customer with orders.
-         ○ Dates will pre-date the current time DateTime.Now
-         ○ All orders will have an order creation date.
+        /*
          ○ For 80% of the orders, a shipping date should be registered to a later time
             than the order’s creation time. Otherwise no date.
          ○ A delivery date will be added to 60% of the shipped orders. Otherwise - no date.
@@ -76,28 +97,57 @@ field’s value by 1 with each call.*/
             ■ All missing values of type DateTime should be initialized with DateTime.MinValue
             ■ Ordered date values - use TimeSpan and add an interval chosen at random. Again, be reasonable with the interval range.
        */
+        //#region arrays:customerName,customerEmail, and address.
+
+        //Setting up initial 20 orders for our store
+        String[] CustomerName = { "Adam", "Boris", "Cara", "David", "Edgar", "Franny", "Greg", "Hannah", "Iris", "Joey", "Kate", "Luke", "Morgan", "Nancy", "Oswald", "Peter", "Queeny", "Roberta", "Shira", "Tevye", "Uriel", "Violet", "Walter", "Xena", "Yuri", "Zahava"  };
+        String[] CustomerEmail = {"aaa@mail.com", "bbb@mail.com", "ccc@mail.com", "ddd@mail.com", "eee@mail.com", "fff@mail.com", "ggg@mail.com", "hh@gamil.com",  "ii@gamil.com", "jj@gamil.com", "kk@gamil.com", "lll@mail.com",
+                                 "mmm@mail.com", "ooo@mail.com", "ppp@mail.com", "qqq@mail.com", "rrr@mail.com", "sss@mail.com","ttt@mail.com", "uuu@mail.com", "vvv@mail.com", "www@mail.com", "xxx@mail.com", "yyy@mail.com", "zzz@mail.com"};
+        String[] CustomerAddress = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z" };
+
+        
+        for (int i = 0; i < 20; i++)
+        {
+            Order myOrder = new() //creating a new order and setting the values to go in our array
+            {
+                ID = Config.NextProductNumber,
+                CustomerName = CustomerName[randNumGen.Next(CustomerName.Length)],
+                CustomerEmail = CustomerEmail[randNumGen.Next(CustomerEmail.Length)],
+                CustomerAddress = CustomerAddress[randNumGen.Next(CustomerAddress.Length)],
+                OrderDate = DateTime.Now - new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L)),
+                ShipDate = DateTime.MinValue,
+                DeliveryDate = DateTime.MinValue
+            };
+            myOrder.ShipDate = myOrder.OrderDate + new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L));//
+            myOrder.DeliveryDate = myOrder.ShipDate + new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L));//
+            _orderList.Add(myOrder); 
+        }
     }
 
-    private void PushOrderItems()
+    /// <summary>
+    /// Initializing our orderItems list with the first 40 orderItems
+    /// </summary>
+    static private void PushOrderItems()
     {
-        /*40 items
-         ○ Each of these should own a serial identifier (utilizing a Config class).
-         ○ Non-null order and product identifiers are mandatory in an OrderItem instance.
-         ○ Each order should have between one and four products.
-         ○ Product quantities should be random. Please set reasonable ranges.
-         ○ The actual price of a product will be retrieved from its retail price.*/
+
+
+        //Setting up initial 40 order-product pairs
+        for (int i = 0; i < 40; i++)
+        {
+            Products product = _productList[randNumGen.Next(_productList.Count)]; 
+            _orderItemList.Add( new OrderItem //creating a new orderItem and setting the values to go in our array
+            {
+                ID = Config.NextOrderItemNumber,
+                ProductID = product.ID,
+                OrderID = randNumGen.Next(Config.s_startOrderNumber, Config.s_startOrderNumber + _orderList.Count), 
+                Price = product.Price,
+                Amount = randNumGen.Next(5)
+            });
+        }
     }
 
 }
 
-/*The DataSource class:
-○ Be reasonable with initialized values. The values should be coordinated across per the
-requirements listed in the mini-project’s general description.
- ○ Object identifiers
-            ■ Implement auto-incrementing identifiers for new objects using a property in the
-                internal class Config (see below)
-            ■ (non-object) identifier values should be chosen at random as described in the
-            project’s general description.
-*/
+
 
 
