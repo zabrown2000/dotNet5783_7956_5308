@@ -1,12 +1,9 @@
 ﻿using System;
+using System.Linq;
 using DO;
 namespace Dal;
 
-/*Implementing the data layer for order details OrderItem: In addition to the classic access
-methods (CRUD) we expect to find the following
-● Get/Set an OrderItem given two identifiers - product ID and order ID. The return
-value is the respective OrderItem record.
-● Get/Set the list of items in an order, given the order ID*/
+
 public class DalOrderItem
 {
     public int Add(OrderItem orderItem)//add OrderItem to the orderItem list and return its id
@@ -45,7 +42,7 @@ public class DalOrderItem
         return orderItem;
     }
 
-    public List<OrderItem> GetAll()
+    public List<OrderItem> ReadAll()
     {
         return DataSource._orderItemList.ToList();
     }
@@ -96,29 +93,41 @@ public class DalOrderItem
         }
     }
 
-    public List<OrderItem> ItemsInOrder(int id)   //returns a list of products in order number of id
+    /// <summary>
+    /// Function to get the list of items in an order, given the order ID
+    /// </summary>
+    /// <param name="orderId">id of order item with the products we want</param>
+    /// <returns>returns a list of products (by id) in order number of id</returns>
+    public List<int> ProductsInOrderItem (int orderId)   
     {
-        List<OrderItem> orderItems = new List<OrderItem>();
+        List<int> productsInOrder = new List<int>();
         foreach (OrderItem orderItem in DataSource._orderItemList) //go over OrderItem list
         {
-            if (orderItem.ID == id) //if found a matching id to the one inputted
-                orderItems.Append(orderItem); //add to the list
-        } 
-        return orderItems; //return the products
+            if (orderItem.OrderID == orderId) //if found a matching id to the one inputted
+                productsInOrder.Append(orderItem.ProductID); //add to the list
+                //productsInOrder.Append(orderItem); //add to the list
+        }
+        return productsInOrder; //return the products
     }
 
-    public OrderItem ItemOfOrder(int id, int productId) //returns specific product from order of id
+    /// <summary>
+    /// Get an OrderItem given two identifiers - product ID and order ID
+    /// </summary>
+    /// <param name="orderId">order id in the orderItem</param>
+    /// <param name="productId">product id in the orderItem</param>
+    /// <returns>Respective OrderItem record</returns>
+    public OrderItem GetOrderItem (int orderId, int productId) //returns specific product from order of id
     {
-        OrderItem returnOI = new();
+        OrderItem returnItem = new();
         
         foreach (OrderItem orderItem in DataSource._orderItemList) //go over OrderItem list
         {
-            if (orderItem.OrderID == id && orderItem.ProductID == productId) //if found and orderItem that matches the given ID and product
+            if (orderItem.OrderID == orderId && orderItem.ProductID == productId) //if found and orderItem that matches the given ID and product
             {
-                    returnOI = orderItem; //save the orderItem
+                returnItem = orderItem; //save the orderItem
             }
         } //find the order of id with product
-        return returnOI; //return the OrderItem
+        return returnItem; //return the OrderItem
     }
 
 }

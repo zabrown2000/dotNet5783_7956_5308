@@ -42,7 +42,7 @@ public class DalOrder
         return order;
     }
 
-    public List<Order> GetAll()
+    public List<Order> ReadAll()
     {
         return DataSource._orderList.ToList();
     }
