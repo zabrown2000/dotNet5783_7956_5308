@@ -59,8 +59,16 @@ public class DalOrder
             }
 
         }
-        Order toDelete = DataSource._orderList[index]; //getting order at index of id want to delete
-        DataSource._orderList.Remove(toDelete); //removing order from the list
+        if (index != -1) //check to make sure actually deleting item that exists
+        {
+            Order toDelete = DataSource._orderList[index]; //getting order at index of id want to delete
+            DataSource._orderList.Remove(toDelete); //removing order from the list
+        }
+        else
+        {
+            throw new Exception("Order does not exist\n");
+        }
+        
     }
 
 

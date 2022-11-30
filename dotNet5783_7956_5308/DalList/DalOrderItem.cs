@@ -52,7 +52,7 @@ public class DalOrderItem
 
     public void Delete(int id)
     {
-        int index = 0;
+        int index = -1;
         foreach (OrderItem orderItem in DataSource._orderItemList) //searching for orderItem in list based on ID
         {
             if (orderItem.ID == id) //if found id in the list
@@ -62,8 +62,16 @@ public class DalOrderItem
             }
 
         }
-        OrderItem toDelete = DataSource._orderItemList[index]; //getting orderItem at index of id want to delete
-        DataSource._orderItemList.Remove(toDelete); //removing orderItem from the list
+        if (index != -1) //check to make sure actually deleting item that exists
+        {
+            OrderItem toDelete = DataSource._orderItemList[index]; //getting orderItem at index of id want to delete
+            DataSource._orderItemList.Remove(toDelete); //removing orderItem from the list
+        }
+        else
+        {
+            throw new Exception("OrderItem does not exist\n");
+        }
+        
     }
 
     public void Update(OrderItem orderItem)

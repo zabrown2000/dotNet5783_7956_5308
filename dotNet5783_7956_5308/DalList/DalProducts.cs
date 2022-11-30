@@ -52,7 +52,7 @@ public class DalProducts
 
     public void Delete(int id)
     {
-        int index = 0;
+        int index = -1;
         foreach (Products product in DataSource._productList) //searching for product in list based on ID
         {
             if (product.ID == id) //if found id in the catalog
@@ -62,8 +62,15 @@ public class DalProducts
             }
                 
         }
-        Products toDelete = DataSource._productList[index]; //getting product at index of id want to delete
-        DataSource._productList.Remove(toDelete); //removing product from the list
+        if (index != -1) //check to make sure actually deleting item that exists
+        {
+            Products toDelete = DataSource._productList[index]; //getting product at index of id want to delete
+            DataSource._productList.Remove(toDelete); //removing product from the list
+        } else
+        {
+            throw new Exception("Product does not exist\n");
+        }
+       
     }
 
     public void Update(Products product)

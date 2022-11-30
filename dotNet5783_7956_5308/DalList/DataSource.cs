@@ -131,7 +131,7 @@ static internal class DataSource
     {
 
 
-        //Setting up initial 40 order-product pairs
+        //Setting up initial 40 Order-Product pairs
         for (int i = 0; i < 40; i++)
         {
             Products product = _productList[randNumGen.Next(_productList.Count)]; 
