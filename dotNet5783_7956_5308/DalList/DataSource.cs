@@ -99,7 +99,7 @@ static internal class DataSource
         {
             Order myOrder = new() //creating a new order and setting the values to go in our array
             {
-                ID = Config.NextProductNumber,
+                ID = Config.NextOrderNumber,
                 CustomerName = CustomerName[randNumGen.Next(CustomerName.Length)],
                 CustomerEmail = CustomerEmail[randNumGen.Next(CustomerEmail.Length)],
                 CustomerAddress = CustomerAddress[randNumGen.Next(CustomerAddress.Length)],
