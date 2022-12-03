@@ -2,6 +2,9 @@
 using DO;
 using System;
 using static DO.Enums;
+using static Dal.DalOrder;
+using static Dal.DalOrderItem;
+using static Dal.DalProducts;
 
 
 namespace Test;
@@ -35,28 +38,174 @@ internal class DalTesting
                     stopFlag = false;
                     Console.WriteLine("Goodbye\n");
                     break;
+
                 case Enums.EntityType.Products :      //make a function that send entiry and it prints menu with appropiate entity inside
                                                       //see slides on how to print with vars. Read input, cast it to enum, return it
-                    //product menu
                     action = HelperFunctions.PrintMenu("product");
-                    //new switch based on submenu
+                    switch (action)
+                    {
+                        case Enums.ActionType.Add:
+                            //add fn
+                            try
+                            {
+                                //
+                            } catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.Delete:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.Update:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.ReadId:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.ReadAll:
+                            //print items of list
+                            
+                            break;
+                    }
                     break;
+
                 case Enums.EntityType.Orders:
                     //order menu
                     action = HelperFunctions.PrintMenu("order");
-                    //new switch based on submenu
+                    switch (action)
+                    {
+                        case Enums.ActionType.Add:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.Delete:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.Update:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.ReadId:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.ReadAll:
+                            //add fn
+                            break;
+                    }
                     break;
+
                 case Enums.EntityType.OrderItems:
                     //orderitems menu
                     action = HelperFunctions.PrintMenu("orderItem");
-                    //new switch based on submenu
-
+                    switch (action)
+                    {
+                        case Enums.ActionType.Add:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.Delete:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.Update:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.ReadId:
+                            //add fn
+                            try
+                            {
+                                //
+                            }
+                            catch
+                            {
+                                //
+                            }
+                            break;
+                        case Enums.ActionType.ReadAll:
+                            //add fn
+                            break;
+                    }
                     break;
+
                 default:
                     break;
-
-
-
             }
         }
     }
@@ -65,14 +214,21 @@ internal class DalTesting
     {
         static internal Enums.ActionType PrintMenu(String entity)
         {
+            int actionChoice = 0;
             //print below with var enitity, read input, cast it, return it
-            /*Console.WriteLine("Please select one of the actions below by clicking the appropiate number:\n" +
-                        "1. Add product to the products list\n" +
-                        "2. Delete product from the products list\n" +
-                        "3. Update product\n" +
-                        "4. Display product by its ID\n" +
-                        "5. Display all the products\n");*/
-            return 0;
+            while (actionChoice <= 0 || actionChoice > 5)
+            {
+                Console.WriteLine("Please select one of the actions below by clicking the appropiate number:\n" +
+                        "1. Add " + entity + " to the " + entity + "s list\n" +
+                        "2. Delete " + entity + " from the " + entity + "s list\n" +
+                        "3. Update " + entity + "\n" +
+                        "4. Display " + entity + " by its ID\n" +
+                        "5. Display all the " + entity + "s\n");
+
+                while (!System.Int32.TryParse(Console.ReadLine(), out actionChoice)) ;
+            }
+            Enums.ActionType action = (Enums.ActionType)actionChoice;
+            return action;
         }
     }
 
