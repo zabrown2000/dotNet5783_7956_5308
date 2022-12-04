@@ -5,6 +5,9 @@ using static DO.Enums;
 using static Dal.DalOrder;
 using static Dal.DalOrderItem;
 using static Dal.DalProducts;
+using System.Diagnostics;
+using static System.Net.Mime.MediaTypeNames;
+using static Test.DalTesting;
 
 
 namespace Test;
@@ -13,11 +16,8 @@ internal class DalTesting
 {
     static void Main(String[] args)
     {
-        Order order = new();
-        OrderItem orderItem = new();
-        Products product = new();
         //datasource is internal, does it start automatically when run?
-
+        
         bool stopFlag = true;
         while (stopFlag) //does it make sense to do it this way?
         {
@@ -48,8 +48,10 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
-                            } catch
+                                
+                                int id = ProductFunctions.AddP(); //
+                                Console.WriteLine("Your new product ID is: " + id + "\n");
+                            } catch 
                             {
                                 //
                             }
@@ -58,7 +60,7 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                ProductFunctions.DeleteP(HelperFunctions.ReadIntUser("Enter product ID:\n"));
                             }
                             catch
                             {
@@ -69,7 +71,13 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                //product.ID = HelperFunctions.ReadIntUser("Enter the product ID:\n");
+                                //Console.WriteLine("Enter the product name:\n");
+                                //product.Name = Console.ReadLine() ?? "";
+                                //product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
+                                //product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category:\n");
+                                //product.InStock = HelperFunctions.ReadIntUser("Enter the product stock:\n");
+                                ProductFunctions.UpdateP(); //inside wrapper, call update on product get info from, then print product we got and end
                             }
                             catch
                             {
@@ -80,7 +88,7 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                Console.WriteLine(ProductFunctions.ReadIdP(HelperFunctions.ReadIntUser("Enter Product ID\n")));
                             }
                             catch
                             {
@@ -89,7 +97,7 @@ internal class DalTesting
                             break;
                         case Enums.ActionType.ReadAll:
                             //print items of list
-                            
+                            ProductFunctions.ReadAllP(); //iterate through list and print
                             break;
                     }
                     break;
@@ -103,7 +111,8 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                int id = OrderFunctions.AddO();
+                                Console.WriteLine("your new order ID is: " + id + "\n");
                             }
                             catch
                             {
@@ -114,7 +123,7 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                OrderFunctions.DeleteO(HelperFunctions.ReadIntUser("Enter Order ID: "));
                             }
                             catch
                             {
@@ -125,7 +134,7 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                OrderFunctions.UpdateO();
                             }
                             catch
                             {
@@ -136,7 +145,7 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                Console.WriteLine(OrderFunctions.ReadIdO(HelperFunctions.ReadIntUser("Enter Order ID\n")));
                             }
                             catch
                             {
@@ -144,7 +153,7 @@ internal class DalTesting
                             }
                             break;
                         case Enums.ActionType.ReadAll:
-                            //add fn
+                            OrderFunctions.ReadAllO();
                             break;
                     }
                     break;
@@ -158,7 +167,8 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                int id = OrdeItemFunctions.AddOI();
+                                Console.WriteLine("your new order-item ID is: " + id + "\n");
                             }
                             catch
                             {
@@ -169,7 +179,7 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                OrderItemFunctions.DeleteOI(HelperFunctions.ReadIntUser("Enter OrderItem ID: "));
                             }
                             catch
                             {
@@ -180,7 +190,7 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                OrderItemFunctions.UpdateOI();
                             }
                             catch
                             {
@@ -191,7 +201,7 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                //
+                                Console.WriteLine(OrderItemFunctions.ReadIdOI(HelperFunctions.ReadIntUser("Enter OrderItem ID\n")));
                             }
                             catch
                             {
@@ -199,7 +209,7 @@ internal class DalTesting
                             }
                             break;
                         case Enums.ActionType.ReadAll:
-                            //add fn
+                            OrderItemFunctions.ReadAllOI();
                             break;
                     }
                     break;
@@ -229,6 +239,129 @@ internal class DalTesting
             }
             Enums.ActionType action = (Enums.ActionType)actionChoice;
             return action;
+        }
+
+        static internal int ReadIntUser(String output)
+        {
+            Console.WriteLine(output);
+            int input;
+            while (!System.Int32.TryParse(Console.ReadLine(), out input))
+            {
+                Console.WriteLine("ERROR format\n");//error
+            }
+            return input;
+        }
+    }
+
+    internal class ProductFunctions
+    {
+        private static DalProducts _dalP = new DalProducts();
+        private static Products product = new();
+
+        static internal int AddP()
+        {
+            Console.WriteLine("Enter the product name:\n");
+            product.Name = Console.ReadLine() ?? "";
+            product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
+            product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category:\n");
+            product.InStock = HelperFunctions.ReadIntUser("Enter the product stock\n");
+
+            return _dalP.Add(product);
+        }
+
+        static internal void DeleteP(int id)
+        {
+
+        }
+
+        static internal void UpdateP()
+        {
+
+        }
+
+        static internal Products ReadIdP(int id)
+        {
+
+        }
+
+        static internal void ReadAllP()
+        {
+
+        }
+    }
+
+    internal class OrderFunctions
+    {
+        private static DalOrder _dalO = new DalOrder();
+        private static Order order = new();
+
+        static internal int AddO()
+        {
+            //Console.WriteLine("Enter the product name:\n");
+            //product.Name = Console.ReadLine() ?? "";
+            //product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
+            //product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category:\n");
+            //product.InStock = HelperFunctions.ReadIntUser("Enter the product stock\n");
+
+            return _dalO.Add(order);
+        }
+
+        static internal void DeleteO(int id)
+        {
+
+        }
+
+        static internal void UpdateO()
+        {
+
+        }
+
+        static internal Order ReadIdO(int id)
+        {
+
+        }
+
+        static internal void ReadAllO()
+        {
+
+        }
+
+    }
+
+    internal class OrderItemFunctions
+    {
+        private static DalOrderItem _dalOI = new DalOrderItem();
+        private static OrderItem orderItem = new();
+
+        static internal int AddOI()
+        {
+            //Console.WriteLine("Enter the product name:\n");
+            //product.Name = Console.ReadLine() ?? "";
+            //product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
+            //product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category:\n");
+            //product.InStock = HelperFunctions.ReadIntUser("Enter the product stock\n");
+
+            return _dalOI.Add(orderItem);
+        }
+
+        static internal void DeleteOI(int id)
+        {
+
+        }
+
+        static internal void UpdateOI()
+        {
+
+        }
+
+        static internal OrderItem ReadIdOI(int id)
+        {
+
+        }
+
+        static internal void ReadAllOI()
+        {
+
         }
     }
 
