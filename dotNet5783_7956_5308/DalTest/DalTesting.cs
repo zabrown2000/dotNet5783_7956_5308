@@ -53,7 +53,8 @@ internal class DalTesting
                                 Console.WriteLine("Your new product ID is: " + id + "\n");
                             } catch 
                             {
-                                //
+                                Console.WriteLine("Product already exists\n"); //error
+
                             }
                             break;
                         case Enums.ActionType.Delete:
@@ -64,24 +65,19 @@ internal class DalTesting
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("Product does not exist\n");
                             }
                             break;
                         case Enums.ActionType.Update:
                             //add fn
                             try
                             {
-                                //product.ID = HelperFunctions.ReadIntUser("Enter the product ID:\n");
-                                //Console.WriteLine("Enter the product name:\n");
-                                //product.Name = Console.ReadLine() ?? "";
-                                //product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
-                                //product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category:\n");
-                                //product.InStock = HelperFunctions.ReadIntUser("Enter the product stock:\n");
+                                
                                 ProductFunctions.UpdateP(); //inside wrapper, call update on product get info from, then print product we got and end
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("The product you wish to update does not exist\n");
                             }
                             break;
                         case Enums.ActionType.ReadId:
@@ -92,7 +88,7 @@ internal class DalTesting
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("Product does not exist\n");
                             }
                             break;
                         case Enums.ActionType.ReadAll:
@@ -116,7 +112,7 @@ internal class DalTesting
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("Order already exists");
                             }
                             break;
                         case Enums.ActionType.Delete:
@@ -127,7 +123,7 @@ internal class DalTesting
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("Order does not exist\n");
                             }
                             break;
                         case Enums.ActionType.Update:
@@ -138,7 +134,7 @@ internal class DalTesting
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("The order you wish to update does not exist\n");
                             }
                             break;
                         case Enums.ActionType.ReadId:
@@ -149,7 +145,7 @@ internal class DalTesting
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("The order does not exist\n");
                             }
                             break;
                         case Enums.ActionType.ReadAll:
@@ -167,12 +163,12 @@ internal class DalTesting
                             //add fn
                             try
                             {
-                                int id = OrdeItemFunctions.AddOI();
+                                int id = OrderItemFunctions.AddOI();
                                 Console.WriteLine("your new order-item ID is: " + id + "\n");
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("OrderItem already exists\n");
                             }
                             break;
                         case Enums.ActionType.Delete:
@@ -183,7 +179,7 @@ internal class DalTesting
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("OrderItem does not exist\n");
                             }
                             break;
                         case Enums.ActionType.Update:
@@ -194,7 +190,7 @@ internal class DalTesting
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("The orderItem you wish to update does not exist\n");
                             }
                             break;
                         case Enums.ActionType.ReadId:
@@ -205,7 +201,7 @@ internal class DalTesting
                             }
                             catch
                             {
-                                //
+                                Console.WriteLine("The orderItem does not exist\n");
                             }
                             break;
                         case Enums.ActionType.ReadAll:
@@ -271,22 +267,36 @@ internal class DalTesting
 
         static internal void DeleteP(int id)
         {
-
+            _dalP.Delete(id);
         }
 
         static internal void UpdateP()
         {
+            product.ID = HelperFunctions.ReadIntUser("Enter the product ID:\n");
+            Console.WriteLine("Enter the product name:\n");
+            product.Name = Console.ReadLine() ?? "";
+            product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
+            product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category:\n");
+            product.InStock = HelperFunctions.ReadIntUser("Enter the product stock:\n");
+
+            _dalP.Update(product);
+            Console.WriteLine(product);
 
         }
 
         static internal Products ReadIdP(int id)
         {
-
+            return _dalP.ReadId(id);
         }
 
         static internal void ReadAllP()
         {
-
+            List<Products> products = _dalP.ReadAll(); 
+            foreach (Products p in products)
+            {
+                Console.WriteLine(p);
+                Console.WriteLine('\n');
+            }//print the list
         }
     }
 
@@ -297,34 +307,58 @@ internal class DalTesting
 
         static internal int AddO()
         {
-            //Console.WriteLine("Enter the product name:\n");
-            //product.Name = Console.ReadLine() ?? "";
-            //product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
-            //product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category:\n");
-            //product.InStock = HelperFunctions.ReadIntUser("Enter the product stock\n");
-
-            return _dalO.Add(order);
+            Console.WriteLine("enter customer name:\n");
+            order.CustomerName = Console.ReadLine() ?? "";
+            Console.WriteLine("enter customer mail:\n");
+            order.CustomerEmail = Console.ReadLine() ?? "";
+            Console.WriteLine("enter customer adress:\n");
+            order.CustomerAddress = Console.ReadLine() ?? "";
+            order.OrderDate = DateTime.Now;
+            order.ShipDate = DateTime.MinValue;
+            order.DeliveryDate = DateTime.MinValue;
+            
+            int id= _dalO.Add(order);
+            return id;
         }
 
         static internal void DeleteO(int id)
         {
-
+            _dalO.Delete(id);
         }
 
         static internal void UpdateO()
         {
+            order.ID = HelperFunctions.ReadIntUser("enter order ID:\n");
+            Console.WriteLine("enter customer name:\n");
+            order.CustomerName = Console.ReadLine() ?? "";
+            Console.WriteLine("enter customer mail:\n");
+            order.CustomerEmail = Console.ReadLine() ?? "";
+            Console.WriteLine("enter customer adress\n");
+            order.CustomerAddress = Console.ReadLine() ?? "";
+            order.OrderDate = DateTime.Now;
+            order.ShipDate = DateTime.MinValue;
+            order.DeliveryDate = DateTime.MinValue;
 
+            _dalO.Update(order);
+            Console.WriteLine(order);
         }
 
         static internal Order ReadIdO(int id)
         {
+            return _dalO.ReadId(id);
 
         }
 
         static internal void ReadAllO()
         {
-
+            List<Order> order = _dalO.ReadAll();
+            foreach (Order o in order)
+            {
+                Console.WriteLine(o);
+                Console.WriteLine('\n');
+            }//print the list
         }
+    }
 
     }
 
@@ -335,34 +369,127 @@ internal class DalTesting
 
         static internal int AddOI()
         {
-            //Console.WriteLine("Enter the product name:\n");
-            //product.Name = Console.ReadLine() ?? "";
-            //product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
-            //product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category:\n");
-            //product.InStock = HelperFunctions.ReadIntUser("Enter the product stock\n");
+        DalOrder dalOrder = new DalOrder();
+        DalProducts dalProduct = new DalProducts();
+        bool check = true;
+        while (check)
+        {
+            try
+            {
+                orderItem.ProductID = HelperFunctions.ReadIntUser("enter product ID:\n");
+                dalProduct.ReadId(orderItem.ProductID);
+                check = false;//if not found
+            }
+            catch
+            {
+                Console.WriteLine("Could not find product ID, please enter new ID\n");
+            }
+        }
 
-            return _dalOI.Add(orderItem);
+        check = true;//if found
+
+        while (check)
+        {
+            try
+            {
+                orderItem.OrderID = HelperFunctions.ReadIntUser("enter order id:\n");
+                dalOrder.ReadId(orderItem.OrderID);
+                check = false;
+            }
+            catch
+            {
+                Console.WriteLine("Could not find order ID, please enter new ID\n");
+            }
+        }
+        orderItem.Amount = HelperFunctions.ReadIntUser("enter amount:\n");
+        orderItem.Price = dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
+
+        int id = _dalOI.Add(orderItem);
+        return id;
         }
 
         static internal void DeleteOI(int id)
         {
+        _dalOI.Delete(id);
 
-        }
+    }
 
-        static internal void UpdateOI()
+    static internal void UpdateOI()
         {
+        DalOrder dalOrder = new();
+        DalProducts dalProduct = new();
+        DalOrderItem dalOrderItem = new();
+        bool check = true;
 
+        while (check)//if found
+        {
+            try
+            {
+                orderItem.ID = HelperFunctions.ReadIntUser("Enter orderItem ID\n");
+                dalOrderItem.ReadId(orderItem.ID);
+                check = false;//not found
+            }
+            catch
+            {
+                Console.WriteLine("Could not find orderItem ID, please enter new ID\n");
+            }
         }
+
+        check = true;
+
+        while (check)
+        {
+            try
+            {
+                orderItem.ProductID = HelperFunctions.ReadIntUser("enter product ID:\n");
+                dalProduct.ReadId(orderItem.ProductID);
+                check = false;
+            }
+            catch
+            {
+                Console.WriteLine("Could not find product ID, please enter new ID\n");
+            }
+        }
+
+        check = true;
+
+        while (check)
+        {
+            try
+            {
+                orderItem.OrderID = HelperFunctions.ReadIntUser("enter order id:\n");
+                dalOrder.ReadId(orderItem.OrderID);
+                check = false;
+            }
+            catch
+            {
+                Console.WriteLine("Could not find product ID, please enter new ID\n");
+            }
+        }
+
+        orderItem.Amount = HelperFunctions.ReadIntUser("enter amount:\n");
+        orderItem.Price = dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
+
+        _dalOI.Update(orderItem);
+        Console.WriteLine(orderItem);
+
+    }
 
         static internal OrderItem ReadIdOI(int id)
         {
+        return _dalOI.ReadId(id);
 
-        }
+    }
 
-        static internal void ReadAllOI()
+    static internal void ReadAllOI()
+    {
+        List<OrderItem> orderItem = _dalOI.ReadAll();
+        foreach (OrderItem oi in orderItem)
         {
+            Console.WriteLine(oi);
+            Console.WriteLine('\n');
+        }//print the list
 
-        }
     }
 
     
