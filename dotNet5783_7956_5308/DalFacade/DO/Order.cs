@@ -38,9 +38,9 @@ public struct Order
     public override String ToString() => $@"
         Order ID={ID}: 
         Customer Details:   
-                Name={CustomerName}    
-                Email={CustomerEmail}    
-                Address={CustomerAddress}     
+        ........Name={CustomerName}    
+        ........Email={CustomerEmail}    
+        ........Address={CustomerAddress}     
         Date ordered: {OrderDate}
         Date shipped: {ShipDate}
         Date Delivered: {DeliveryDate}

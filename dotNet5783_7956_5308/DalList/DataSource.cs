@@ -1,5 +1,5 @@
 ﻿using DO;
-              //NEED TO ADD COMMENTS - should the 10,20,40 be parameters? Maor's fns are hardcoded with these, he says they should be arguments?
+              
 namespace Dal;
 
 static internal class DataSource
@@ -57,6 +57,7 @@ static internal class DataSource
     /// </summary>
     static private void s_Initialize()
     {
+        //calling functions to initialize each entity
         PushProducts();
         PushOrders();
         PushOrderItems();
@@ -72,8 +73,8 @@ static internal class DataSource
         
         for (int i = 0; i < 10; i++)
         {
-            _productList.Add( new() //creating a new product and setting the values to go in our array
-            {
+            _productList.Add( new() //creating a new product and setting the values to go in our list
+            {   //using random generator to fill most of the fields
                 ID = Config.NextProductNumber,
                 Price = randNumGen.Next(50, 3000),
                 Name = NameOfApplicance[randNumGen.Next(NameOfApplicance.Length)],
@@ -97,8 +98,8 @@ static internal class DataSource
         
         for (int i = 0; i < 20; i++)
         {
-            Order myOrder = new() //creating a new order and setting the values to go in our array
-            {
+            Order myOrder = new() //creating a new order and setting the values to go in our list
+            {   //using random generator to fill most of the fields
                 ID = Config.NextOrderNumber,
                 CustomerName = CustomerName[randNumGen.Next(CustomerName.Length)],
                 CustomerEmail = CustomerEmail[randNumGen.Next(CustomerEmail.Length)],
@@ -135,8 +136,8 @@ static internal class DataSource
         for (int i = 0; i < 40; i++)
         {
             Products product = _productList[randNumGen.Next(_productList.Count)]; 
-            _orderItemList.Add( new OrderItem //creating a new orderItem and setting the values to go in our array
-            {
+            _orderItemList.Add( new OrderItem //creating a new orderItem and setting the values to go in our list
+            {   //using random generator to fill most of the fields
                 ID = Config.NextOrderItemNumber,
                 ProductID = product.ID,
                 OrderID = randNumGen.Next(Config.s_startOrderNumber, Config.s_startOrderNumber + _orderList.Count), 

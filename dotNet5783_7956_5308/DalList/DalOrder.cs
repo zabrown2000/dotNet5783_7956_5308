@@ -6,60 +6,82 @@ namespace Dal;
 
 public class DalOrder
 {
-    public int Add(Order order)//add order to a list and return its id
+    /// <summary>
+    /// Create function for orders
+    /// </summary>
+    /// <param name="order">order to add to list</param>
+    /// <returns>id of new order</returns>
+    /// <exception cref="Exception">Exception if order exists or list is full</exception>
+    public int Add(Order order)
     {
-        //Case 1: New order, need to initialize it and add it
+        if (DataSource._orderList.Count() < 100) //checking that the order cap hasn't been reached
+        {
+            //Case 1: New order, need to initialize it and add it
+            if (order.ID == 0) //Orders's default ctor makes the id 0, so we want to make sure it's a new order to add to our list
+            {
+                order.ID = DataSource.Config.NextOrderNumber;//giving this new order a unique id
+                DataSource._orderList.Add(order); //add order to the order list
+                return order.ID; //Added the order, returning id
+            }
+            //Case 2: Item already exists, throw exception
+            int index = DataSource._orderList.FindIndex(x => x.ID == order.ID); //getting the index of the order in the list (if it exists)
+            if (index != -1) //order was found, so it exists and can't add again
+            {
+                throw new Exception("Order already exists"); 
+            }
+            else
+            {
+                DataSource._orderList.Add(order); //initialized order but not in list yet so adding it
+                return order.ID; //return the id
+            }
+        } else
+        {
+            throw new Exception("Order list is full");
+        }
 
-        if (order.ID == 0) //Orders's default ctor makes the id 0, so we want to make sure it's a new order to add to our list
-        {
-            order.ID = DataSource.Config.NextOrderNumber;//giving this new product a unique id
-            DataSource._orderList.Add(order);             //add order to the order list
-            return order.ID; //Added the order, returning id
-        }
-        //Case 2: Item already exists, throw exception
-
-        int index = DataSource._orderList.FindIndex(x => x.ID == order.ID); //getting the index of the product in the list (if it exists)
-        if (index != -1) //item was found, so it exists and can't add again
-        {
-            throw new Exception("Order already exists"); //error
-        }
-        else
-        {
-            DataSource._orderList.Add(order); //initialized product but not in catalog yet so adding it
-            return order.ID; //return the id
-        }
+        
     }
-    /*○ Implement a read method for a single object: input - an entity’s identifier (not an array
-        index!), output - an object.
-    ○ Implement a read method for a list of objects stored in the entity array. No input
-        arguments.
-*/
+
+    /// <summary>
+    /// Reading a particular order
+    /// </summary>
+    /// <param name="id">id of order want to get</param>
+    /// <returns>order wanted to read</returns>
+    /// <exception cref="Exception">Exception if order doesn't exist</exception>
     public Order ReadId(int id)
     {
-        Order order = DataSource._orderList.Find(x => x.ID == id); //checking to see if product exists
-        if (order.ID != id) //if not found the item id will be the default, 0, and not match the given id
+        Order order = DataSource._orderList.Find(x => x.ID == id); //checking to see if order exists
+        if (order.ID != id) //if not found the order id will be the default, 0, and not match the given id
             throw new Exception("The order does not exist\n");
         return order;
     }
 
+    /// <summary>
+    /// Reading all orders in list
+    /// </summary>
+    /// <returns>a list with all the orders</returns>
     public List<Order> ReadAll()
     {
-        return DataSource._orderList.ToList();
+        return DataSource._orderList.ToList(); //list of orders
     }
 
+    /// <summary>
+    /// Delete function for order
+    /// </summary>
+    /// <param name="id">id of order to delete</param>
+    /// <exception cref="Exception">Exception if order doesn't exist</exception>
     public void Delete(int id)
     {
-        int index = 0;
+        int index = -1; //flag for checking if order exists
         foreach (Order order in DataSource._orderList) //searching for order in list based on ID
         {
-            if (order.ID == id) //if found id in the catalog
+            if (order.ID == id) //if found id in the list
             {
                 index = DataSource._orderList.IndexOf(order);//save index of that order
                 break;
             }
-
         }
-        if (index != -1) //check to make sure actually deleting item that exists
+        if (index != -1) //check to make sure actually deleting order that exists
         {
             Order toDelete = DataSource._orderList[index]; //getting order at index of id want to delete
             DataSource._orderList.Remove(toDelete); //removing order from the list
@@ -68,25 +90,27 @@ public class DalOrder
         {
             throw new Exception("Order does not exist\n");
         }
-        
     }
 
-
-
+    /// <summary>
+    /// Update function for orders
+    /// </summary>
+    /// <param name="order">order to update</param>
+    /// <exception cref="Exception">Exception if order doesn't exist</exception>
     public void Update(Order order)
     {
-        int index = -1;
+        int index = -1; //flag for checking if order exists
         foreach (Order or in DataSource._orderList)//go over order list
         {
             if (order.ID == or.ID)//if found id in the list
             {
-                index = DataSource._orderList.IndexOf(order); //save index of that order
+                index = DataSource._orderList.IndexOf(or); //save index of that order
                 break;
             }
         }
         if (index != -1)
         {
-            DataSource._orderList[index] = order; //updating item using same place in memory
+            DataSource._orderList[index] = order; //updating order using same place in memory
 
         }
         else
@@ -94,5 +118,4 @@ public class DalOrder
             throw new Exception("The order you wish to update does not exist");
         }
     }
-
 }

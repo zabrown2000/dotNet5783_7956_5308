@@ -16,10 +16,8 @@ internal class DalTesting
 {
     static void Main(String[] args)
     {
-        //datasource is internal, does it start automatically when run?
-        
-        bool stopFlag = true;
-        while (stopFlag) //does it make sense to do it this way?
+        bool stopFlag = true; //have nested conditionals so need to know when to leave outer whileloop
+        while (stopFlag) //will be changed to false if user chooses 0
         {
             Console.WriteLine("Please select one of the options below by clicking the appropiate number:\n" +
                 "0. Exit\n" +
@@ -28,86 +26,83 @@ internal class DalTesting
                 "3. Check out OrderItems\n");
 
             int entityChoice;
-            while (!System.Int32.TryParse(Console.ReadLine(), out entityChoice)) ;
-            Enums.EntityType entity = (Enums.EntityType)entityChoice;
+            while (!System.Int32.TryParse(Console.ReadLine(), out entityChoice)) ; //checking input to make sure its an int
 
+            Enums.EntityType entity = (Enums.EntityType)entityChoice; //casting int to be corresponding enum type
             Enums.ActionType action;
-            switch (entity)
+
+            switch (entity) //outer menu handling based on entity types
             {
-                case Enums.EntityType.Exit :
+                case Enums.EntityType.Exit:
                     stopFlag = false;
                     Console.WriteLine("Goodbye\n");
                     break;
 
-                case Enums.EntityType.Products :      //make a function that send entiry and it prints menu with appropiate entity inside
-                                                      //see slides on how to print with vars. Read input, cast it to enum, return it
-                    action = HelperFunctions.PrintMenu("product");
-                    switch (action)
+                case Enums.EntityType.Products:
+                    action = HelperFunctions.PrintMenu("product"); //printing menu for products
+                    switch (action) //inner menu for product cases
                     {
                         case Enums.ActionType.Add:
-                            //add fn
                             try
                             {
-                                
-                                int id = ProductFunctions.AddP(); //
+
+                                int id = ProductFunctions.AddP(); //calling wrapper function for adding a product
                                 Console.WriteLine("Your new product ID is: " + id + "\n");
-                            } catch 
+                            }
+                            catch
                             {
                                 Console.WriteLine("Product already exists\n"); //error
-
                             }
                             break;
+
                         case Enums.ActionType.Delete:
-                            //add fn
                             try
                             {
-                                ProductFunctions.DeleteP(HelperFunctions.ReadIntUser("Enter product ID:\n"));
+                                ProductFunctions.DeleteP(HelperFunctions.ReadIntUser("Enter product ID:\n")); //printing and getting input from user and sending it to wrapper delete function
                             }
                             catch
                             {
                                 Console.WriteLine("Product does not exist\n");
                             }
                             break;
+
                         case Enums.ActionType.Update:
-                            //add fn
                             try
                             {
-                                
-                                ProductFunctions.UpdateP(); //inside wrapper, call update on product get info from, then print product we got and end
+
+                                ProductFunctions.UpdateP(); //calling wrapper function for updating a product
                             }
                             catch
                             {
                                 Console.WriteLine("The product you wish to update does not exist\n");
                             }
                             break;
+
                         case Enums.ActionType.ReadId:
-                            //add fn
                             try
                             {
-                                Console.WriteLine(ProductFunctions.ReadIdP(HelperFunctions.ReadIntUser("Enter Product ID\n")));
+                                Console.WriteLine(ProductFunctions.ReadIdP(HelperFunctions.ReadIntUser("Enter Product ID\n"))); //printing and getting input from user and sending it to wrapper readId function
                             }
                             catch
                             {
                                 Console.WriteLine("Product does not exist\n");
                             }
                             break;
+
                         case Enums.ActionType.ReadAll:
-                            //print items of list
-                            ProductFunctions.ReadAllP(); //iterate through list and print
+                            ProductFunctions.ReadAllP(); //calling wrapper function for reading a product list
                             break;
                     }
                     break;
 
                 case Enums.EntityType.Orders:
-                    //order menu
-                    action = HelperFunctions.PrintMenu("order");
-                    switch (action)
+                    action = HelperFunctions.PrintMenu("order"); //printing menu for orders
+                    switch (action) //inner menu for order cases
                     {
                         case Enums.ActionType.Add:
-                            //add fn
                             try
                             {
-                                int id = OrderFunctions.AddO();
+                                int id = OrderFunctions.AddO(); //calling wrapper function for adding an order
                                 Console.WriteLine("your new order ID is: " + id + "\n");
                             }
                             catch
@@ -115,114 +110,122 @@ internal class DalTesting
                                 Console.WriteLine("Order already exists");
                             }
                             break;
+
                         case Enums.ActionType.Delete:
-                            //add fn
                             try
                             {
-                                OrderFunctions.DeleteO(HelperFunctions.ReadIntUser("Enter Order ID: "));
+                                OrderFunctions.DeleteO(HelperFunctions.ReadIntUser("Enter Order ID: ")); //printing and getting input from user and sending it to wrapper delete function
                             }
                             catch
                             {
                                 Console.WriteLine("Order does not exist\n");
                             }
                             break;
+
                         case Enums.ActionType.Update:
-                            //add fn
                             try
                             {
-                                OrderFunctions.UpdateO();
+                                OrderFunctions.UpdateO(); //calling wrapper function for updating an order
                             }
                             catch
                             {
                                 Console.WriteLine("The order you wish to update does not exist\n");
                             }
                             break;
+
                         case Enums.ActionType.ReadId:
-                            //add fn
                             try
                             {
-                                Console.WriteLine(OrderFunctions.ReadIdO(HelperFunctions.ReadIntUser("Enter Order ID\n")));
+                                Console.WriteLine(OrderFunctions.ReadIdO(HelperFunctions.ReadIntUser("Enter Order ID\n"))); //printing and getting input from user and sending it to wrapper readId function
                             }
                             catch
                             {
                                 Console.WriteLine("The order does not exist\n");
                             }
                             break;
+
                         case Enums.ActionType.ReadAll:
-                            OrderFunctions.ReadAllO();
+                            OrderFunctions.ReadAllO(); //calling wrapper function for reading an order list
                             break;
                     }
                     break;
 
                 case Enums.EntityType.OrderItems:
-                    //orderitems menu
-                    action = HelperFunctions.PrintMenu("orderItem");
-                    switch (action)
+                    action = HelperFunctions.PrintMenu("orderItem"); //printing menu for orderItems
+                    switch (action) //inner menu for orderItem cases
                     {
                         case Enums.ActionType.Add:
-                            //add fn
                             try
                             {
-                                int id = OrderItemFunctions.AddOI();
-                                Console.WriteLine("your new order-item ID is: " + id + "\n");
+                                int id = OrderItemFunctions.AddOI(); //calling wrapper function for adding an orderItem
+                                Console.WriteLine("your new orderItem ID is: " + id + "\n");
                             }
                             catch
                             {
                                 Console.WriteLine("OrderItem already exists\n");
                             }
                             break;
+
                         case Enums.ActionType.Delete:
-                            //add fn
                             try
                             {
-                                OrderItemFunctions.DeleteOI(HelperFunctions.ReadIntUser("Enter OrderItem ID: "));
+                                OrderItemFunctions.DeleteOI(HelperFunctions.ReadIntUser("Enter OrderItem ID: ")); //printing and getting input from user and sending it to wrapper delete function
                             }
                             catch
                             {
                                 Console.WriteLine("OrderItem does not exist\n");
                             }
                             break;
+
                         case Enums.ActionType.Update:
-                            //add fn
                             try
                             {
-                                OrderItemFunctions.UpdateOI();
+                                OrderItemFunctions.UpdateOI(); //calling wrapper function for updating an order
                             }
                             catch
                             {
                                 Console.WriteLine("The orderItem you wish to update does not exist\n");
                             }
                             break;
+
                         case Enums.ActionType.ReadId:
-                            //add fn
                             try
                             {
-                                Console.WriteLine(OrderItemFunctions.ReadIdOI(HelperFunctions.ReadIntUser("Enter OrderItem ID\n")));
+                                Console.WriteLine(OrderItemFunctions.ReadIdOI(HelperFunctions.ReadIntUser("Enter OrderItem ID\n"))); //printing and getting input from user and sending it to wrapper readId function
                             }
                             catch
                             {
                                 Console.WriteLine("The orderItem does not exist\n");
                             }
                             break;
+
                         case Enums.ActionType.ReadAll:
-                            OrderItemFunctions.ReadAllOI();
+                            OrderItemFunctions.ReadAllOI(); //calling wrapper function for reading an orderItem list
                             break;
                     }
                     break;
 
-                default:
+                default: //if user didn't add correct menu option, will break and do another iteration (flag is still true)
                     break;
             }
         }
     }
 
+    /// <summary>
+    /// Internal class that contains general helper functions for main program
+    /// </summary>
     internal class HelperFunctions
     {
+        /// <summary>
+        /// Function to print a menu given a string
+        /// </summary>
+        /// <param name="entity">which entity's menu will be displayed</param>
+        /// <returns>menu choice from user</returns>
         static internal Enums.ActionType PrintMenu(String entity)
         {
             int actionChoice = 0;
-            //print below with var enitity, read input, cast it, return it
-            while (actionChoice <= 0 || actionChoice > 5)
+
+            while (actionChoice <= 0 || actionChoice > 5) //checking user entered correct menu item
             {
                 Console.WriteLine("Please select one of the actions below by clicking the appropiate number:\n" +
                         "1. Add " + entity + " to the " + entity + "s list\n" +
@@ -231,80 +234,126 @@ internal class DalTesting
                         "4. Display " + entity + " by its ID\n" +
                         "5. Display all the " + entity + "s\n");
 
-                while (!System.Int32.TryParse(Console.ReadLine(), out actionChoice)) ;
+                while (!System.Int32.TryParse(Console.ReadLine(), out actionChoice)) ; //checking user entered an int
             }
-            Enums.ActionType action = (Enums.ActionType)actionChoice;
+            Enums.ActionType action = (Enums.ActionType)actionChoice; //casting input to correct enum type
             return action;
         }
 
+        /// <summary>
+        /// Function to print a string to the user and read in an int
+        /// </summary>
+        /// <param name="output">string to display to user</param>
+        /// <returns>int user returned</returns>
         static internal int ReadIntUser(String output)
         {
             Console.WriteLine(output);
             int input;
-            while (!System.Int32.TryParse(Console.ReadLine(), out input))
+            while (!System.Int32.TryParse(Console.ReadLine(), out input)) //keep going until user prints an int
             {
-                Console.WriteLine("ERROR format\n");//error
+                Console.WriteLine("ERROR format! Please enter an integer\n"); //error
             }
             return input;
         }
     }
 
+    /// <summary>
+    /// Internal class that contains helper functions dealing with Product actions
+    /// </summary>
     internal class ProductFunctions
     {
+        /// <summary>
+        /// field to access product CRUD methods
+        /// </summary>
         private static DalProducts _dalP = new DalProducts();
+        /// <summary>
+        /// Product will use for below functions (instead of creating new one each time)
+        /// </summary>
         private static Products product = new();
 
+        /// <summary>
+        /// Wrapper function for CRUD add function
+        /// </summary>
+        /// <returns>id of product added</returns>
         static internal int AddP()
         {
             Console.WriteLine("Enter the product name:\n");
             product.Name = Console.ReadLine() ?? "";
             product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
-            product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category:\n");
+            product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category (1-7):\n");
             product.InStock = HelperFunctions.ReadIntUser("Enter the product stock\n");
 
-            return _dalP.Add(product);
+            return _dalP.Add(product); //calling CRUD add
         }
 
+        /// <summary>
+        /// Wrapper function for CRUD delete function
+        /// </summary>
+        /// <param name="id">id of product to delete</param>
         static internal void DeleteP(int id)
         {
-            _dalP.Delete(id);
+            _dalP.Delete(id); //calling CRUD delete
         }
 
+        /// <summary>
+        /// Wrapper function for CRUD update function
+        /// </summary>
         static internal void UpdateP()
         {
             product.ID = HelperFunctions.ReadIntUser("Enter the product ID:\n");
             Console.WriteLine("Enter the product name:\n");
             product.Name = Console.ReadLine() ?? "";
             product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
-            product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category:\n");
+            product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category (1-7):\n");
             product.InStock = HelperFunctions.ReadIntUser("Enter the product stock:\n");
 
-            _dalP.Update(product);
-            Console.WriteLine(product);
+            _dalP.Update(product); //calling CRUD update
+            Console.WriteLine(product); //update was successful, print new product
 
         }
 
+        /// <summary>
+        /// Wrapper function for CRUD readId function
+        /// </summary>
+        /// <param name="id">id of product to read</param>
+        /// <returns>product to read</returns>
         static internal Products ReadIdP(int id)
         {
-            return _dalP.ReadId(id);
+            return _dalP.ReadId(id); //calling CRUD readId
         }
 
+        /// <summary>
+        /// Wrapper function for CRUD readAll function
+        /// </summary>
         static internal void ReadAllP()
         {
-            List<Products> products = _dalP.ReadAll(); 
-            foreach (Products p in products)
+            List<Products> products = _dalP.ReadAll(); //calling CRUD readAll
+            foreach (Products p in products) //printing the list
             {
                 Console.WriteLine(p);
                 Console.WriteLine('\n');
-            }//print the list
+            }
         }
     }
 
+    /// <summary>
+    /// Internal class that contains helper functions dealing with Order actions
+    /// </summary>
     internal class OrderFunctions
     {
+        /// <summary>
+        /// field to access order CRUD methods
+        /// </summary>
         private static DalOrder _dalO = new DalOrder();
+        /// <summary>
+        /// Order will use for below functions (instead of creating new one each time)
+        /// </summary>
         private static Order order = new();
 
+        /// <summary>
+        /// Wrapper function for CRUD add function
+        /// </summary>
+        /// <returns>id of order added</returns>
         static internal int AddO()
         {
             Console.WriteLine("enter customer name:\n");
@@ -316,16 +365,23 @@ internal class DalTesting
             order.OrderDate = DateTime.Now;
             order.ShipDate = DateTime.MinValue;
             order.DeliveryDate = DateTime.MinValue;
-            
-            int id= _dalO.Add(order);
+
+            int id = _dalO.Add(order); //calling CRUD add
             return id;
         }
 
+        /// <summary>
+        /// Wrapper function for CRUD delete function
+        /// </summary>
+        /// <param name="id">id of order to delete</param>
         static internal void DeleteO(int id)
         {
-            _dalO.Delete(id);
+            _dalO.Delete(id); //calling CRUD delete
         }
 
+        /// <summary>
+        /// Wrapper function for CRUD update function
+        /// </summary>
         static internal void UpdateO()
         {
             order.ID = HelperFunctions.ReadIntUser("enter order ID:\n");
@@ -339,202 +395,191 @@ internal class DalTesting
             order.ShipDate = DateTime.MinValue;
             order.DeliveryDate = DateTime.MinValue;
 
-            _dalO.Update(order);
-            Console.WriteLine(order);
+            _dalO.Update(order); //calling CRUD update
+            Console.WriteLine(order); //update was successful, print new product
         }
 
+        /// <summary>
+        /// Wrapper function for CRUD readId function
+        /// </summary>
+        /// <param name="id">id of order to read</param>
+        /// <returns>order want to read</returns>
         static internal Order ReadIdO(int id)
         {
-            return _dalO.ReadId(id);
+            return _dalO.ReadId(id); //calling CRUD readId
 
         }
 
+        /// <summary>
+        /// Wrapper function for CRUD readAll function
+        /// </summary>
         static internal void ReadAllO()
         {
-            List<Order> order = _dalO.ReadAll();
-            foreach (Order o in order)
+            List<Order> order = _dalO.ReadAll(); //calling CRUD readAll
+            foreach (Order o in order) //printing the list
             {
                 Console.WriteLine(o);
                 Console.WriteLine('\n');
-            }//print the list
+            }
         }
     }
 
-    }
-
+    /// <summary>
+    /// Internal class that contains helper functions dealing with OrderItems actions
+    /// </summary>
     internal class OrderItemFunctions
     {
+        /// <summary>
+        /// field to access order CRUD methods
+        /// </summary>
         private static DalOrderItem _dalOI = new DalOrderItem();
+        /// <summary>
+        /// OrderItem will use for below functions (instead of creating new one each time)
+        /// </summary>
         private static OrderItem orderItem = new();
 
+        /// <summary>
+        /// Wrapper function for CRUD add function
+        /// </summary>
+        /// <returns>id of orderItem added</returns>
         static internal int AddOI()
         {
-        DalOrder dalOrder = new DalOrder();
-        DalProducts dalProduct = new DalProducts();
-        bool check = true;
-        while (check)
-        {
-            try
+            DalOrder dalOrder = new DalOrder();
+            DalProducts dalProduct = new DalProducts();
+            bool check = true;
+            //need to check product id to go in orderItem exists
+            while (check)
             {
-                orderItem.ProductID = HelperFunctions.ReadIntUser("enter product ID:\n");
-                dalProduct.ReadId(orderItem.ProductID);
-                check = false;//if not found
+                try
+                {
+                    orderItem.ProductID = HelperFunctions.ReadIntUser("enter product ID:\n");
+                    dalProduct.ReadId(orderItem.ProductID);
+                    check = false; //if not found
+                }
+                catch
+                {
+                    Console.WriteLine("Could not find product ID, please enter new ID\n");
+                }
             }
-            catch
+
+            check = true; //if found
+
+            //need to check order id to go in orderItem exists
+            while (check)
             {
-                Console.WriteLine("Could not find product ID, please enter new ID\n");
+                try
+                {
+                    orderItem.OrderID = HelperFunctions.ReadIntUser("enter order id:\n");
+                    dalOrder.ReadId(orderItem.OrderID);
+                    check = false;
+                }
+                catch
+                {
+                    Console.WriteLine("Could not find order ID, please enter new ID\n");
+                }
             }
+            orderItem.Amount = HelperFunctions.ReadIntUser("enter amount:\n");
+            orderItem.Price = dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
+
+            int id = _dalOI.Add(orderItem); //calling CRUD add
+            return id;
         }
 
-        check = true;//if found
-
-        while (check)
-        {
-            try
-            {
-                orderItem.OrderID = HelperFunctions.ReadIntUser("enter order id:\n");
-                dalOrder.ReadId(orderItem.OrderID);
-                check = false;
-            }
-            catch
-            {
-                Console.WriteLine("Could not find order ID, please enter new ID\n");
-            }
-        }
-        orderItem.Amount = HelperFunctions.ReadIntUser("enter amount:\n");
-        orderItem.Price = dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
-
-        int id = _dalOI.Add(orderItem);
-        return id;
-        }
-
+        /// <summary>
+        /// Wrapper function for CRUD delete functio
+        /// </summary>
+        /// <param name="id">id of orderItem to be deleted</param>
         static internal void DeleteOI(int id)
         {
-        _dalOI.Delete(id);
+            _dalOI.Delete(id); //calling CRUD delete
 
-    }
-
-    static internal void UpdateOI()
-        {
-        DalOrder dalOrder = new();
-        DalProducts dalProduct = new();
-        DalOrderItem dalOrderItem = new();
-        bool check = true;
-
-        while (check)//if found
-        {
-            try
-            {
-                orderItem.ID = HelperFunctions.ReadIntUser("Enter orderItem ID\n");
-                dalOrderItem.ReadId(orderItem.ID);
-                check = false;//not found
-            }
-            catch
-            {
-                Console.WriteLine("Could not find orderItem ID, please enter new ID\n");
-            }
         }
 
-        check = true;
-
-        while (check)
+        /// <summary>
+        /// Wrapper function for CRUD update function
+        /// </summary>
+        static internal void UpdateOI()
         {
-            try
+            DalOrder dalOrder = new();
+            DalProducts dalProduct = new();
+            DalOrderItem dalOrderItem = new();
+            bool check = true;
+
+            while (check)//if found
             {
-                orderItem.ProductID = HelperFunctions.ReadIntUser("enter product ID:\n");
-                dalProduct.ReadId(orderItem.ProductID);
-                check = false;
+                try
+                {
+                    orderItem.ID = HelperFunctions.ReadIntUser("Enter orderItem ID\n");
+                    dalOrderItem.ReadId(orderItem.ID);
+                    check = false;//not found
+                }
+                catch
+                {
+                    Console.WriteLine("Could not find orderItem ID, please enter new ID\n");
+                }
             }
-            catch
+
+            check = true;
+            //need to check product id to go in orderItem exists
+            while (check)
             {
-                Console.WriteLine("Could not find product ID, please enter new ID\n");
+                try
+                {
+                    orderItem.ProductID = HelperFunctions.ReadIntUser("enter product ID:\n");
+                    dalProduct.ReadId(orderItem.ProductID);
+                    check = false;
+                }
+                catch
+                {
+                    Console.WriteLine("Could not find product ID, please enter new ID\n");
+                }
             }
+
+            check = true;
+            //need to check order id to go in orderItem exists
+            while (check)
+            {
+                try
+                {
+                    orderItem.OrderID = HelperFunctions.ReadIntUser("enter order id:\n");
+                    dalOrder.ReadId(orderItem.OrderID);
+                    check = false;
+                }
+                catch
+                {
+                    Console.WriteLine("Could not find product ID, please enter new ID\n");
+                }
+            }
+
+            orderItem.Amount = HelperFunctions.ReadIntUser("enter amount:\n");
+            orderItem.Price = dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
+
+            _dalOI.Update(orderItem); //calling CRUD update
+            Console.WriteLine(orderItem);
+
         }
 
-        check = true;
-
-        while (check)
-        {
-            try
-            {
-                orderItem.OrderID = HelperFunctions.ReadIntUser("enter order id:\n");
-                dalOrder.ReadId(orderItem.OrderID);
-                check = false;
-            }
-            catch
-            {
-                Console.WriteLine("Could not find product ID, please enter new ID\n");
-            }
-        }
-
-        orderItem.Amount = HelperFunctions.ReadIntUser("enter amount:\n");
-        orderItem.Price = dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
-
-        _dalOI.Update(orderItem);
-        Console.WriteLine(orderItem);
-
-    }
-
+        /// <summary>
+        /// Wrapper function for CRUD readId function
+        /// </summary>
+        /// <param name="id">id of orderItem to read</param>
+        /// <returns>orderItem to read</returns>
         static internal OrderItem ReadIdOI(int id)
         {
-        return _dalOI.ReadId(id);
+            return _dalOI.ReadId(id); //calling CRUD readId
+        }
 
-    }
-
-    static internal void ReadAllOI()
-    {
-        List<OrderItem> orderItem = _dalOI.ReadAll();
-        foreach (OrderItem oi in orderItem)
+        /// <summary>
+        /// Wrapper function for CRUD readAll function
+        /// </summary>
+        static internal void ReadAllOI()
         {
-            Console.WriteLine(oi);
-            Console.WriteLine('\n');
-        }//print the list
-
+            List<OrderItem> orderItem = _dalOI.ReadAll(); //calling CRUD readAll
+            foreach (OrderItem oi in orderItem) //printing the list
+            {
+                Console.WriteLine(oi);
+                Console.WriteLine('\n');
+            }
+        }
     }
-
-    
 }
-/*The main program of stage1 should display a menu to the user. The menu options appear below.
-Each team needs to analyze the entities and conclude the items (the levels) that are needed in each
-option. Again, note: no logic should be implemented in the main program, as was the case in the
-data entity methods.
-The main menu will give the options for checking out every data entity. Choosing a specific entity will
-open a sub-menu for performing entity operations. There should be a menu item for each
-implemented method in the respective accessor class. For example:
-
-0. Exit
-1. Check out [entity-name-1]:
-    a. Add an object to the entity list.
-    b. Display and object using an object’s identifier.
-    c. Display the object list.
-    d. Update an object.
-    e. Delete an object from the object list.
-2. Check out [entity-name-2]:
-…
-
-Should an entity have methods outside CRUD their extra functionality may reflect in their respective
-menu. It is mandatory to consider all the accessor methods of each class.
-● The main program will be defined in project DalTest
-● The main program’s classes should contain private fields for each of the accessor class
-    ○ The fields should be initialized in the declaration, using an instantiated object of the respective class.
-● The Main() method works as a polling loop. The menu is printed to the console and
-    responds, by descending through the submenus, to input read from the console too.
-● You are required to implement a separate method for each entity’s submenu that will contain:
-    ○ Listing of the checks for the entity.
-    ○ Accepts a user’s choice.
-    ○ Accepts the relevant information for running the method test.
-    ○ calls the requested testing method.
-    ○ Should the tested method return a value - the value may be serialized and printed to the console.
-    ○ An exception thrown by the tested method should be caught and its error message
-     should be printed.
-● Passing input to the create() methods: an object should be created using the (flat) input
-from the user and passed as an object argument to create().
-● Testing update() methods: receive an identifier, serialize and print the object that was located,
-and then request information from the user for performing the update.
-    ○ In the event that input is empty - no update should be performed.
-● Printing values:
-    ○ Entity objects will be serialized inside the ToString() method.
-        ■ Do not call ToString() directly
-    ○ An array should be printed using foreach.
-● The program should not include any logic apart from the necessary input, data requests (method calling), and output.
-*/

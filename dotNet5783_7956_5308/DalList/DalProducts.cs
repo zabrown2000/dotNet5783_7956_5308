@@ -2,39 +2,50 @@
 using DO;
 using System;
 
-//ADD COMMENTS
-
-
 public class DalProducts
 {
-    public int Add(Products product)//add Product to a list and return its id
+    /// <summary>
+    /// Create function for products
+    /// </summary>
+    /// <param name="product">product to add to catalog</param>
+    /// <returns>id of new product</returns>
+    /// <exception cref="Exception">Exception if product exists or catalog is full</exception>
+    public int Add(Products product)
     {
-        //Case 1: New product, need to initialize it and add it
-
-        if (product.ID == 0) //Product's default ctor makes the id 0, so we want to make sure it's a new product to add to our catalog
+        if (DataSource._productList.Count() < 50) //checking that the product cap hasn't been reached
         {
-            product.ID = DataSource.Config.NextProductNumber; //giving this new product a unique id
-            //come back later to see if need to initialize rest of fields
-            DataSource._productList.Add(product);//add product to the Product list
-            return product.ID; //Added the product, returning id
-        }
-        //Case 2: Item already exists, throw exception
-        int index = DataSource._productList.FindIndex(x => x.ID == product.ID); //getting the index of the product in the list (if it exists)
-        if (index != -1) //item was found, so it exists and can't add again
-        {
-            throw new Exception("Product already exists\n"); //error
+            //Case 1: New product, need to initialize it and add it
+            if (product.ID == 0) //Product's default ctor makes the id 0, so we want to make sure it's a new product to add to our catalog
+            {
+                product.ID = DataSource.Config.NextProductNumber; //giving this new product a unique id
+                DataSource._productList.Add(product); //add product to the Product list
+                return product.ID; //Added the product, returning id
+            }
+            //Case 2: Item already exists, throw exception
+            int index = DataSource._productList.FindIndex(x => x.ID == product.ID); //getting the index of the product in the list (if it exists)
+            if (index != -1) //item was found, so it exists and can't add again
+            {
+                throw new Exception("Product already exists\n"); 
+            }
+            else
+            {
+                DataSource._productList.Add(product); //initialized product but not in catalog yet so adding it
+                return product.ID;
+            }
         } else
         {
-            DataSource._productList.Add(product); //initialized product but not in catalog yet so adding it
-            return product.ID;
+            throw new Exception("Product list is full");
         }
+
+        
     }
 
-    /*○ Implement a read method for a single object: input - an entity’s identifier (not an array
-        index!), output - an object.
-    ○ Implement a read method for a list of objects stored in the entity array. No input
-        arguments.
-*/
+    /// <summary>
+    /// Reading a particular product
+    /// </summary>
+    /// <param name="id">id of product to get</param>
+    /// <returns>product that want to read</returns>
+    /// <exception cref="Exception">Exception if product doesn't exist</exception>
     public Products ReadId(int id)
     {
         Products item = DataSource._productList.Find(x => x.ID == id); //checking to see if product exists
@@ -45,19 +56,28 @@ public class DalProducts
         return item;
     }
 
+    /// <summary>
+    /// Reading all products in catalog
+    /// </summary>
+    /// <returns>a list with all the products</returns>
     public List<Products> ReadAll ()
     {
-        return DataSource._productList.ToList();
+        return DataSource._productList.ToList(); //list of products
     }
 
+    /// <summary>
+    /// Delete function for products
+    /// </summary>
+    /// <param name="id">id of product to delete</param>
+    /// <exception cref="Exception">Exception if product doesn't exist</exception>
     public void Delete(int id)
     {
-        int index = -1;
+        int index = -1; //flag for checking if product exists
         foreach (Products product in DataSource._productList) //searching for product in list based on ID
         {
             if (product.ID == id) //if found id in the catalog
             {
-                index = DataSource._productList.IndexOf(product);//save index of that Product
+                index = DataSource._productList.IndexOf(product); //save index of that Product
                 break;
             }
                 
@@ -70,17 +90,21 @@ public class DalProducts
         {
             throw new Exception("Product does not exist\n");
         }
-       
     }
 
+    /// <summary>
+    /// Update function for products
+    /// </summary>
+    /// <param name="product">product want to update</param>
+    /// <exception cref="Exception">Exception if product doesn't exist</exception>
     public void Update(Products product)
     {
-        int index = -1;
-        foreach (Products p in DataSource._productList)//go over Product list
+        int index = -1; //flag for checking if product exists
+        foreach (Products p in DataSource._productList) //go over Product list
         {
             if (product.ID == p.ID) //if found id in the catalog
-            {
-                index = DataSource._productList.IndexOf(product);//save index of that Product
+            { 
+                index = DataSource._productList.IndexOf(p); //save index of that Product
                 break;
             }
         }
