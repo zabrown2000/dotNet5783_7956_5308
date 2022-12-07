@@ -49,7 +49,8 @@ public class DalProducts
     public Products ReadId(int id)
     {
         Products item = DataSource._productList.Find(x => x.ID == id); //checking to see if product exists
-        if (item.ID != id) //if not found the item id will be the default, 0, and not match the given id
+       
+        if (item.ID == 0) //if not found the item id will be the default 0
         {
             throw new Exception("Product does not exist\n");
         }

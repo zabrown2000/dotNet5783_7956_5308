@@ -51,7 +51,7 @@ public class DalOrder
     public Order ReadId(int id)
     {
         Order order = DataSource._orderList.Find(x => x.ID == id); //checking to see if order exists
-        if (order.ID != id) //if not found the order id will be the default, 0, and not match the given id
+        if (order.ID == 0) //if not found the order id will be the default 0
             throw new Exception("The order does not exist\n");
         return order;
     }

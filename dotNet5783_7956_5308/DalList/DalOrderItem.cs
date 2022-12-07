@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using DO;
 namespace Dal;
 
@@ -49,7 +50,7 @@ public class DalOrderItem
     public OrderItem ReadId(int id)
     {
         OrderItem orderItem = DataSource._orderItemList.Find(x => x.ID == id); //checking to see if orderItem exists
-        if (orderItem.ID != id)  //if not found the item id will be the default, 0, and not match the given id
+        if (orderItem.ID == 0)  //if not found the item id will be the default 0
             throw new Exception("The orderItem does not exist\n");
         return orderItem;
     }
@@ -93,11 +94,11 @@ public class DalOrderItem
     }
 
     /// <summary>
-    /// Update function for orderItem
+    /// Update function for orderItem based on orderItem ID
     /// </summary>
     /// <param name="orderItem">orderItem want to update</param>
     /// <exception cref="Exception">Exception if orderItem doesn't exist</exception>
-    public void Update(OrderItem orderItem)
+    public void SetByOrderItem(OrderItem orderItem)
     {
         int index = -1; //flag for checking if orderItem exists
         foreach (OrderItem ori in DataSource._orderItemList) //go over orderItem list
@@ -117,21 +118,47 @@ public class DalOrderItem
             throw new Exception("The orderItem you wish to update does not exist");
         }
     }
+    /// <summary>
+    /// update function for orderItem based on product ID and order ID
+    /// </summary>
+    /// <param name="orderItem"></param>
+    /// <exception cref="Exception"></exception>
+    public void SetByOrdProdID(OrderItem orderItem)
+    {
+        int index = -1;
+        foreach (OrderItem oi in DataSource._orderItemList) //go over OrderItem list
+        {
+            if (oi.OrderID == orderItem.OrderID && oi.ProductID == orderItem.ProductID) //if found an orderItem that matches the given ID and product
+            {
+                index = DataSource._orderItemList.IndexOf(oi); //save index of that orderItem
+                break;
+            }
+        }
+
+        if (index != -1)
+        {
+            DataSource._orderItemList[index] = orderItem; //updating orderItem using same place in memory
+        }
+        else
+        {
+            throw new Exception("The orderItem you wish to update does not exist\n");
+        }
+    }
 
     /// <summary>
-    /// Function to get the list of items in an order, given the order ID
+    /// Function to get the list of items in orderItems with a given order ID
     /// </summary>
     /// <param name="orderId">id of order item with the products we want</param>
     /// <returns>returns a list of products (by id) in order number of id</returns>
-    public List<int> ProductsInOrderItem (int orderId)   
+    public List<OrderItem> OrdersInOrderItem (int orderId)   
     {
-        List<int> productsInOrder = new List<int>(); //list to place ids of products
+        List<OrderItem> OrdersInOrder = new List<OrderItem>(); //list to place ids of products
         foreach (OrderItem orderItem in DataSource._orderItemList) //go over OrderItem list
         {
             if (orderItem.OrderID == orderId) //if found a matching order id to the one sent
-                productsInOrder.Append(orderItem.ProductID); //add id of product in that ordeItem to the list
+                OrdersInOrder.Append(orderItem); //add that orderItem to the list
         }
-        return productsInOrder; //return the products
+        return OrdersInOrder.ToList(); //return the products
     }
 
     /// <summary>
@@ -141,16 +168,15 @@ public class DalOrderItem
     /// <param name="productId">product id in the orderItem</param>
     /// <returns>Respective OrderItem record</returns>
     public OrderItem GetOrderItem (int orderId, int productId) //returns specific product from order of id
-    {
-        OrderItem returnItem = new();
-        
+    {        
         foreach (OrderItem orderItem in DataSource._orderItemList) //go over OrderItem list
         {
-            if (orderItem.OrderID == orderId && orderItem.ProductID == productId) //if found and orderItem that matches the given ID and product
+            if (orderItem.OrderID == orderId && orderItem.ProductID == productId) //if found an orderItem that matches the given ID and product
             {
-                returnItem = orderItem; //save the orderItem
+                return orderItem; //save the orderItem
             }
-        } 
-        return returnItem; //return the OrderItem
+        }
+        throw new Exception("orderItem does not exist\n");
     }
+
 }

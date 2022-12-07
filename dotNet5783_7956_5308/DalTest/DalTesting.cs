@@ -180,18 +180,45 @@ internal class DalTesting
                         case Enums.ActionType.Update:
                             try
                             {
-                                OrderItemFunctions.UpdateOI(); //calling wrapper function for updating an order
+                                //Ask if they want to choose an orderItem to update using a product and order Id or just order Id and then bring to the correct menu and call those functions
+                                int num = HelperFunctions.ReadIntUser("Enter 1 to set orderItem from order ID and 2 to set OrderItem from order ID and product ID\n");
+                                if (num == 1)
+                                {
+                                    OrderItemFunctions.SetByOrderItem();
+                                }
+                                else if (num == 2)
+                                {
+                                    OrderItemFunctions.SetByOrdProdID();
+                                }
+                                else
+                                {
+                                    throw new Exception("invalid integer entered\n");
+                                }
                             }
                             catch
                             {
-                                Console.WriteLine("The orderItem you wish to update does not exist\n");
+                                Console.WriteLine("The orderItem does not exist\n");
                             }
                             break;
+
 
                         case Enums.ActionType.ReadId:
                             try
                             {
-                                Console.WriteLine(OrderItemFunctions.ReadIdOI(HelperFunctions.ReadIntUser("Enter OrderItem ID\n"))); //printing and getting input from user and sending it to wrapper readId function
+                                //Ask if they want to choose an orderItem to get using a product and order Id or just order Id and then bring to the correct menu and call those functions
+                                int num = HelperFunctions.ReadIntUser("Enter 1 to get orderItem list from order ID and 2 to get OrderItem from order ID and product ID\n");
+                                if (num == 1)
+                                {
+                                    OrderItemFunctions.ReadOrderID();
+                                }
+                                else if (num == 2)
+                                {
+                                    Console.WriteLine(OrderItemFunctions.ReadOrdProdID());
+                                }
+                                else
+                                {
+                                    throw new Exception("invalid integer entered\n");
+                                }
                             }
                             catch
                             {
@@ -360,7 +387,7 @@ internal class DalTesting
             order.CustomerName = Console.ReadLine() ?? "";
             Console.WriteLine("enter customer mail:\n");
             order.CustomerEmail = Console.ReadLine() ?? "";
-            Console.WriteLine("enter customer adress:\n");
+            Console.WriteLine("enter customer address:\n");
             order.CustomerAddress = Console.ReadLine() ?? "";
             order.OrderDate = DateTime.Now;
             order.ShipDate = DateTime.MinValue;
@@ -486,7 +513,7 @@ internal class DalTesting
         }
 
         /// <summary>
-        /// Wrapper function for CRUD delete functio
+        /// Wrapper function for CRUD delete function
         /// </summary>
         /// <param name="id">id of orderItem to be deleted</param>
         static internal void DeleteOI(int id)
@@ -496,9 +523,54 @@ internal class DalTesting
         }
 
         /// <summary>
-        /// Wrapper function for CRUD update function
+        /// Wrapper function for CRUD update/SetByOrdProdId function based on order Id and product Id
         /// </summary>
-        static internal void UpdateOI()
+        static internal void SetByOrdProdID()
+        {
+            DalOrder dalOrder = new();
+            DalProducts dalProduct = new();
+            DalOrderItem dalOrderItem = new();
+            bool check = true;
+
+            while (check)
+            {
+                try
+                {
+                    orderItem.ProductID = HelperFunctions.ReadIntUser("enter product ID:\n");
+                    dalProduct.ReadId(orderItem.ProductID);
+                    check = false;
+                }
+                catch
+                {
+                    Console.WriteLine("Could not find product ID, please enter new ID\n");
+                }
+            }
+
+            check = true;
+
+            while (check)
+            {
+                try
+                {
+                    orderItem.OrderID = HelperFunctions.ReadIntUser("enter order id:\n");
+                    dalOrder.ReadId(orderItem.OrderID);
+                    check = false;
+                }
+                catch
+                {
+                    Console.WriteLine("Could not find order ID, please enter new ID\n");
+                }
+            }
+            orderItem.Amount = HelperFunctions.ReadIntUser("enter new amount:\n");
+            orderItem.Price = dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
+
+            _dalOI.SetByOrdProdID(orderItem);
+            Console.WriteLine(orderItem);
+        }
+        /// <summary>
+        /// wrapper function for CRUD update/setByOrderItem function based on just orderItem id
+        /// </summary>
+        static internal void SetByOrderItem()
         {
             DalOrder dalOrder = new();
             DalProducts dalProduct = new();
@@ -518,9 +590,9 @@ internal class DalTesting
                     Console.WriteLine("Could not find orderItem ID, please enter new ID\n");
                 }
             }
-
+            /*
+            //we don't care about order or product number here. we only want to know about the orderItem id so remove these lines
             check = true;
-            //need to check product id to go in orderItem exists
             while (check)
             {
                 try
@@ -536,7 +608,7 @@ internal class DalTesting
             }
 
             check = true;
-            //need to check order id to go in orderItem exists
+
             while (check)
             {
                 try
@@ -547,26 +619,45 @@ internal class DalTesting
                 }
                 catch
                 {
-                    Console.WriteLine("Could not find product ID, please enter new ID\n");
+                    Console.WriteLine("Could not find order ID, please enter new ID\n");
                 }
             }
-
-            orderItem.Amount = HelperFunctions.ReadIntUser("enter amount:\n");
+            */
+            orderItem.Amount = HelperFunctions.ReadIntUser("enter new amount:\n");
             orderItem.Price = dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
 
-            _dalOI.Update(orderItem); //calling CRUD update
+            _dalOI.SetByOrderItem(orderItem);
             Console.WriteLine(orderItem);
 
         }
 
+
         /// <summary>
-        /// Wrapper function for CRUD readId function
+        /// Wrapper function for CRUD GetOrderItem function 
         /// </summary>
         /// <param name="id">id of orderItem to read</param>
         /// <returns>orderItem to read</returns>
-        static internal OrderItem ReadIdOI(int id)
+        static internal OrderItem ReadOrdProdID()
         {
-            return _dalOI.ReadId(id); //calling CRUD readId
+           
+            int ordNum = HelperFunctions.ReadIntUser("Enter the order ID:\n");
+            int prodNum = HelperFunctions.ReadIntUser("Enter the product ID:\n");
+            return _dalOI.GetOrderItem(ordNum, prodNum);
+           
+        }
+        /// <summary>
+        /// Wrapper function for CRUD OrdersInOrderItem function to return a list of orderItems with a given order Id
+        /// </summary>
+        static internal void ReadOrderID()
+        {
+            
+            int num = HelperFunctions.ReadIntUser("Enter the order ID:\n");
+            List<OrderItem> orderItem = _dalOI.OrdersInOrderItem(num); 
+            foreach (OrderItem oi in orderItem) //printing the list
+            {
+                Console.WriteLine(oi);
+                Console.WriteLine('\n');
+            }
         }
 
         /// <summary>

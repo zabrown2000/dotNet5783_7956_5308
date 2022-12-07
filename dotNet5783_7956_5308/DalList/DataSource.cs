@@ -111,17 +111,21 @@ static internal class DataSource
             if (i < 4) //hardcoding the 20% of current orders to not have been shipped yet 
             {
                _orderList.Add(myOrder);
-                return;
+                
             }
-            myOrder.ShipDate = myOrder.OrderDate + new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L)); //using TimeSpan to add an interval chosen at random
-            
-            if (i >= 4 && i < 10) //hardcoding 40% of current shipped items to not have a delivery date yet
+           //we want the rest of them to have shipping
+                myOrder.ShipDate = myOrder.OrderDate + new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L)); //using TimeSpan to add an interval chosen at random
+
+                if (i >= 4 && i < 10) //hardcoding 40% of current shipped items to not have a delivery date yet
+                {
+                    _orderList.Add(myOrder);
+                }
+            if (i >= 10)
             {
+                //we want delivery date to apply only to 
+                myOrder.DeliveryDate = myOrder.ShipDate + new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L)); //using TimeSpan to add an interval chosen at random
                 _orderList.Add(myOrder);
-                return;
             }
-            myOrder.DeliveryDate = myOrder.ShipDate + new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L)); //using TimeSpan to add an interval chosen at random
-            _orderList.Add(myOrder); 
         }
     }
 
