@@ -156,7 +156,7 @@ public class DalOrderItem
         foreach (OrderItem orderItem in DataSource._orderItemList) //go over OrderItem list
         {
             if (orderItem.OrderID == orderId) //if found a matching order id to the one sent
-                OrdersInOrder.Append(orderItem); //add that orderItem to the list
+                OrdersInOrder.Add(orderItem); //add that orderItem to the list
         }
         return OrdersInOrder.ToList(); //return the products
     }

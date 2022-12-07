@@ -181,7 +181,11 @@ internal class DalTesting
                             try
                             {
                                 //Ask if they want to choose an orderItem to update using a product and order Id or just order Id and then bring to the correct menu and call those functions
-                                int num = HelperFunctions.ReadIntUser("Enter 1 to set orderItem from order ID and 2 to set OrderItem from order ID and product ID\n");
+                                int num = HelperFunctions.ReadIntUser("Enter 1 to set orderItem from orderItem ID and 2 to set OrderItem from order ID and product ID\n");
+                                while (num < 1 || num > 2)
+                                {
+                                    num = HelperFunctions.ReadIntUser("Invalid choice entered. Please enter 1 or 2\n");
+                                }
                                 if (num == 1)
                                 {
                                     OrderItemFunctions.SetByOrderItem();
@@ -189,10 +193,6 @@ internal class DalTesting
                                 else if (num == 2)
                                 {
                                     OrderItemFunctions.SetByOrdProdID();
-                                }
-                                else
-                                {
-                                    throw new Exception("invalid integer entered\n");
                                 }
                             }
                             catch
@@ -207,6 +207,10 @@ internal class DalTesting
                             {
                                 //Ask if they want to choose an orderItem to get using a product and order Id or just order Id and then bring to the correct menu and call those functions
                                 int num = HelperFunctions.ReadIntUser("Enter 1 to get orderItem list from order ID and 2 to get OrderItem from order ID and product ID\n");
+                                while (num < 1 || num > 2)
+                                {
+                                    num = HelperFunctions.ReadIntUser("Invalid choice entered. Please enter 1 or 2\n");
+                                }
                                 if (num == 1)
                                 {
                                     OrderItemFunctions.ReadOrderID();
@@ -214,10 +218,6 @@ internal class DalTesting
                                 else if (num == 2)
                                 {
                                     Console.WriteLine(OrderItemFunctions.ReadOrdProdID());
-                                }
-                                else
-                                {
-                                    throw new Exception("invalid integer entered\n");
                                 }
                             }
                             catch
@@ -307,7 +307,12 @@ internal class DalTesting
             Console.WriteLine("Enter the product name:\n");
             product.Name = Console.ReadLine() ?? "";
             product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
-            product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category (1-7):\n");
+            int num = HelperFunctions.ReadIntUser("Enter the product category (1-7):\n");
+            while (num < 1 || num > 7)
+            {
+                num = HelperFunctions.ReadIntUser("Invalid choice, please choose 1-7\n");
+            }
+            product.Category = (Enums.Categories)num;
             product.InStock = HelperFunctions.ReadIntUser("Enter the product stock\n");
 
             return _dalP.Add(product); //calling CRUD add
@@ -331,7 +336,12 @@ internal class DalTesting
             Console.WriteLine("Enter the product name:\n");
             product.Name = Console.ReadLine() ?? "";
             product.Price = HelperFunctions.ReadIntUser("Enter the product price:\n");
-            product.Category = (Enums.Categories)HelperFunctions.ReadIntUser("Enter the product category (1-7):\n");
+            int num = HelperFunctions.ReadIntUser("Enter the product category (1-7):\n");
+            while (num < 1 || num > 7)
+            {
+                num = HelperFunctions.ReadIntUser("Invalid choice, please choose 1-7\n");
+            }
+            product.Category = (Enums.Categories)num;
             product.InStock = HelperFunctions.ReadIntUser("Enter the product stock:\n");
 
             _dalP.Update(product); //calling CRUD update
@@ -582,7 +592,7 @@ internal class DalTesting
                 try
                 {
                     orderItem.ID = HelperFunctions.ReadIntUser("Enter orderItem ID\n");
-                    dalOrderItem.ReadId(orderItem.ID);
+                    orderItem = dalOrderItem.ReadId(orderItem.ID); //need to get the product and order ids so assigning the whole item and will reset necessary fields below
                     check = false;//not found
                 }
                 catch
@@ -590,39 +600,6 @@ internal class DalTesting
                     Console.WriteLine("Could not find orderItem ID, please enter new ID\n");
                 }
             }
-            /*
-            //we don't care about order or product number here. we only want to know about the orderItem id so remove these lines
-            check = true;
-            while (check)
-            {
-                try
-                {
-                    orderItem.ProductID = HelperFunctions.ReadIntUser("enter product ID:\n");
-                    dalProduct.ReadId(orderItem.ProductID);
-                    check = false;
-                }
-                catch
-                {
-                    Console.WriteLine("Could not find product ID, please enter new ID\n");
-                }
-            }
-
-            check = true;
-
-            while (check)
-            {
-                try
-                {
-                    orderItem.OrderID = HelperFunctions.ReadIntUser("enter order id:\n");
-                    dalOrder.ReadId(orderItem.OrderID);
-                    check = false;
-                }
-                catch
-                {
-                    Console.WriteLine("Could not find order ID, please enter new ID\n");
-                }
-            }
-            */
             orderItem.Amount = HelperFunctions.ReadIntUser("enter new amount:\n");
             orderItem.Price = dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
 
@@ -637,7 +614,7 @@ internal class DalTesting
         /// </summary>
         /// <param name="id">id of orderItem to read</param>
         /// <returns>orderItem to read</returns>
-        static internal OrderItem ReadOrdProdID()
+        static internal OrderItem ReadOrdProdID() //test it works
         {
            
             int ordNum = HelperFunctions.ReadIntUser("Enter the order ID:\n");
