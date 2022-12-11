@@ -32,6 +32,13 @@ static internal class DataSource
     /// </summary>
     internal static class Config
     {
+        /*Remove the counter fields. We called them “last available running (integer)
+identifier in each object”. These fields were staged for each auto-incremental
+identifier entity field.
+iii. The initializations for these counters should be removed as well
+*/
+
+
         //Order numbers setup
         internal const int s_startOrderNumber = 1000; //decided to make order numbers 4 digits
         private static int s_nextOrderNumber = s_startOrderNumber;

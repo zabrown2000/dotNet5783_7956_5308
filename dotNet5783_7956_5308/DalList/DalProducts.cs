@@ -1,8 +1,11 @@
 ﻿namespace Dal;
 using DO;
 using System;
+using DalApi;
 
-public class DalProducts
+
+
+internal class DalProducts : IProducts
 {
     /// <summary>
     /// Create function for products
@@ -25,7 +28,7 @@ public class DalProducts
             int index = DataSource._productList.FindIndex(x => x.ID == product.ID); //getting the index of the product in the list (if it exists)
             if (index != -1) //item was found, so it exists and can't add again
             {
-                throw new Exception("Product already exists\n"); 
+                throw new EntityAlreadyExistsException("Product already exists\n");
             }
             else
             {
@@ -34,7 +37,7 @@ public class DalProducts
             }
         } else
         {
-            throw new Exception("Product list is full");
+            throw new EntityListIsFullException("Product list is full");
         }
 
         
@@ -52,7 +55,7 @@ public class DalProducts
        
         if (item.ID == 0) //if not found the item id will be the default 0
         {
-            throw new Exception("Product does not exist\n");
+            throw new EntityDoesNotExistException("Product does not exist\n");
         }
         return item;
     }
@@ -61,7 +64,7 @@ public class DalProducts
     /// Reading all products in catalog
     /// </summary>
     /// <returns>a list with all the products</returns>
-    public List<Products> ReadAll ()
+    public IEnumerable<Products> ReadAll ()
     {
         return DataSource._productList.ToList(); //list of products
     }
@@ -89,7 +92,7 @@ public class DalProducts
             DataSource._productList.Remove(toDelete); //removing product from the list
         } else
         {
-            throw new Exception("Product does not exist\n");
+            throw new EntityDoesNotExistException("Product does not exist\n");
         }
     }
 
@@ -114,7 +117,7 @@ public class DalProducts
             DataSource._productList[index] = product; //updating item using same place in memory
         } else
         {
-            throw new Exception("The product you wish to update does not exist");
+            throw new EntityDoesNotExistException("The product you wish to update does not exist");
         }
     }
 }

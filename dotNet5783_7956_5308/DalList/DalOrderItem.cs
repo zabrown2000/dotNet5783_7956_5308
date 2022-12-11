@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Reflection;
-using DO;
+﻿using DO;
+using DalApi;
 namespace Dal;
 
 
-public class DalOrderItem
+internal class DalOrderItem : IOrderItem
 {
     /// <summary>
     /// Create function for orderitems
@@ -28,7 +26,7 @@ public class DalOrderItem
             int index = DataSource._orderItemList.FindIndex(x => x.ID == orderItem.ID); //getting the index of the orderItem in the list (if it exists)
             if (index != -1) //orderItem was found, so it exists and can't add again
             {
-                throw new Exception("OrderItem already exists"); //error
+                throw new EntityAlreadyExistsException("OrderItem already exists"); //error
             }
             else
             {
@@ -37,7 +35,7 @@ public class DalOrderItem
             }
         } else
         {
-            throw new Exception("OrderItem list is full");
+            throw new EntityListIsFullException("OrderItem list is full");
         }       
     }
 
@@ -51,7 +49,7 @@ public class DalOrderItem
     {
         OrderItem orderItem = DataSource._orderItemList.Find(x => x.ID == id); //checking to see if orderItem exists
         if (orderItem.ID == 0)  //if not found the item id will be the default 0
-            throw new Exception("The orderItem does not exist\n");
+            throw new EntityDoesNotExistException("The orderItem does not exist\n");
         return orderItem;
     }
 
@@ -59,7 +57,7 @@ public class DalOrderItem
     /// Reading all the orderItems in list
     /// </summary>
     /// <returns>list with all the orderItems</returns>
-    public List<OrderItem> ReadAll()
+    public IEnumerable<OrderItem> ReadAll()
     {
         return DataSource._orderItemList.ToList(); //list of orderItems
     }
@@ -88,7 +86,7 @@ public class DalOrderItem
         }
         else
         {
-            throw new Exception("OrderItem does not exist\n");
+            throw new EntityDoesNotExistException("OrderItem does not exist\n");
         }
         
     }
@@ -115,7 +113,7 @@ public class DalOrderItem
         }
         else
         {
-            throw new Exception("The orderItem you wish to update does not exist");
+            throw new EntityDoesNotExistException("The orderItem you wish to update does not exist");
         }
     }
     /// <summary>
@@ -141,7 +139,7 @@ public class DalOrderItem
         }
         else
         {
-            throw new Exception("The orderItem you wish to update does not exist\n");
+            throw new EntityDoesNotExistException("The orderItem you wish to update does not exist\n");
         }
     }
 
@@ -150,7 +148,7 @@ public class DalOrderItem
     /// </summary>
     /// <param name="orderId">id of order item with the products we want</param>
     /// <returns>returns a list of products (by id) in order number of id</returns>
-    public List<OrderItem> OrdersInOrderItem (int orderId)   
+    public IEnumerable<OrderItem> OrdersInOrderItem (int orderId)   
     {
         List<OrderItem> OrdersInOrder = new List<OrderItem>(); //list to place ids of products
         foreach (OrderItem orderItem in DataSource._orderItemList) //go over OrderItem list
@@ -176,7 +174,9 @@ public class DalOrderItem
                 return orderItem; //save the orderItem
             }
         }
-        throw new Exception("orderItem does not exist\n");
+        throw new EntityDoesNotExistException("orderItem does not exist\n");
     }
+
+    public void Update(OrderItem orderItem) { }
 
 }

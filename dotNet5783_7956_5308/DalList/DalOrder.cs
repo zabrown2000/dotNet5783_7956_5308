@@ -1,10 +1,10 @@
 ﻿
 using System;
 using DO;
+using DalApi;
 namespace Dal;
 
-
-public class DalOrder
+internal class DalOrder : IOrder
 {
     /// <summary>
     /// Create function for orders
@@ -27,7 +27,7 @@ public class DalOrder
             int index = DataSource._orderList.FindIndex(x => x.ID == order.ID); //getting the index of the order in the list (if it exists)
             if (index != -1) //order was found, so it exists and can't add again
             {
-                throw new Exception("Order already exists"); 
+                throw new EntityAlreadyExistsException("Order already exists"); 
             }
             else
             {
@@ -36,7 +36,7 @@ public class DalOrder
             }
         } else
         {
-            throw new Exception("Order list is full");
+            throw new EntityListIsFullException("Order list is full");
         }
 
         
@@ -52,7 +52,7 @@ public class DalOrder
     {
         Order order = DataSource._orderList.Find(x => x.ID == id); //checking to see if order exists
         if (order.ID == 0) //if not found the order id will be the default 0
-            throw new Exception("The order does not exist\n");
+            throw new EntityDoesNotExistException("The order does not exist\n");
         return order;
     }
 
@@ -60,7 +60,7 @@ public class DalOrder
     /// Reading all orders in list
     /// </summary>
     /// <returns>a list with all the orders</returns>
-    public List<Order> ReadAll()
+    public IEnumerable<Order> ReadAll()
     {
         return DataSource._orderList.ToList(); //list of orders
     }
@@ -88,7 +88,7 @@ public class DalOrder
         }
         else
         {
-            throw new Exception("Order does not exist\n");
+            throw new EntityDoesNotExistException("Order does not exist\n");
         }
     }
 
@@ -115,7 +115,7 @@ public class DalOrder
         }
         else
         {
-            throw new Exception("The order you wish to update does not exist");
+            throw new EntityDoesNotExistException("The order you wish to update does not exist");
         }
     }
 }
