@@ -5,7 +5,7 @@ using DalApi;
 
 
 
-internal class DalProducts : IProducts
+internal class DalProducts : IProducts                  //need new way to check if new or not
 {
     /// <summary>
     /// Create function for products
@@ -20,7 +20,7 @@ internal class DalProducts : IProducts
             //Case 1: New product, need to initialize it and add it
             if (product.ID == 0) //Product's default ctor makes the id 0, so we want to make sure it's a new product to add to our catalog
             {
-                product.ID = DataSource.Config.NextProductNumber; //giving this new product a unique id
+                //product.ID = DataSource.Config.NextProductNumber; //giving this new product a unique id
                 DataSource._productList.Add(product); //add product to the Product list
                 return product.ID; //Added the product, returning id
             }

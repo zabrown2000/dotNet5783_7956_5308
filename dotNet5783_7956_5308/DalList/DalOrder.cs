@@ -4,7 +4,7 @@ using DO;
 using DalApi;
 namespace Dal;
 
-internal class DalOrder : IOrder
+internal class DalOrder : IOrder                       //need new way to check if new or not
 {
     /// <summary>
     /// Create function for orders
@@ -19,7 +19,7 @@ internal class DalOrder : IOrder
             //Case 1: New order, need to initialize it and add it
             if (order.ID == 0) //Orders's default ctor makes the id 0, so we want to make sure it's a new order to add to our list
             {
-                order.ID = DataSource.Config.NextOrderNumber;//giving this new order a unique id
+                //order.ID = DataSource.Config.NextOrderNumber;//giving this new order a unique id
                 DataSource._orderList.Add(order); //add order to the order list
                 return order.ID; //Added the order, returning id
             }

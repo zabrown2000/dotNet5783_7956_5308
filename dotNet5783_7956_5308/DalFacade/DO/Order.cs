@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Xml.Linq;
 
 namespace DO;
 
@@ -7,10 +8,21 @@ namespace DO;
 /// </summary>
 public struct Order
 {
+    public Order()
+    {
+        CustomerName = "";
+        CustomerEmail = "";
+        CustomerAddress = "";
+        OrderDate = DateTime.MinValue;
+        ShipDate = DateTime.MinValue;
+        DeliveryDate = DateTime.MinValue;
+    }
+    static int counter = 10; //2 digit order ids
+
     /// <summary>
     /// Unique id for an order 
     /// </summary>
-    public int ID { get; set; }
+    public int ID { get; init; } = counter++;
     /// <summary>
     /// Name of customer making order
     /// </summary>

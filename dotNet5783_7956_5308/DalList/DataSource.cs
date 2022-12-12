@@ -27,31 +27,7 @@ static internal class DataSource
     /// </summary>
     static internal List<OrderItem> _orderItemList = new List<OrderItem> { }; //total of 200 order-items
 
-    /// <summary>
-    /// Internal class to help us automate the creation of order, product, and orderItem IDs
-    /// </summary>
-    internal static class Config
-    {
-        /*Remove the counter fields. We called them “last available running (integer)
-identifier in each object”. These fields were staged for each auto-incremental
-identifier entity field.
-iii. The initializations for these counters should be removed as well
-*/
-
-
-        //Order numbers setup
-        internal const int s_startOrderNumber = 1000; //decided to make order numbers 4 digits
-        private static int s_nextOrderNumber = s_startOrderNumber;
-        internal static int NextOrderNumber { get => ++s_nextOrderNumber; } //each time the value is "get-ed" it will increment the value by 1
-        //Product numbers setup
-        internal const int s_startProductNumber = 100000; //needs to be a 6 digit number, so this is the minimum it can be
-        public static int s_nextProductNumber = s_startProductNumber; 
-        internal static int NextProductNumber { get => ++s_nextProductNumber; } //each time the value is "get-ed" it will increment the value by 1
-        //OrderItem numbers setup
-        internal const int s_startOrderItemNumber = 0;
-        public static int s_nextOrderItemNumber = s_startOrderItemNumber;
-        internal static int NextOrderItemNumber { get => ++s_nextOrderItemNumber; } //each time the value is "get-ed" it will increment the value by 1
-    }
+    
 
     /*--------Class Methods--------*/
     /// <summary>
@@ -82,7 +58,7 @@ iii. The initializations for these counters should be removed as well
         {
             _productList.Add( new() //creating a new product and setting the values to go in our list
             {   //using random generator to fill most of the fields
-                ID = Config.NextProductNumber,
+                //ID = Config.NextProductNumber,
                 Price = randNumGen.Next(50, 3000),
                 Name = NameOfApplicance[randNumGen.Next(NameOfApplicance.Length)],
                 Category = (Enums.Categories)randNumGen.Next(0, 8),
@@ -107,7 +83,6 @@ iii. The initializations for these counters should be removed as well
         {
             Order myOrder = new() //creating a new order and setting the values to go in our list
             {   //using random generator to fill most of the fields
-                ID = Config.NextOrderNumber,
                 CustomerName = CustomerName[randNumGen.Next(CustomerName.Length)],
                 CustomerEmail = CustomerEmail[randNumGen.Next(CustomerEmail.Length)],
                 CustomerAddress = CustomerAddress[randNumGen.Next(CustomerAddress.Length)],
@@ -149,9 +124,8 @@ iii. The initializations for these counters should be removed as well
             Products product = _productList[randNumGen.Next(_productList.Count)]; 
             _orderItemList.Add( new OrderItem //creating a new orderItem and setting the values to go in our list
             {   //using random generator to fill most of the fields
-                ID = Config.NextOrderItemNumber,
                 ProductID = product.ID,
-                OrderID = randNumGen.Next(Config.s_startOrderNumber, Config.s_startOrderNumber + _orderList.Count), 
+                OrderID = randNumGen.Next(10, 10 + _orderList.Count), //order ids are all 2 digits
                 Price = product.Price,
                 Amount = randNumGen.Next(5)
             });

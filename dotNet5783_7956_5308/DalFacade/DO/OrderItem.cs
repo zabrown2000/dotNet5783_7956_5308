@@ -1,4 +1,5 @@
 ﻿
+using System.Diagnostics.Metrics;
 using System.Xml.Linq;
 
 namespace DO;
@@ -8,10 +9,20 @@ namespace DO;
 /// </summary>
 public struct OrderItem
 {
+    public OrderItem()
+    {
+        OrderID = 0;
+        ProductID = 0;
+        Amount = 0;
+        Price = 0;
+    }
+    
+    static int counter = 1000; //4 digit order-item ids
+
     /// <summary>
     /// Unique id for an order-item relation
     /// </summary>
-    public int ID { get; set; }
+    public int ID { get; init; } = counter++;
     /// <summary>
     /// Unique id of product in relation
     /// </summary>

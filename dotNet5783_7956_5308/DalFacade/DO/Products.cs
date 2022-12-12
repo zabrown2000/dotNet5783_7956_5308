@@ -1,14 +1,26 @@
-﻿namespace DO;
+﻿using System.Diagnostics.Metrics;
+
+namespace DO;
 
 /// <summary>
 /// Structure for a product entity
 /// </summary>
 public struct Products
 {
+    public Products()
+    {
+        Name = "";
+        Price = 0;
+        Category = 0;
+        InStock = 0;
+    }
+
+    static int counter = 100; //3 digit product ids
+
     /// <summary>
     /// Unique id for a product
     /// </summary>
-    public int ID { get; set; }
+    public int ID { get; init; } = counter++;
     /// <summary>
     /// Name of product
     /// </summary>
@@ -16,7 +28,7 @@ public struct Products
     /// <summary>
     /// Category of product
     /// </summary>
-    public Enums.Categories Category {get; set;}
+    public Enums.Categories Category { get; set; }
     /// <summary>
     /// Cost of product
     /// </summary>
@@ -25,6 +37,8 @@ public struct Products
     /// Quantity of product in stock
     /// </summary>
     public int InStock { get; set; }
+    
+
 
     public override String ToString() => $@"
         Product ID={ID}: {Name},
