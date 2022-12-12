@@ -5,7 +5,7 @@ using static DO.Enums;
 using System.Diagnostics;
 using static System.Net.Mime.MediaTypeNames;
 using static Test.DalTesting;
-using DalApi;
+using DalApi;                                             //will to update catching to handle new exceptions
 
 namespace Test;
 

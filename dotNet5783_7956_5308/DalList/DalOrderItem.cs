@@ -26,7 +26,7 @@ internal class DalOrderItem : IOrderItem
             int index = DataSource._orderItemList.FindIndex(x => x.ID == orderItem.ID); //getting the index of the orderItem in the list (if it exists)
             if (index != -1) //orderItem was found, so it exists and can't add again
             {
-                throw new EntityAlreadyExistsException("OrderItem already exists"); //error
+                throw new EntityAlreadyExistsException(orderItem); //error
             }
             else
             {
@@ -35,7 +35,7 @@ internal class DalOrderItem : IOrderItem
             }
         } else
         {
-            throw new EntityListIsFullException("OrderItem list is full");
+            throw new EntityListIsFullException(orderItem);
         }       
     }
 
@@ -49,7 +49,7 @@ internal class DalOrderItem : IOrderItem
     {
         OrderItem orderItem = DataSource._orderItemList.Find(x => x.ID == id); //checking to see if orderItem exists
         if (orderItem.ID == 0)  //if not found the item id will be the default 0
-            throw new EntityDoesNotExistException("The orderItem does not exist\n");
+            throw new EntityDoesNotExistException(new OrderItem());
         return orderItem;
     }
 
@@ -86,7 +86,7 @@ internal class DalOrderItem : IOrderItem
         }
         else
         {
-            throw new EntityDoesNotExistException("OrderItem does not exist\n");
+            throw new EntityDoesNotExistException(new OrderItem());
         }
         
     }
@@ -113,7 +113,7 @@ internal class DalOrderItem : IOrderItem
         }
         else
         {
-            throw new EntityDoesNotExistException("The orderItem you wish to update does not exist");
+            throw new EntityDoesNotExistException(orderItem);
         }
     }
     /// <summary>

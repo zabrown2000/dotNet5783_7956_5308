@@ -27,7 +27,7 @@ internal class DalOrder : IOrder
             int index = DataSource._orderList.FindIndex(x => x.ID == order.ID); //getting the index of the order in the list (if it exists)
             if (index != -1) //order was found, so it exists and can't add again
             {
-                throw new EntityAlreadyExistsException("Order already exists"); 
+                throw new EntityAlreadyExistsException(order); 
             }
             else
             {
@@ -36,7 +36,7 @@ internal class DalOrder : IOrder
             }
         } else
         {
-            throw new EntityListIsFullException("Order list is full");
+            throw new EntityListIsFullException(order);
         }
 
         
@@ -52,7 +52,7 @@ internal class DalOrder : IOrder
     {
         Order order = DataSource._orderList.Find(x => x.ID == id); //checking to see if order exists
         if (order.ID == 0) //if not found the order id will be the default 0
-            throw new EntityDoesNotExistException("The order does not exist\n");
+            throw new EntityDoesNotExistException(new Order());
         return order;
     }
 
@@ -88,7 +88,7 @@ internal class DalOrder : IOrder
         }
         else
         {
-            throw new EntityDoesNotExistException("Order does not exist\n");
+            throw new EntityDoesNotExistException(new Order());
         }
     }
 
@@ -115,7 +115,7 @@ internal class DalOrder : IOrder
         }
         else
         {
-            throw new EntityDoesNotExistException("The order you wish to update does not exist");
+            throw new EntityDoesNotExistException(order);
         }
     }
 }

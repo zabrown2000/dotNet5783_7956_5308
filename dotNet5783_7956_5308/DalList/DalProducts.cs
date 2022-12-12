@@ -28,7 +28,7 @@ internal class DalProducts : IProducts
             int index = DataSource._productList.FindIndex(x => x.ID == product.ID); //getting the index of the product in the list (if it exists)
             if (index != -1) //item was found, so it exists and can't add again
             {
-                throw new EntityAlreadyExistsException("Product already exists\n");
+                throw new EntityAlreadyExistsException(product);
             }
             else
             {
@@ -37,7 +37,7 @@ internal class DalProducts : IProducts
             }
         } else
         {
-            throw new EntityListIsFullException("Product list is full");
+            throw new EntityListIsFullException(product);
         }
 
         
@@ -55,7 +55,7 @@ internal class DalProducts : IProducts
        
         if (item.ID == 0) //if not found the item id will be the default 0
         {
-            throw new EntityDoesNotExistException("Product does not exist\n");
+            throw new EntityDoesNotExistException(new Products());
         }
         return item;
     }
@@ -92,7 +92,7 @@ internal class DalProducts : IProducts
             DataSource._productList.Remove(toDelete); //removing product from the list
         } else
         {
-            throw new EntityDoesNotExistException("Product does not exist\n");
+            throw new EntityDoesNotExistException(new Products());
         }
     }
 
@@ -117,7 +117,7 @@ internal class DalProducts : IProducts
             DataSource._productList[index] = product; //updating item using same place in memory
         } else
         {
-            throw new EntityDoesNotExistException("The product you wish to update does not exist");
+            throw new EntityDoesNotExistException(product);
         }
     }
 }
