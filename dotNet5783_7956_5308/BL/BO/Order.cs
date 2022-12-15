@@ -23,15 +23,19 @@ public class Order
     /// <summary>
     /// Date order was made
     /// </summary>
-    public DateTime OrderDate { get; set; }
+    public DateTime? OrderDate { get; set; }
+    /// <summary>
+    /// Status of the order
+    /// </summary>
+    public Enums.OrderStatus Status { get; set; }
     /// <summary>
     /// Date order was shipped
     /// </summary>
-    public DateTime ShipDate { get; set; }
+    public DateTime? ShipDate { get; set; }
     /// <summary>
     /// Date order was delivered
     /// </summary>
-    public DateTime DeliveryDate { get; set; }
+    public DateTime? DeliveryDate { get; set; }
     /// <summary>
     /// list of order items that correspond to order
     /// </summary>

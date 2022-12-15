@@ -25,12 +25,12 @@
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
-    public class CartException : Exception
+    public class OutOfStockException : Exception
     {
-        public CartException() { }
-        public CartException(string message) : base(message) { }
-        public CartException(string message, Exception inner) : base(message, inner) { }
-        protected CartException(
+        public OutOfStockException() { }
+        public OutOfStockException(string message) : base(message) { }
+        public OutOfStockException(string message, Exception inner) : base(message, inner) { }
+        protected OutOfStockException(
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
