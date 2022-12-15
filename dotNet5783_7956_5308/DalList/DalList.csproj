@@ -13,6 +13,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="BlApi\**" />
+    <EmbeddedResource Remove="BlApi\**" />
+    <None Remove="BlApi\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\DalFacade\DalFacade.csproj" />
   </ItemGroup>
 
