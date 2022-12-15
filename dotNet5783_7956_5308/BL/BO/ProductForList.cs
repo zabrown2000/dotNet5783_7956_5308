@@ -19,7 +19,7 @@ public class ProductForList
     /// <summary>
     /// Cost of product for list
     /// </summary>
-    public int Price { get; set; }
+    public double Price { get; set; }
 
     public override String ToString() => $@"
         ID: {ID}

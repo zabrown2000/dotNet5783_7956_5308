@@ -18,11 +18,11 @@ public class ProductItem
     /// <summary>
     /// Cost of product item
     /// </summary>
-    public int Price { get; set; }
+    public double Price { get; set; }
     /// <summary>
-    /// Quantity of product item in stock
+    /// Flag if given product item is in stock
     /// </summary>
-    public int InStock { get; set; }
+    public bool InStock { get; set; }
     /// <summary>
     /// Amount of product items
     /// </summary>
@@ -33,7 +33,7 @@ public class ProductItem
         Name: {Name}
         Category: {Category}
         Price: {Price}
-        In Stock: {InStock}
+        Item In Stock?: {InStock}
         Amount: {Amount}
         ";
 

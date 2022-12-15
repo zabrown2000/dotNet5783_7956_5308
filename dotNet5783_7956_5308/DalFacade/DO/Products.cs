@@ -20,7 +20,7 @@ public struct Products
     /// <summary>
     /// Unique id for a product
     /// </summary>
-    public int ID { get; init; } = counter++;
+    public int ID { get; set; } = counter++;
     /// <summary>
     /// Name of product
     /// </summary>

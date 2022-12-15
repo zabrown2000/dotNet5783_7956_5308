@@ -7,5 +7,5 @@ public interface ICrud<T> where T : struct
     void Update(T item);
     void Delete(int id);
 
-    IEnumerable<T> ReadAll();
+    IEnumerable<T?> ReadAll(Func<T?, bool>? filter = null);
 }
