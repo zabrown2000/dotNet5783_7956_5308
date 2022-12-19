@@ -2,92 +2,118 @@
 using DalApi;
 using Dal;
 using BO;
-//ADD DOCUMENTATION
 namespace BlImplementation;
 
 
 internal class Cart : ICart
 {
     static IDal? dal = new DalList();
-    public BO.Cart AddToCart(BO.Cart myCart, int id)
+
+    /// <summary>
+    /// Method to add product to cart
+    /// </summary>
+    /// <param name="myCart">current user's cart</param>
+    /// <param name="pID">id of product to add to cart</param>
+    /// <returns>updated cart</returns>
+    /// <exception cref="BO.OutOfStockException">exception if product user wants to add is out of stock</exception>
+    public BO.Cart AddToCart(BO.Cart myCart, int pID)
     {
-        int ind = myCart.Items.FindIndex(x => x != null && x.ID == id); //save index of order with ID in cart
-        DO.Products? product = new DO.Products?();//create a DO product
-        product = dal.dalProduct.ReadId(id);//get the matching product for the ID
+        int index = myCart.Items.FindIndex(x => x != null && x.ProductID == pID); //getting index of the product in the cart (if it's there)
+        DO.Products? product = new DO.Products?();//creating new DO product
+        product = dal.dalProduct.ReadId(pID); //getting the actual product for corresponding id user wants to add
+        
         if (product?.InStock < 1)
         {
             throw new BO.OutOfStockException("Product unavailable");
         }
-        if (ind != -1)//exists in cart
+        if (index != -1) //index wasn't -1 so exists in cart
         {
-            myCart.Items[ind].Amount++; //add another product to the cart
-            myCart.Items[ind].Price += myCart.Items[ind].Price;//add to the total price 
-            myCart.TotalPrice += myCart.Items[ind].Price;//update cart price
+            myCart.Items[index].Amount++; //adding another product to the cart
+            double unitPrice = product.Value.Price;
+            myCart.Items[index].Price += unitPrice; //adding to the total price of order item
+            myCart.TotalPrice += unitPrice;//updating cart price
             return myCart;
         }
-        BO.OrderItem oi = new BO.OrderItem//create new orderitem that is being added 
+        //product not in cart yet
+        BO.OrderItem oi = new BO.OrderItem //creating new orderitem to contain the product to add 
         {
-            ID = id,
+            ID = pID,  //is this right? if id sent to fn is oi id then how get product info?
             Price = (double)product.Value.Price,
             Amount = 1,
             ProductID = product.Value.ID
         };
-        myCart.Items.Add(oi);//add the orderitem to cart
-        myCart.TotalPrice += oi.Price;//update price of the cart
+        myCart.Items.Add(oi); //adding the orderitem to cart
+        myCart.TotalPrice += oi.Price; //updating price of the cart
         return myCart;
 
     }
-    public BO.Cart UpdateCart(BO.Cart myCart, int id, int amount)
+    /// <summary>
+    /// Method to update the cart for a specific product
+    /// </summary>
+    /// <param name="myCart">current user's cart</param>
+    /// <param name="pID">id of product to change in cart</param>
+    /// <param name="amount"></param>
+    /// <returns>updated cart</returns>
+    /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
+    public BO.Cart UpdateCart(BO.Cart myCart, int pID, int amount)
     {
-
-
-        int ind = myCart.Items.FindIndex(x => x.ProductID == id); //save index of product with ID in cart
-        DO.Products product = new DO.Products();//create a DO product
+        int index = myCart.Items.FindIndex(x => x.ProductID == pID); //getting index of the product in the cart (if it's there)
+        DO.Products? product = new DO.Products(); //create a new DO product
         try
         {
-            product = dal.dalProduct.ReadId(id);//get the matching product for the ID
+            product = dal.dalProduct.ReadId(pID); //getting product based on id
         }catch
         {
             throw new BO.BOEntityDoesNotExistException();
         }
-        if (ind != -1)//if in cart
+        if (index != -1) //product in cart already
         {
-            if (amount == 0)
+            if (amount == 0) //want to remove item
             {
-                BO.OrderItem temp = myCart.Items[ind];//save the orderitem with id
-                myCart.Items.Remove(temp);//remove orderItem from cart
-                myCart.TotalPrice -= myCart.Items[ind].Price;
+                BO.OrderItem oi = myCart.Items[index]; //save the orderitem with id
+                myCart.Items.Remove(oi); //remove orderItem from cart
+                myCart.TotalPrice -= myCart.Items[index].Price;
                 return myCart;
             }
-            myCart.TotalPrice -= myCart.Items[ind].Price * myCart.Items[ind].Amount; //substract price of product from cart
-            myCart.Items[ind].Amount = amount;//set new amount
-            myCart.TotalPrice += myCart.Items[ind].Price * amount;//add the new price
+            double unitPrice = product.Value.Price;
+            myCart.TotalPrice -= unitPrice * myCart.Items[index].Amount; //substract price of product from cart
+            myCart.Items[index].Amount = amount;//set new amount
+            myCart.TotalPrice += unitPrice * amount;//add the new price
             return myCart;
         }
         throw new BO.BOEntityDoesNotExistException();
     }
+    /// <summary>
+    /// aMethod to make checkout cart and make new order
+    /// </summary>
+    /// <param name="myCart">current user's cart</param>
+    /// <param name="CustomerName">name of customer</param>
+    /// <param name="CustomerEmail">email of customer</param>
+    /// <param name="CustomerAddress">address of customer</param>
+    /// <exception cref="BO.InvalidInputException"></exception>
+    /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
     public void MakeOrder(BO.Cart myCart, string CustomerName, string CustomerEmail, string CustomerAddress)
     {
-        if (CustomerName == "" || CustomerEmail == "" || CustomerAddress == "")//check input
+        if (CustomerName == "" || CustomerEmail == "" || CustomerAddress == "") //validating input
         {
             throw new BO.InvalidInputException("Incorrect Input");
         }
-        DO.OrderItem oi = new();//create order item
-        foreach (BO.OrderItem? item in myCart.Items)//go over orderItems in the cart
+        DO.OrderItem oi = new(); //creating new order item
+        foreach (BO.OrderItem? item in myCart.Items) //go over orderItems in the cart and make sure all info is correct
         {
             try
             {
-                if (item.ProductID == dal.dalProduct.ReadId(item.ProductID).ID && item.Amount > 0 && item.Amount <= dal.dalProduct.ReadId(item.ProductID).InStock)//if orderItem exists and is instock
+                if (item.ProductID == dal.dalProduct.ReadId(item.ProductID).ID && item.Amount > 0 && item.Amount <= dal.dalProduct.ReadId(item.ProductID).InStock) //if orderItem exists and is instock
                 {
-                    DO.Order order = new DO.Order();//new DO order
-                    order.OrderDate = DateTime.Now;//ordered now
-                    int num = dal.dalOrder.Add(order);//add to DO orderlist and get order id
-                    oi.ProductID = item.ProductID;//save product id
-                    oi.OrderID = num;//save order id
-                    dal.dalOrderItem.Add(oi);//add to DO order item list 
-                    DO.Products p = dal.dalProduct.ReadId(oi.ProductID);//get matching product
-                    p.InStock -= item.Amount;//subtract the amount of products in stock
-                    dal.dalProduct.Update(p);//update product in DO
+                    DO.Order order = new DO.Order(); //new DO order
+                    order.OrderDate = DateTime.Now; //ordered now
+                    int num = dal.dalOrder.Add(order); //add to DO orderlist and get order id
+                    oi.ProductID = item.ProductID; //save product id
+                    oi.OrderID = num; //save order id
+                    dal.dalOrderItem.Add(oi); //add to DO order item list 
+                    DO.Products p = dal.dalProduct.ReadId(oi.ProductID); //get matching product
+                    p.InStock -= item.Amount; //subtract the amount of products in stock
+                    dal.dalProduct.Update(p); //update product in DO
                 }
             } catch
             {

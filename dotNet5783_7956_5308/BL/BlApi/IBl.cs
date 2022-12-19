@@ -4,12 +4,17 @@ namespace BlApi;
                     //cart, order, product
 public interface IBl
 {
+    /// <summary>
+    /// field to hold the products interface
+    /// </summary>
     public IProducts products { get; }
+    /// <summary>
+    /// field to hold the order interface
+    /// </summary>
     public IOrder order { get; }
-    //public IOrderItem orderItem { get; }
+    /// <summary>
+    /// field to hold the cart interface
+    /// </summary>
     public ICart cart { get; }
-    //public IOrderTracking orderTracking { get; }
-    //public IOrderForList orderForList { get; }
-    //public IProductForList productForList { get; }
-    //public IProductItem productItem { get; }
+
 }
