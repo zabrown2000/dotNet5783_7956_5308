@@ -5,7 +5,7 @@ using DalApi;
 
 
 
-internal class DalProducts : IProducts                  //need new way to check if new or not
+internal class DalProducts : IProducts                
 {
     /// <summary>
     /// Create function for products
@@ -18,7 +18,7 @@ internal class DalProducts : IProducts                  //need new way to check 
         if (DataSource._productList.Count() < 50) //checking that the product cap hasn't been reached
         {
             //Case 1: New product, need to initialize it and add it
-            if (product.ID == 0) //Product's default ctor makes the id 0, so we want to make sure it's a new product to add to our catalog
+            if (product.Name == "") //Product's default ctor makes the name empty string, so we want to make sure it's a new product to add to our catalog
             {
                 //product.ID = DataSource.Config.NextProductNumber; //giving this new product a unique id
                 DataSource._productList.Add(product); //add product to the Product list
@@ -64,9 +64,9 @@ internal class DalProducts : IProducts                  //need new way to check 
     /// Reading all products in catalog
     /// </summary>
     /// <returns>a list with all the products</returns>
-    public IEnumerable<Products> ReadAll ()
+    public IEnumerable<Products?> ReadAll (Func<Products?, bool>? filter = null)
     {
-        return DataSource._productList.ToList(); //list of products
+        return (IEnumerable<Products?>)DataSource._productList.ToList(); //list of products
     }
 
     /// <summary>

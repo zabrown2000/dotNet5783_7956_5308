@@ -3,7 +3,7 @@ using DalApi;
 namespace Dal;
 
 
-internal class DalOrderItem : IOrderItem            //need new way to check if new or not
+internal class DalOrderItem : IOrderItem           
 {
     /// <summary>
     /// Create function for orderitems
@@ -16,7 +16,7 @@ internal class DalOrderItem : IOrderItem            //need new way to check if n
         if (DataSource._orderItemList.Count() < 200) //checking that the orderItem cap hasn't been reached
         {
             //Case 1: New order, need to initialize it and add it
-            if (orderItem.ID == 0) //OrdersItem's default ctor makes the id 0, so we want to make sure it's a new orderItem to add to our list
+            if (orderItem.OrderID == 0) //OrdersItem's default ctor makes the orderId 0, so we want to make sure it's a new orderItem to add to our list
             {
                 //orderItem.ID = DataSource.Config.NextOrderItemNumber; //giving this new orderItem a unique id
                 DataSource._orderItemList.Add(orderItem); //add orderItem to the orderItem list

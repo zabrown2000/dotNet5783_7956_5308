@@ -8,139 +8,190 @@ namespace BlImplementation;
 
 internal class Order : BlApi.IOrder
 {
-    static IDal? dal = new DalList(); 
+    static IDal? dal = new DalList();
+    /// <summary>
+    /// Getting all orders in data layer and forming a list of type OrderForList for the business layer
+    /// </summary>
+    /// <returns>List of OrderForList</returns>
+    /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
     public IEnumerable<OrderForList?> GetAllOrderForList()
     {
-        IEnumerable<DO.Order?> orders = dal.dalOrder.ReadAll();//get all orders from DO 
-        IEnumerable<DO.OrderItem?> orderItems = dal.dalOrderItem.ReadAll();//get all orderItems from DO 
-        return from DO.Order? ord in orders
-               select new BO.OrderForList
+        IEnumerable<DO.Order?> orders = dal.dalOrder.ReadAll(); //getting all DO orders 
+        IEnumerable<DO.OrderItem?> orderItems = dal.dalOrderItem.ReadAll(); //getting all DO orderItems
+        
+        return from DO.Order? o in orders
+               select new BO.OrderForList //for each order we have we add an entry to the OrderForList list
                {
-                   ID = ord?.ID ?? throw new BO.BOEntityDoesNotExistException(),
-                   CustomerName = ord?.CustomerName,
-                   Status = GetStatus(ord.Value),
-                   AmountOfItems = orderItems.Select(orderItems => orderItems?.ID == ord?.ID).Count(),
-                   TotalPrice = (double)orderItems.Sum(orderItems => orderItems?.Price)
+                   ID = o?.ID ?? throw new BO.BOEntityDoesNotExistException(), //if the order id is null then throw an exception
+                   CustomerName = o?.CustomerName,
+                   Status = GetStatus(o.Value),
+                   AmountOfItems = orderItems.Select(orderItems => orderItems?.ID == o?.ID).Count(), //counting amount of orders in the orderitem list and setting that for BO orderForList amount
+                   TotalPrice = (double)orderItems.Sum(orderItems => orderItems?.Price) //summing up each orderitem for this new BO list entry
                };
+    }
 
-    }//calls get of DO order list, gets items for each order, and build orderItemlist
-
+    /// <summary>
+    /// helper function to get status of a given Dal order
+    /// </summary>
+    /// <param name="order">order we want status of</param>
+    /// <returns></returns>
     private BO.Enums.OrderStatus GetStatus(DO.Order order)
     {
 
         return order.DeliveryDate != DateTime.MinValue ? BO.Enums.OrderStatus.Completed : order.ShipDate != DateTime.MinValue ?
-            BO.Enums.OrderStatus.InProgress : BO.Enums.OrderStatus.New;
+            BO.Enums.OrderStatus.InProgress : BO.Enums.OrderStatus.New; //determining order status by checking if the dates are set
     }
 
-    public BO.Order GetBoOrder(int id)
+    /// <summary>
+    /// Given a DO order ID will return a BO order
+    /// </summary>
+    /// <param name="orderId">id of DO order</param>
+    /// <returns>new BO order</returns>
+    /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
+    public BO.Order GetBoOrder(int orderId)
     {
-        if (id < 0)//id is negative
+        if (orderId < 0) //check if it exists
         {
             throw new BO.BOEntityDoesNotExistException();
         }
-        DO.Order ord = dal.dalOrder.ReadId(id);//get right DO Order
-        double priceTemp = 0;
+        DO.Order order;
+        try
+        {
+            order = dal.dalOrder.ReadId(orderId);//get right DO Order
+        } catch
+        {
+            throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
+        }
+        
+        double tempPrice = 0;
         foreach (DO.OrderItem o in dal.dalOrderItem.ReadAll())
         {
-            if (o.OrderID == id)
+            if (o.OrderID == orderId)
             {
-                priceTemp += o.Price;//add up all of prices in the order
+                tempPrice += o.Price; //add up all prices of all orders in orderItem lists
             }
         }
-        if (ord.ID == id)//if exists 
+        if (order.ID == orderId) //at this point we know it exists
         {
             return new BO.Order
             {
-                ID = id,
-                CustomerAddress = ord.CustomerAddress,
-                CustomerEmail = ord.CustomerEmail,
-                CustomerName = ord.CustomerName,
-                OrderDate = ord.OrderDate,
-                ShipDate = ord.ShipDate,
-                DeliveryDate = ord.DeliveryDate,
-                Status = GetStatus(ord),
-                TotalPrice = priceTemp,
-            };//new BO Order
+                ID = orderId,
+                CustomerAddress = order.CustomerAddress,
+                CustomerEmail = order.CustomerEmail,
+                CustomerName = order.CustomerName,
+                OrderDate = order.OrderDate,
+                ShipDate = order.ShipDate,
+                DeliveryDate = order.DeliveryDate,
+                Status = GetStatus(order),
+                TotalPrice = tempPrice,
+            }; //new BO Order
         }
-        throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
-    }//get order number, check if exists, update date in DO order, and return BO order that has been "shipped"
+        throw new BO.BOEntityDoesNotExistException("Order does not exist\n"); //taking into account any errors we missed
+    }
+    /// <summary>
+    /// Given a DO order ID will update the order to be delivered
+    /// </summary>
+    /// <param name="orderId">id of order want to update</param>
+    /// <returns>the order just updated</returns>
+    /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
     public BO.Order DeliveredUpdate(int orderId)
     {
-
-        DO.Order oId = dal.dalOrder.ReadId(orderId);//get the order from DO of orderId-or catch exception
-        if (oId.ID == orderId && oId.DeliveryDate < DateTime.Today)//if oId exists and has not been shipped 
+        DO.Order order;
+        try
+        {
+            order = dal.dalOrder.ReadId(orderId); //get right DO Order
+        }
+        catch
+        {
+            throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
+        }
+        if (order.ID == orderId && order.DeliveryDate != DateTime.MinValue) //if order exists and has not been shipped (would have set it already if delivered) 
         {
             DO.Order o = new()
             {
                 ID = orderId,
-                CustomerAddress = oId.CustomerAddress,
-                CustomerEmail = oId.CustomerEmail,
-                CustomerName = oId.CustomerName,
-                OrderDate = oId.OrderDate,
-                ShipDate = oId.ShipDate,
-                DeliveryDate = DateTime.Now,//the only difference
-            };//set new delivery date in new DO Order
+                CustomerAddress = order.CustomerAddress,
+                CustomerEmail = order.CustomerEmail,
+                CustomerName = order.CustomerName,
+                OrderDate = order.OrderDate,
+                ShipDate = order.ShipDate,
+                DeliveryDate = DateTime.Now, //the only difference, setting updated delivery date
+            }; 
             dal.dalOrder.Update(o);//update the order in DO
-            double priceTemp = 0;
+            double tempPrice = 0;
             foreach (DO.OrderItem temp in dal.dalOrderItem.ReadAll())
             {
                 if (temp.OrderID == o.ID)
                 {
-                    priceTemp += temp.Price;//add up all of prices in the order
+                    tempPrice += temp.Price; //add up all prices of this order in the orderItem list
                 }
             }
             return new BO.Order
             {
                 ID = orderId,
-                CustomerAddress = oId.CustomerAddress,
-                CustomerEmail = oId.CustomerEmail,
-                CustomerName = oId.CustomerName,
-                OrderDate = oId.OrderDate,
-                ShipDate = oId.ShipDate,
+                CustomerAddress = order.CustomerAddress,
+                CustomerEmail = order.CustomerEmail,
+                CustomerName = order.CustomerName,
+                OrderDate = order.OrderDate,
+                ShipDate = order.ShipDate,
                 DeliveryDate = DateTime.Now,
                 Status = GetStatus(o),
-                TotalPrice = priceTemp,
-            };//new BO Order
+                TotalPrice = tempPrice,
+            }; //new BO Order
         }
         throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
 
-    }//get order number, check if exists, update date in DO order, and return BO order that has been "delivered" 
+    }
+    /// <summary>
+    /// Given a DO order ID will update the order to be shipped
+    /// </summary>
+    /// <param name="orderId">id order to update</param>
+    /// <returns>updated BO order</returns>
+    /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
     public BO.Order ShipUpdate(int orderId)
     {
-        DO.Order oId = dal.dalOrder.ReadId(orderId);//get the order from DO of orderId-or catch exception
-        if (oId.ID == orderId && oId.ShipDate < DateTime.Today)//if oId exists and has not been shipped 
+        DO.Order order;
+        try
+        {
+            order = dal.dalOrder.ReadId(orderId); //get right DO Order
+        }
+        catch
+        {
+            throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
+        }
+        if (order.ID == orderId && order.ShipDate != DateTime.MinValue) //if order exists and has not been shipped 
         {
             DO.Order o = new()
             {
                 ID = orderId,
-                CustomerAddress = oId.CustomerAddress,
-                CustomerEmail = oId.CustomerEmail,
-                CustomerName = oId.CustomerName,
-                OrderDate = oId.OrderDate,
+                CustomerAddress = order.CustomerAddress,
+                CustomerEmail = order.CustomerEmail,
+                CustomerName = order.CustomerName,
+                OrderDate = order.OrderDate,
                 ShipDate = DateTime.Now,
                 DeliveryDate = DateTime.MinValue,
-            };//set new ship date in new DO Order
-            dal.dalOrder.Update(o);//update the order in DO
-            double priceTemp = 0;
+            }; //set new ship date in new DO Order
+            dal.dalOrder.Update(o); //update the order in DO
+            double tempPrice = 0;
             foreach (DO.OrderItem temp in dal.dalOrderItem.ReadAll())
             {
                 if (temp.OrderID == o.ID)
                 {
-                    priceTemp += temp.Price;//add up all of prices in the order
+                    tempPrice += temp.Price;//add up all of prices in the order
                 }
             }
             return new BO.Order
             {
                 ID = orderId,
-                CustomerAddress = oId.CustomerAddress,
-                CustomerEmail = oId.CustomerEmail,
-                CustomerName = oId.CustomerName,
-                OrderDate = oId.OrderDate,
+                CustomerAddress = order.CustomerAddress,
+                CustomerEmail = order.CustomerEmail,
+                CustomerName = order.CustomerName,
+                OrderDate = order.OrderDate,
                 ShipDate = DateTime.Now,
                 Status = GetStatus(o),
-                TotalPrice = priceTemp,
+                TotalPrice = tempPrice,
                 DeliveryDate = DateTime.MinValue,
-            };//new BO Order
+            }; //new BO Order
         }
         throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
     }

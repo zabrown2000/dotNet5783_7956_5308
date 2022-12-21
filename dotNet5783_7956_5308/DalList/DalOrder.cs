@@ -4,7 +4,7 @@ using DO;
 using DalApi;
 namespace Dal;
 
-internal class DalOrder : IOrder                       //need new way to check if new or not
+internal class DalOrder : IOrder                       
 {
     /// <summary>
     /// Create function for orders
@@ -17,7 +17,7 @@ internal class DalOrder : IOrder                       //need new way to check i
         if (DataSource._orderList.Count() < 100) //checking that the order cap hasn't been reached
         {
             //Case 1: New order, need to initialize it and add it
-            if (order.ID == 0) //Orders's default ctor makes the id 0, so we want to make sure it's a new order to add to our list
+            if (order.CustomerName == "") //Orders's default name is empty string
             {
                 //order.ID = DataSource.Config.NextOrderNumber;//giving this new order a unique id
                 DataSource._orderList.Add(order); //add order to the order list
@@ -60,9 +60,9 @@ internal class DalOrder : IOrder                       //need new way to check i
     /// Reading all orders in list
     /// </summary>
     /// <returns>a list with all the orders</returns>
-    public IEnumerable<Order> ReadAll()
+    public IEnumerable<Order?> ReadAll(Func<Order?, bool>? filter = null)
     {
-        return DataSource._orderList.ToList(); //list of orders
+        return (IEnumerable<Order?>)DataSource._orderList.ToList(); //list of orders
     }
 
     /// <summary>

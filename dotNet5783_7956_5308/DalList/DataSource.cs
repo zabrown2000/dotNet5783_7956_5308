@@ -8,7 +8,7 @@ static internal class DataSource
     /// <summary>
     /// Readonly static field for generating random numbers
     /// </summary>
-    static internal readonly Random randNumGen = new Random();
+    static internal readonly Random randNumGen = new Random(1);
 
     /*Note to Grader: Prof. Kelman said we can go straight to lists instead of doing the array now and list later*/
 
