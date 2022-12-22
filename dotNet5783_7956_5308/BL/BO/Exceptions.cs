@@ -1,6 +1,9 @@
 ﻿namespace BO;
 
-    public class BOEntityDoesNotExistException : Exception
+/// <summary>
+/// Exception class for business logic layer - an entity is not found
+/// </summary>
+public class BOEntityDoesNotExistException : Exception
     {
         public BOEntityDoesNotExistException() { }
         public BOEntityDoesNotExistException(String message) : base(message) { }
@@ -9,7 +12,10 @@
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
-    public class InvalidInputException : Exception
+/// <summary>
+/// Exception class for business logic layer - input given for an entity is invalid
+/// </summary>
+public class InvalidInputException : Exception
     {
         public InvalidInputException() { }
         public InvalidInputException(string message) : base(message) { }
@@ -18,7 +24,10 @@
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
-    public class BOEntityAlreadyExistsException : Exception
+/// <summary>
+/// Exception class for business logic layer - an entity already exists
+/// </summary>
+public class BOEntityAlreadyExistsException : Exception
     {
         public BOEntityAlreadyExistsException() { }
         public BOEntityAlreadyExistsException(string message) : base(message) { }
@@ -27,7 +36,10 @@
           System.Runtime.Serialization.SerializationInfo info,
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
-    public class OutOfStockException : Exception
+/// <summary>
+/// Exception class for business logic layer - an item is out of stock
+/// </summary>
+public class OutOfStockException : Exception
     {
         public OutOfStockException() { }
         public OutOfStockException(string message) : base(message) { }
