@@ -83,19 +83,10 @@ internal class Cart : ICart
                 myCart.TotalPrice -= myCart.Items[index].Price;
                 return myCart;
             }
-            else if (amount > 0)
-            {
-                double unitPrice = product.Value.Price;
-                myCart.Items[index].Amount += amount;//set new amount
-                myCart.TotalPrice += unitPrice * amount;//add the new price
-            }
-            else
-            {
-                double unitPrice = product.Value.Price;
-                myCart.Items[index].Amount -= amount;//set new amount
-                myCart.TotalPrice += unitPrice * amount;//subtracting the new price (amount is negative so really decreasing even though +) 
-            }
-            
+            double unitPrice = product.Value.Price;
+            myCart.Items[index].Amount += amount;//set new amount (adds or subtracts)
+            myCart.TotalPrice += unitPrice * amount;//add/subtract the new price
+
             return myCart;
         }
         throw new BO.BOEntityDoesNotExistException("Product does not exist in cart\n");
