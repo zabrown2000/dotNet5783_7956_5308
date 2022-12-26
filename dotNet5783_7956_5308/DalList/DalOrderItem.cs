@@ -23,7 +23,7 @@ internal class DalOrderItem : IOrderItem
                 return orderItem.ID; //Added the orderItem, returning id
             }
             //Case 2: orderItem already exists, throw exception
-            int index = DataSource._orderItemList.FindIndex(x => x.ID == orderItem.ID); //getting the index of the orderItem in the list (if it exists)
+            int index = DataSource._orderItemList.FindIndex(x => x?.ID == orderItem.ID); //getting the index of the orderItem in the list (if it exists)
             if (index != -1) //orderItem was found, so it exists and can't add again
             {
                 throw new EntityAlreadyExistsException(orderItem); //error
@@ -47,17 +47,17 @@ internal class DalOrderItem : IOrderItem
     /// <exception cref="Exception">Exception if orderItem doesn't exist</exception>
     public OrderItem ReadId(int id)
     {
-        OrderItem orderItem = DataSource._orderItemList.Find(x => x.ID == id); //checking to see if orderItem exists
-        if (orderItem.ID == 0)  //if not found the item id will be the default 0
+        OrderItem? orderItem = DataSource._orderItemList.Find(x => x?.ID == id); //checking to see if orderItem exists
+        if (orderItem.Value.ID == 0)  //if not found the item id will be the default 0
             throw new EntityDoesNotExistException(new OrderItem());
-        return orderItem;
+        return orderItem.Value;
     }
 
     /// <summary>
     /// Reading all the orderItems in list
     /// </summary>
     /// <returns>list with all the orderItems</returns>
-    public IEnumerable<OrderItem> ReadAll()
+    public IEnumerable<OrderItem?> ReadAll(Func<OrderItem?, bool>? filter = null)
     {
         return DataSource._orderItemList.ToList(); //list of orderItems
     }
@@ -81,7 +81,7 @@ internal class DalOrderItem : IOrderItem
         }
         if (index != -1) //check to make sure actually deleting orderItem that exists
         {
-            OrderItem toDelete = DataSource._orderItemList[index]; //getting orderItem at index of id want to delete
+            OrderItem? toDelete = DataSource._orderItemList[index]; //getting orderItem at index of id want to delete
             DataSource._orderItemList.Remove(toDelete); //removing orderItem from the list
         }
         else
@@ -99,9 +99,9 @@ internal class DalOrderItem : IOrderItem
     public void SetByOrderItem(OrderItem orderItem)
     {
         int index = -1; //flag for checking if orderItem exists
-        foreach (OrderItem ori in DataSource._orderItemList) //go over orderItem list
+        foreach (OrderItem? ori in DataSource._orderItemList) //go over orderItem list
         {
-            if (orderItem.ID == ori.ID) //if found id in the list
+            if (orderItem.ID == ori.Value.ID) //if found id in the list
             {
                 index = DataSource._orderItemList.IndexOf(ori); //save index of that orderItem
                 break;
@@ -124,9 +124,9 @@ internal class DalOrderItem : IOrderItem
     public void SetByOrdProdID(OrderItem orderItem)
     {
         int index = -1;
-        foreach (OrderItem oi in DataSource._orderItemList) //go over OrderItem list
+        foreach (OrderItem? oi in DataSource._orderItemList) //go over OrderItem list
         {
-            if (oi.OrderID == orderItem.OrderID && oi.ProductID == orderItem.ProductID) //if found an orderItem that matches the given ID and product
+            if (oi.Value.OrderID == orderItem.OrderID && oi.Value.ProductID == orderItem.ProductID) //if found an orderItem that matches the given ID and product
             {
                 index = DataSource._orderItemList.IndexOf(oi); //save index of that orderItem
                 break;

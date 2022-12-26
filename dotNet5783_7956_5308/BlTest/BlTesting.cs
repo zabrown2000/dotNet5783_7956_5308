@@ -36,7 +36,8 @@ class BlTesting
                         "1. Add item to cart\n" +
                         "2. Update cart\n" +
                         "3. Place an order\n" +
-                        "4. Return to main menu\n");
+                        "4. Display cart\n" +
+                        "5. Return to main menu\n");
                     int actionChoice;
                     System.Int32.TryParse(Console.ReadLine(), out actionChoice);
                     
@@ -47,8 +48,21 @@ class BlTesting
                             try
                             {
                                 Console.WriteLine(bl.cart.AddToCart(cart, id));
+                                //Note to Grader: 
+                                //Customer details will be left blank until
+                                //an order is made. Just like when browsing online and you aren't
+                                //signed in, you only put in your information when you're
+                                //ready to make an order.
                             }
                             catch (BO.OutOfStockException e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            catch (BOEntityDoesNotExistException e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            catch (Exception e)
                             {
                                 Console.WriteLine(e.Message);
                             }
@@ -61,8 +75,11 @@ class BlTesting
                             {
                                 cart = bl.cart.UpdateCart(cart, id, amount);
                             }
-
                             catch (BOEntityDoesNotExistException e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            catch (Exception e)
                             {
                                 Console.WriteLine(e.Message);
                             }
@@ -91,10 +108,18 @@ class BlTesting
                             {
                                 Console.WriteLine(e.Message);
                             }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
 
                             break;
 
-                        case 4: //return to main menu
+                        case 4: //Display cart
+                            Console.WriteLine(cart);
+                            break;
+
+                        case 5: //return to main menu
                             Console.WriteLine("Returning to main menu...\n");
 
                             break;
@@ -125,6 +150,10 @@ class BlTesting
                             {
                                 Console.WriteLine(e.Message);
                             }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
                             break;
                             
                         case 2: //display specific order
@@ -134,6 +163,10 @@ class BlTesting
                                 Console.WriteLine(bl.order.ReadBoOrder(id));
                             }
                             catch (BO.BOEntityDoesNotExistException e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            catch (Exception e)
                             {
                                 Console.WriteLine(e.Message);
                             }
@@ -149,6 +182,10 @@ class BlTesting
                             {
                                 Console.WriteLine(e.Message);
                             }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
                             break;
                             
                         case 4: //update delivery date
@@ -158,6 +195,10 @@ class BlTesting
                                 Console.WriteLine(bl.order.DeliveredUpdate(id));
                             }
                             catch (BO.BOEntityDoesNotExistException e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            catch (Exception e)
                             {
                                 Console.WriteLine(e.Message);
                             }
@@ -198,6 +239,10 @@ class BlTesting
                             {
                                 Console.WriteLine(e.Message);
                             }
+                            catch (Exception e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
                             break;
                             
                         case 3://add product for m
@@ -216,12 +261,15 @@ class BlTesting
                             {
                                 bl.products.AddProduct(p);
                             }
-
                             catch (BO.BOEntityAlreadyExistsException e)
                             {
                                 Console.WriteLine(e.Message);
                             }
                             catch (BO.InvalidInputException e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            catch (Exception e)
                             {
                                 Console.WriteLine(e.Message);
                             }
@@ -234,6 +282,10 @@ class BlTesting
                                 bl.products.DeleteProduct(id);
                             }
                             catch (BO.BOEntityDoesNotExistException e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            catch (Exception e)
                             {
                                 Console.WriteLine(e.Message);
                             }
@@ -261,6 +313,10 @@ class BlTesting
                                 Console.WriteLine(e.Message);
                             }
                             catch (BO.InvalidInputException e)
+                            {
+                                Console.WriteLine(e.Message);
+                            }
+                            catch (Exception e)
                             {
                                 Console.WriteLine(e.Message);
                             }

@@ -44,22 +44,5 @@ public class Order
     /// total price of order
     /// </summary>
     public double TotalPrice { get; set; }
-    /*members inside the class will be defined as properties.
-i. automatic properties
-ii. public permissions
-iii. no initialization in the declaration
-    No methods should be added except overloading the ToString() method. Namely,
-no constructors, destructors or other methods. The reason is that we want to avoid
-applying logic at this time.*/
-    public override String ToString() => $@"
-       ID: {ID}
-       .....Customer Name: {CustomerName}
-       .....Customer Email: {CustomerEmail}
-       .....Customer Address: {CustomerAddress}
-       Order Date: {OrderDate}
-       Ship Date: {ShipDate}
-       Delivery Date: {DeliveryDate}
-       Items: {Items}
-       Total Price: {TotalPrice}
-       ";
+    public override String ToString() => this.ToStringProperty();
 }

@@ -25,7 +25,7 @@ internal class DalProducts : IProducts
                 return product.ID; //Added the product, returning id
             }
             //Case 2: Item already exists, throw exception
-            int index = DataSource._productList.FindIndex(x => x.ID == product.ID); //getting the index of the product in the list (if it exists)
+            int index = DataSource._productList.FindIndex(x => x?.ID == product.ID); //getting the index of the product in the list (if it exists)
             if (index != -1) //item was found, so it exists and can't add again
             {
                 throw new EntityAlreadyExistsException(product);
@@ -51,13 +51,13 @@ internal class DalProducts : IProducts
     /// <exception cref="Exception">Exception if product doesn't exist</exception>
     public Products ReadId(int id)
     {
-        Products item = DataSource._productList.Find(x => x.ID == id); //checking to see if product exists
+        Products? item = DataSource._productList.Find(x => x?.ID == id); //checking to see if product exists
        
-        if (item.ID == 0) //if not found the item id will be the default 0
+        if (item?.ID == 0) //if not found the item id will be the default 0
         {
             throw new EntityDoesNotExistException(new Products());
         }
-        return item;
+        return item.Value;
     }
 
     /// <summary>
@@ -66,7 +66,7 @@ internal class DalProducts : IProducts
     /// <returns>a list with all the products</returns>
     public IEnumerable<Products?> ReadAll (Func<Products?, bool>? filter = null)
     {
-        return (IEnumerable<Products?>)DataSource._productList.ToList(); //list of products
+        return DataSource._productList.ToList(); //list of products
     }
 
     /// <summary>
@@ -88,7 +88,7 @@ internal class DalProducts : IProducts
         }
         if (index != -1) //check to make sure actually deleting item that exists
         {
-            Products toDelete = DataSource._productList[index]; //getting product at index of id want to delete
+            Products? toDelete = DataSource._productList[index]; //getting product at index of id want to delete
             DataSource._productList.Remove(toDelete); //removing product from the list
         } else
         {

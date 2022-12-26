@@ -13,8 +13,5 @@ public class OrderTracking
     /// </summary>
     public Enums.OrderStatus Status { get; set; }
 
-    public override String ToString() => $@"
-        Id: {Id}
-        Status: {Status}
-        ";
+    public override String ToString() => this.ToStringProperty();
 }

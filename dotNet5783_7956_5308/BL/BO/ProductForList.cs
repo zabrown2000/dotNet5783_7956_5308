@@ -21,10 +21,5 @@ public class ProductForList
     /// </summary>
     public double Price { get; set; }
 
-    public override String ToString() => $@"
-        ID: {ID}
-        Name: {Name}
-        Category: {Category}
-        Price: {Price}
-        ";
+    public override String ToString() => this.ToStringProperty();
 }

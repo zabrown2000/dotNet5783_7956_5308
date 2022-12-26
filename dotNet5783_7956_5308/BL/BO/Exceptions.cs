@@ -18,6 +18,7 @@ public class Exceptions : Exception
 /// <summary>
 /// Exception class for business logic layer - an entity is not found
 /// </summary>
+[Serializable]
 public class BOEntityDoesNotExistException : Exception
     {
         public BOEntityDoesNotExistException() { }
@@ -30,6 +31,7 @@ public class BOEntityDoesNotExistException : Exception
 /// <summary>
 /// Exception class for business logic layer - input given for an entity is invalid
 /// </summary>
+[Serializable]
 public class InvalidInputException : Exception
     {
         public InvalidInputException() { }
@@ -42,6 +44,7 @@ public class InvalidInputException : Exception
 /// <summary>
 /// Exception class for business logic layer - an entity already exists
 /// </summary>
+[Serializable]
 public class BOEntityAlreadyExistsException : Exception
     {
         public BOEntityAlreadyExistsException() { }
@@ -54,6 +57,7 @@ public class BOEntityAlreadyExistsException : Exception
 /// <summary>
 /// Exception class for business logic layer - an item is out of stock
 /// </summary>
+[Serializable]
 public class OutOfStockException : Exception
     {
         public OutOfStockException() { }

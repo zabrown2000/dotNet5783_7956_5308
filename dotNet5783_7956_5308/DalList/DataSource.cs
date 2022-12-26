@@ -15,17 +15,17 @@ static internal class DataSource
     /// <summary>
     /// List to hold the products
     /// </summary>
-    static internal List<Products> _productList = new List<Products> { }; //total of 50 products
+    static internal List<Products?> _productList = new List<Products?> { }; //total of 50 products
 
     /// <summary>
     ///List to hold the orders
     /// </summary>
-    static internal List<Order> _orderList = new List<Order> { }; //total of 100 orders
+    static internal List<Order?> _orderList = new List<Order?> { }; //total of 100 orders
 
     /// <summary>
     /// List to hold the orderItems
     /// </summary>
-    static internal List<OrderItem> _orderItemList = new List<OrderItem> { }; //total of 200 order-items
+    static internal List<OrderItem?> _orderItemList = new List<OrderItem?> { }; //total of 200 order-items
 
     
 
@@ -121,12 +121,12 @@ static internal class DataSource
         //Setting up initial 40 Order-Product pairs
         for (int i = 0; i < 40; i++)
         {
-            Products product = _productList[randNumGen.Next(_productList.Count)]; 
+            Products? product = _productList[randNumGen.Next(_productList.Count)]; 
             _orderItemList.Add( new OrderItem //creating a new orderItem and setting the values to go in our list
             {   //using random generator to fill most of the fields
-                ProductID = product.ID,
+                ProductID = product.Value.ID,
                 OrderID = randNumGen.Next(10, 10 + _orderList.Count), //order ids are all 2 digits
-                Price = product.Price,
+                Price = product.Value.Price,
                 Amount = randNumGen.Next(5)
             });
         }

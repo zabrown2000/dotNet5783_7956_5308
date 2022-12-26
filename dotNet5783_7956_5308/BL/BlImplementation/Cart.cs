@@ -8,7 +8,7 @@ namespace BlImplementation;
 internal class Cart : ICart
 {
     static IDal? dal = new DalList();
-
+    
     /// <summary>
     /// Method to add product to cart
     /// </summary>
@@ -16,11 +16,19 @@ internal class Cart : ICart
     /// <param name="pID">id of product to add to cart</param>
     /// <returns>updated cart</returns>
     /// <exception cref="BO.OutOfStockException">exception if product user wants to add is out of stock</exception>
+    /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
     public BO.Cart AddToCart(BO.Cart myCart, int pID)
     {
         int index = myCart.Items.FindIndex(x => x != null && x.ProductID == pID); //getting index of the product in the cart (if it's there)
         DO.Products? product = new DO.Products?();//creating new DO product
-        product = dal.dalProduct.ReadId(pID); //getting the actual product for corresponding id user wants to add
+        try
+        {
+            product = dal.dalProduct.ReadId(pID); //getting the actual product for corresponding id user wants to add
+        }
+        catch
+        {
+            throw new BO.BOEntityDoesNotExistException("Product does not exist\n");
+        }
         
         if (product?.InStock < 1)
         {
@@ -68,20 +76,29 @@ internal class Cart : ICart
         }
         if (index != -1) //product in cart already
         {
-            if (amount <= 0) //want to remove item
+            if (amount == 0) //want to remove item
             {
                 BO.OrderItem oi = myCart.Items[index]; //save the orderitem with id
                 myCart.Items.Remove(oi); //remove orderItem from cart
                 myCart.TotalPrice -= myCart.Items[index].Price;
                 return myCart;
             }
-            double unitPrice = product.Value.Price;
-            myCart.TotalPrice -= unitPrice * myCart.Items[index].Amount; //substract price of product from cart
-            myCart.Items[index].Amount = amount;//set new amount
-            myCart.TotalPrice += unitPrice * amount;//add the new price
+            else if (amount > 0)
+            {
+                double unitPrice = product.Value.Price;
+                myCart.Items[index].Amount += amount;//set new amount
+                myCart.TotalPrice += unitPrice * amount;//add the new price
+            }
+            else
+            {
+                double unitPrice = product.Value.Price;
+                myCart.Items[index].Amount -= amount;//set new amount
+                myCart.TotalPrice += unitPrice * amount;//subtracting the new price (amount is negative so really decreasing even though +) 
+            }
+            
             return myCart;
         }
-        throw new BO.BOEntityDoesNotExistException("Error occured\n");
+        throw new BO.BOEntityDoesNotExistException("Product does not exist in cart\n");
     }
     /// <summary>
     /// aMethod to make checkout cart and make new order
@@ -98,7 +115,9 @@ internal class Cart : ICart
         {
             throw new BO.InvalidInputException("Incorrect Input");
         }
-        DO.OrderItem oi = new(); //creating new order item
+        myCart.CustomerAddress = CustomerAddress;
+        myCart.CustomerEmail = CustomerEmail;
+        myCart.CustomerName = CustomerName;
         foreach (BO.OrderItem? item in myCart.Items) //go over orderItems in the cart and make sure all info is correct
         {
             try
@@ -108,6 +127,7 @@ internal class Cart : ICart
                     DO.Order order = new DO.Order(); //new DO order
                     order.OrderDate = DateTime.Now; //ordered now
                     int num = dal.dalOrder.Add(order); //add to DO orderlist and get order id
+                    DO.OrderItem oi = new(); //creating new DO order item
                     oi.ProductID = item.ProductID; //save product id
                     oi.OrderID = num; //save order id
                     dal.dalOrderItem.Add(oi); //add to DO order item list 
@@ -121,6 +141,8 @@ internal class Cart : ICart
 
             }
         }
+        Console.WriteLine(myCart);  //WHY DOESN'T IT PRINT CUST DETAILS?
+        myCart.Items.Clear(); //clear cart, we made order so cart is empty
 
     }
 }

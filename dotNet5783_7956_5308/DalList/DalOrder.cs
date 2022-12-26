@@ -24,7 +24,7 @@ internal class DalOrder : IOrder
                 return order.ID; //Added the order, returning id
             }
             //Case 2: Item already exists, throw exception
-            int index = DataSource._orderList.FindIndex(x => x.ID == order.ID); //getting the index of the order in the list (if it exists)
+            int index = DataSource._orderList.FindIndex(x => x?.ID == order.ID); //getting the index of the order in the list (if it exists)
             if (index != -1) //order was found, so it exists and can't add again
             {
                 throw new EntityAlreadyExistsException(order); 
@@ -50,10 +50,10 @@ internal class DalOrder : IOrder
     /// <exception cref="Exception">Exception if order doesn't exist</exception>
     public Order ReadId(int id)
     {
-        Order order = DataSource._orderList.Find(x => x.ID == id); //checking to see if order exists
-        if (order.ID == 0) //if not found the order id will be the default 0
+        Order? order = DataSource._orderList.Find(x => x?.ID == id); //checking to see if order exists
+        if (order.Value.ID == 0) //if not found the order id will be the default 0
             throw new EntityDoesNotExistException(new Order());
-        return order;
+        return order.Value;
     }
 
     /// <summary>
@@ -62,7 +62,7 @@ internal class DalOrder : IOrder
     /// <returns>a list with all the orders</returns>
     public IEnumerable<Order?> ReadAll(Func<Order?, bool>? filter = null)
     {
-        return (IEnumerable<Order?>)DataSource._orderList.ToList(); //list of orders
+        return DataSource._orderList.ToList(); //list of orders
     }
 
     /// <summary>
@@ -83,7 +83,7 @@ internal class DalOrder : IOrder
         }
         if (index != -1) //check to make sure actually deleting order that exists
         {
-            Order toDelete = DataSource._orderList[index]; //getting order at index of id want to delete
+            Order? toDelete = DataSource._orderList[index]; //getting order at index of id want to delete
             DataSource._orderList.Remove(toDelete); //removing order from the list
         }
         else

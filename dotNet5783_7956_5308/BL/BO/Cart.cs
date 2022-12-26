@@ -24,13 +24,7 @@ public class Cart
     /// total price of cart
     /// </summary>
     public double TotalPrice { get; set; }
+    
 
-
-    public override String ToString() => $@"
-        Customer Name: {CustomerName}
-        Customer Email: {CustomerEmail}
-        Customer Address: {CustomerAddress}
-        Items: {Items}
-        Total Price: {TotalPrice}
-        ";
+    public override String ToString() => this.ToStringProperty(); 
 }

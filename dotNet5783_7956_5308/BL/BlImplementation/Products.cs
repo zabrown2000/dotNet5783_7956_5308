@@ -21,7 +21,7 @@ internal class Products : BlApi.IProducts
                    ID = prod.Value.ID,
                    Name = prod?.Name,
                    Price = (double)prod?.Price,
-                   Category = (BO.Enums.ProdCategory)item?.Category
+                   Category = (BO.Enums.ProdCategory)prod?.Category
                };
 
     }

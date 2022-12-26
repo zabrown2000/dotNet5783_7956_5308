@@ -27,11 +27,5 @@ public class OrderForList
     /// </summary>
     public double TotalPrice { get; set; }
 
-    public override String ToString() => $@"
-        ID: {ID}
-        .....Customer Name: {CustomerName}
-        Status: {Status}
-        Amount of Items: {AmountOfItems}
-        Total Price: {TotalPrice}
-        ";
+    public override String ToString() => this.ToStringProperty();
 }
