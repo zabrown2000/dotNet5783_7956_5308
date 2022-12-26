@@ -64,11 +64,11 @@ internal class Cart : ICart
             product = dal.dalProduct.ReadId(pID); //getting product based on id
         }catch
         {
-            throw new BO.BOEntityDoesNotExistException();
+            throw new BO.BOEntityDoesNotExistException("Product does not exist\n");
         }
         if (index != -1) //product in cart already
         {
-            if (amount == 0) //want to remove item
+            if (amount <= 0) //want to remove item
             {
                 BO.OrderItem oi = myCart.Items[index]; //save the orderitem with id
                 myCart.Items.Remove(oi); //remove orderItem from cart
@@ -81,7 +81,7 @@ internal class Cart : ICart
             myCart.TotalPrice += unitPrice * amount;//add the new price
             return myCart;
         }
-        throw new BO.BOEntityDoesNotExistException();
+        throw new BO.BOEntityDoesNotExistException("Error occured\n");
     }
     /// <summary>
     /// aMethod to make checkout cart and make new order

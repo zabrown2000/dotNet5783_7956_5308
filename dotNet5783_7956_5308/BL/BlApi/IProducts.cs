@@ -4,7 +4,7 @@ namespace BlApi;
 public interface IProducts
 {
     //managerial functions
-    public IEnumerable<ProductForList?> GetProductsForList(); 
+    public IEnumerable<ProductForList?> ReadProductsForList(); 
     public Products ManagerProduct(int id);
     public void AddProduct(Products product);
     public void DeleteProduct(int id);

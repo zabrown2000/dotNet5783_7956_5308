@@ -12,7 +12,7 @@ internal class Products : BlApi.IProducts
     /// Method to get a list of products for the manager
     /// </summary>
     /// <returns>List of ProductForList</returns>
-    public IEnumerable<BO.ProductForList?> GetProductsForList()
+    public IEnumerable<BO.ProductForList?> ReadProductsForList()
     {
         return from DO.Products? prod in dal.dalProduct.ReadAll() //getting all DO products and taking details need for manager
                where prod != null 
@@ -41,7 +41,7 @@ internal class Products : BlApi.IProducts
             product = dal.dalProduct.ReadId(id); //getting the product from id
         } catch
         {
-            throw new BO.BOEntityDoesNotExistException();
+            throw new BO.BOEntityDoesNotExistException("Product does not exist");
         }
 
         p.ID = id;
@@ -79,7 +79,7 @@ internal class Products : BlApi.IProducts
             dal.dalProduct.Add(newP);//add to product list
             return;
         }
-        throw new BO.BOEntityAlreadyExistsException(); //made it here then DO product already exists     
+        throw new BO.BOEntityAlreadyExistsException("Product already exists"); //made it here then DO product already exists     
     }
 
     /// <summary>
@@ -106,6 +106,7 @@ internal class Products : BlApi.IProducts
     /// </summary>
     /// <param name="p">BO product providing update</param>
     /// <exception cref="InvalidInputException"></exception>
+    /// <exception cref="BOEntityDoesNotExistException"></exception>
     public void UpdateProduct(BO.Products p)
     {
         if (p.ID < 100 || p.Name == "" || p.Price <= 0 || p.InStock < 0)
@@ -118,7 +119,14 @@ internal class Products : BlApi.IProducts
         temp.Price = p.Price;
         temp.InStock = p.InStock;
         temp.Category = (DO.Enums.Categories)p.Category;
-        dal.dalProduct.Update(temp);
+        try
+        {
+            dal.dalProduct.Update(temp); //update product
+        }
+        catch
+        {
+            throw new BO.BOEntityDoesNotExistException("Product does not exist");
+        }
     }
 
     /// <summary>
