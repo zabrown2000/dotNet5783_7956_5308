@@ -69,7 +69,7 @@ internal class Products : BlApi.IProducts
         {
             DO.Products prod = dal.dalProduct.ReadId(p.ID); //get product with id
         } catch
-        {   //comes here is product didn't exist
+        {   //comes here if product didn't exist
             DO.Products newP = new DO.Products(); //create new DO product
             newP.Name = p.Name;
             newP.Price = p.Price;

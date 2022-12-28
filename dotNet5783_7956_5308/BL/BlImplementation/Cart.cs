@@ -32,7 +32,7 @@ internal class Cart : ICart
         
         if (product?.InStock < 1)
         {
-            throw new BO.OutOfStockException("Product unavailable");
+            throw new BO.OutOfStockException("Product out of stock");
         }
         if (index != -1) //index wasn't -1 so exists in cart
         {
@@ -76,18 +76,20 @@ internal class Cart : ICart
         }
         if (index != -1) //product in cart already
         {
-            if (amount == 0) //want to remove item
+            if (myCart.Items[index].Amount + amount <= 0) //want to remove item
             {
                 BO.OrderItem oi = myCart.Items[index]; //save the orderitem with id
-                myCart.Items.Remove(oi); //remove orderItem from cart
                 myCart.TotalPrice -= myCart.Items[index].Price;
+                myCart.Items.Remove(oi); //remove orderItem from cart
                 return myCart;
             }
+   
             double unitPrice = product.Value.Price;
             myCart.Items[index].Amount += amount;//set new amount (adds or subtracts)
-            myCart.TotalPrice += unitPrice * amount;//add/subtract the new price
-
+            myCart.Items[index].Price += unitPrice * amount; // add/subtract to make the price reflect addition/subtraction of items to cart 
+            myCart.TotalPrice += unitPrice * amount;//add/subtract the new total cart price
             return myCart;
+            
         }
         throw new BO.BOEntityDoesNotExistException("Product does not exist in cart\n");
     }
@@ -132,7 +134,7 @@ internal class Cart : ICart
 
             }
         }
-        Console.WriteLine(myCart);  //WHY DOESN'T IT PRINT CUST DETAILS?
+        Console.WriteLine(myCart);  //WHY DOESN'T IT PRINT CART DETAILS?
         myCart.Items.Clear(); //clear cart, we made order so cart is empty
 
     }

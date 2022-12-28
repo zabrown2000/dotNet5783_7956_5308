@@ -140,7 +140,7 @@ internal class Order : BlApi.IOrder
                 DeliveryDate = DateTime.MinValue,
             }; //new BO Order
         }
-        throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
+        throw new BO.BOEntityDoesNotExistException("Order has already been shipped\n");
     }
     /// <summary>
     /// Given a DO order ID will update the order to be delivered
