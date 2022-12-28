@@ -24,7 +24,7 @@ internal class Order : BlApi.IOrder
                {
                    ID = o?.ID ?? throw new BO.BOEntityDoesNotExistException("Missing order in list"), //if the order id is null then throw an exception
                    CustomerName = o?.CustomerName,
-                   Status = GetStatus(o.Value),
+                   Status = GetOrderStatus(o.Value),
                    AmountOfItems = orderItems.Select(orderItems => orderItems?.ID == o?.ID).Count(), //counting amount of orders in the orderitem list and setting that for BO orderForList amount
                    TotalPrice = (double)orderItems.Sum(orderItems => orderItems?.Price) //summing up each orderitem for this new BO list entry
                };
@@ -35,11 +35,10 @@ internal class Order : BlApi.IOrder
     /// </summary>
     /// <param name="order">order we want status of</param>
     /// <returns></returns>
-    private BO.Enums.OrderStatus GetStatus(DO.Order order)
+    private BO.Enums.OrderStatus GetOrderStatus(DO.Order order)
     {
-
-        return order.DeliveryDate != DateTime.MinValue ? BO.Enums.OrderStatus.Completed : order.ShipDate != DateTime.MinValue ?
-            BO.Enums.OrderStatus.InProgress : BO.Enums.OrderStatus.New; //determining order status by checking if the dates are set
+        return order.DeliveryDate != null ? BO.Enums.OrderStatus.Recieved : order.ShipDate != null ?
+            BO.Enums.OrderStatus.Shipped : BO.Enums.OrderStatus.JustOrdered; //determining order status by checking if the dates are set
     }
 
     /// <summary>
