@@ -134,9 +134,13 @@ internal class Cart : ICart
 
             }
         }
-        Console.WriteLine(myCart);  //WHY DOESN'T IT PRINT CART DETAILS?
-        myCart.Items.Clear(); //clear cart, we made order so cart is empty
-
+        Console.WriteLine(myCart);  
+        //resetting cart values
+        myCart.Items.Clear(); 
+        myCart.TotalPrice = 0;
+        myCart.CustomerAddress = "";
+        myCart.CustomerEmail = "";
+        myCart.CustomerName = "";
     }
 }
 

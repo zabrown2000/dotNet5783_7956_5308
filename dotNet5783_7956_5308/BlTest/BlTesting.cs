@@ -246,17 +246,18 @@ class BlTesting
                             break;
                             
                         case 3://add product for m
-                            Console.WriteLine("Enter ID of new product:\n");
-                            p.ID = GetNumberFromUser();
-                            Console.WriteLine("Enter category of new product:\n");
-                            category = GetNumberFromUser();
+                            p.ID = GetNumberFromUser("Enter ID of new product:\n");
+                            category = GetNumberFromUser("Enter category of new product:\n");
+                            while (category < 1 || category > 7)
+                            {
+                                Console.WriteLine("Invalid category, try again\n");
+                                category = GetNumberFromUser("Invalid category, try again\n");
+                            }
                             p.Category = (BO.Enums.ProdCategory)category;
                             Console.WriteLine("Enter name of product:\n");
                             p.Name = Console.ReadLine();
-                            Console.WriteLine("Enter stock of product:\n");
-                            p.InStock = GetNumberFromUser();
-                            Console.WriteLine("Enter price of Product\n");
-                            p.Price = GetNumberFromUser();
+                            p.InStock = GetNumberFromUser("Enter stock of product:\n");
+                            p.Price = GetNumberFromUser("Enter price of Product\n");
                             try
                             {
                                 bl.products.AddProduct(p);
@@ -292,17 +293,18 @@ class BlTesting
                             break;
                             
                         case 5: //update product for m
-                            Console.WriteLine("Enter ID of new product:\n");
-                            p.ID = GetNumberFromUser();
-                            Console.WriteLine("Enter category of new product:\n");
-                            category = GetNumberFromUser();
+                            p.ID = GetNumberFromUser("Enter ID of new product:\n");
+                            category = GetNumberFromUser("Enter category of new product:\n");
+                            while (category < 1 || category > 7)
+                            {
+                                Console.WriteLine("Invalid category, try again\n");
+                                category = GetNumberFromUser("Invalid category, try again\n");
+                            }
                             p.Category = (BO.Enums.ProdCategory)category;
                             Console.WriteLine("Enter name of product:\n");
                             p.Name = Console.ReadLine();
-                            Console.WriteLine("Enter stock of product:\n");
-                            p.InStock = GetNumberFromUser();
-                            Console.WriteLine("Enter price of Product:\n");
-                            p.Price = GetNumberFromUser();
+                            p.InStock = GetNumberFromUser("Enter stock of product:\n");
+                            p.Price = GetNumberFromUser("Enter price of Product\n");
                             try
                             {
                                 bl.products.UpdateProduct(p);
