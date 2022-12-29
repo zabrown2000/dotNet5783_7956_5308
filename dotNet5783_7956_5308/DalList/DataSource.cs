@@ -61,7 +61,7 @@ static internal class DataSource
                 //ID = Config.NextProductNumber,
                 Price = randNumGen.Next(50, 3000),
                 Name = NameOfApplicance[randNumGen.Next(NameOfApplicance.Length)],
-                Category = (Enums.Categories)randNumGen.Next(0, 8),
+                Category = (Enums.Categories)randNumGen.Next(1, 8),
                 InStock = (i < 3) ? 0 : randNumGen.Next(19, 48) //hardcoding first 5% of products to have 0 stock
             });
         }

@@ -2,7 +2,6 @@
 using DalApi;
 using Dal;
 using BO;
-                        //ADD DOCUMENTATION
 namespace BlImplementation;
 
 internal class Products : BlApi.IProducts
@@ -14,9 +13,9 @@ internal class Products : BlApi.IProducts
     /// <returns>List of ProductForList</returns>
     public IEnumerable<BO.ProductForList?> ReadProductsForList()
     {
-        return from DO.Products? prod in dal.dalProduct.ReadAll() //getting all DO products and taking details need for manager
+        return from DO.Products? prod in dal.dalProduct.ReadAll() //getting all DO products and details needed for manager
                where prod != null 
-               select new BO.ProductForList
+               select new BO.ProductForList  //add to ProductForList List
                {
                    ID = prod.Value.ID,
                    Name = prod?.Name,
@@ -43,7 +42,7 @@ internal class Products : BlApi.IProducts
         {
             throw new BO.BOEntityDoesNotExistException("Product does not exist");
         }
-
+        //add vals from the DOproduct to BOproduct
         p.ID = id;
         p.Name = product.Name;
         p.Price = product.Price;
@@ -61,6 +60,7 @@ internal class Products : BlApi.IProducts
     /// <exception cref="BO.BOEntityAlreadyExistsException"></exception>
     public void AddProduct(BO.Products p)
     {
+        //validate input
         if (p.Name == "" || p.Price <= 0 || p.InStock < 0 || p.Category < BO.Enums.ProdCategory.Mixer || p.Category > BO.Enums.ProdCategory.Kettle)
         {
             throw new BO.InvalidInputException("Invalid field value");
@@ -79,7 +79,7 @@ internal class Products : BlApi.IProducts
             dal.dalProduct.Add(newP);//add to product list
             return;
         }
-        throw new BO.BOEntityAlreadyExistsException("Product already exists"); //made it here then DO product already exists     
+        throw new BO.BOEntityAlreadyExistsException("Product already exists"); //if made it here then DO product already exists     
     }
 
     /// <summary>
@@ -89,6 +89,7 @@ internal class Products : BlApi.IProducts
     /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
     public void DeleteProduct(int id)
     {
+        //get the prod with matching id to given id
         var v = from ords in dal.dalOrder.ReadAll()
                 where ords != null 
                 select from oi in dal.dalOrderItem.ReadAll()
@@ -109,6 +110,7 @@ internal class Products : BlApi.IProducts
     /// <exception cref="BOEntityDoesNotExistException"></exception>
     public void UpdateProduct(BO.Products p)
     {
+        //validate input
         if (p.ID < 100 || p.Name == "" || p.Price <= 0 || p.InStock < 0)
         {
             throw new InvalidInputException("Invalid field value");

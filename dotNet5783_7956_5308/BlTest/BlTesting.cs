@@ -10,8 +10,8 @@ class BlTesting
     static void Main(string[] args)
     {
         Cart? cart = new() { Items = new List<BO.OrderItem?>() }; //new cart
-        BO.Products? p = new();
-        BO.Order? o = new();
+        BO.Products? p = new(); //new BO prod
+        BO.Order? o = new();   //new BO order
         int id, category;
         while (true)
         {
@@ -22,6 +22,8 @@ class BlTesting
                 "3. Check out Products\n");
             
             int input;
+
+            //get user input
             while (!System.Int32.TryParse(Console.ReadLine(), out input)) ;
             BO.Enums.BoEntityType entityChoice = (BO.Enums.BoEntityType)input;
 
@@ -220,7 +222,7 @@ class BlTesting
                         "3. Manager: Add a product\n" +
                         "4. Manager: Delete a product\n" +
                         "5. Manager: Update a product\n" +
-                        "6. Customer: Display all the productst\n" +
+                        "6. Customer: Display all the products\n" +
                         "7. Return to main menu\n");
 
                     System.Int32.TryParse(Console.ReadLine(), out actionChoice);
@@ -248,11 +250,6 @@ class BlTesting
                         case 3://add product for m
                             p.ID = GetNumberFromUser("Enter ID of new product:\n");
                             category = GetNumberFromUser("Enter category of new product:\n");
-                            while (category < 1 || category > 7)
-                            {
-                                Console.WriteLine("Invalid category, try again\n");
-                                category = GetNumberFromUser("Invalid category, try again\n");
-                            }
                             p.Category = (BO.Enums.ProdCategory)category;
                             Console.WriteLine("Enter name of product:\n");
                             p.Name = Console.ReadLine();

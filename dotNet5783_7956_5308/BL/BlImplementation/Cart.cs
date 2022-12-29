@@ -4,7 +4,6 @@ using Dal;
 using BO;
 namespace BlImplementation;
 
-
 internal class Cart : ICart
 {
     static IDal? dal = new DalList();
@@ -37,7 +36,7 @@ internal class Cart : ICart
         if (index != -1) //index wasn't -1 so exists in cart
         {
             myCart.Items[index].Amount++; //adding another product to the cart
-            double unitPrice = product.Value.Price;
+            double unitPrice = product.Value.Price; //getting price of just one of that product
             myCart.Items[index].Price += unitPrice; //adding to the total price of order item
             myCart.TotalPrice += unitPrice;//updating cart price
             return myCart;
@@ -45,7 +44,7 @@ internal class Cart : ICart
         //product not in cart yet
         BO.OrderItem oi = new BO.OrderItem //creating new orderitem to contain the product to add 
         {
-            ID = pID,  //is this right? if id sent to fn is oi id then how get product info?
+            ID = pID,
             Price = (double)product.Value.Price,
             Amount = 1,
             ProductID = product.Value.ID
@@ -66,7 +65,7 @@ internal class Cart : ICart
     public BO.Cart UpdateCart(BO.Cart myCart, int pID, int amount)
     {
         int index = myCart.Items.FindIndex(x => x.ProductID == pID); //getting index of the product in the cart (if it's there)
-        DO.Products? product = new DO.Products(); //create a new DO product
+        DO.Products product = new DO.Products(); //create a new DO product
         try
         {
             product = dal.dalProduct.ReadId(pID); //getting product based on id
@@ -83,18 +82,25 @@ internal class Cart : ICart
                 myCart.Items.Remove(oi); //remove orderItem from cart
                 return myCart;
             }
-   
-            double unitPrice = product.Value.Price;
-            myCart.Items[index].Amount += amount;//set new amount (adds or subtracts)
-            myCart.Items[index].Price += unitPrice * amount; // add/subtract to make the price reflect addition/subtraction of items to cart 
-            myCart.TotalPrice += unitPrice * amount;//add/subtract the new total cart price
-            return myCart;
+            product = dal.dalProduct.ReadId(myCart.Items[index].ProductID); //get product from the orderItem in Items to check stock
+            if (myCart.Items[index].Amount + amount > product.InStock)      //if amount to add is more than available stock throw exception
+            {
+                throw new BO.OutOfStockException("Amount entered is more than amount in stock.");
+            }
+            else
+            {
+                double unitPrice = product.Price;
+                myCart.Items[index].Amount += amount;//set new amount (adds or subtracts)
+                myCart.Items[index].Price += unitPrice * amount; // add/subtract to make the price reflect addition/subtraction of items to cart 
+                myCart.TotalPrice += unitPrice * amount;//add/subtract the new total cart price
+                return myCart;
+            }
             
         }
         throw new BO.BOEntityDoesNotExistException("Product does not exist in cart\n");
     }
     /// <summary>
-    /// aMethod to make checkout cart and make new order
+    /// Method to make checkout cart and make new order
     /// </summary>
     /// <param name="myCart">current user's cart</param>
     /// <param name="CustomerName">name of customer</param>

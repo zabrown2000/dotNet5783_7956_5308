@@ -1,6 +1,5 @@
 ﻿using BO;
 namespace BlApi;
-                    //REDO DOCUMENTATION
 public interface IProducts
 {
     //managerial functions

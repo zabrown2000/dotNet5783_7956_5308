@@ -2,9 +2,7 @@
 using DalApi;
 using Dal;
 using BO;
-//ADD DOCUMENTATION
 namespace BlImplementation;
-
 
 internal class Order : BlApi.IOrder
 {
@@ -81,7 +79,7 @@ internal class Order : BlApi.IOrder
                 OrderDate = order.OrderDate,
                 ShipDate = order.ShipDate,
                 DeliveryDate = order.DeliveryDate,
-                Status = GetStatus(order),
+                Status = GetOrderStatus(order),
                 TotalPrice = tempPrice,
             }; //new BO Order
         }
@@ -134,7 +132,7 @@ internal class Order : BlApi.IOrder
                 CustomerName = order.CustomerName,
                 OrderDate = order.OrderDate,
                 ShipDate = DateTime.Now,
-                Status = GetStatus(o),
+                Status = GetOrderStatus(o),
                 TotalPrice = tempPrice,
                 DeliveryDate = DateTime.MinValue,
             }; //new BO Order
@@ -188,7 +186,7 @@ internal class Order : BlApi.IOrder
                 OrderDate = order.OrderDate,
                 ShipDate = order.ShipDate,
                 DeliveryDate = DateTime.Now,
-                Status = GetStatus(o),
+                Status = GetOrderStatus(o),
                 TotalPrice = tempPrice,
             }; //new BO Order
         }

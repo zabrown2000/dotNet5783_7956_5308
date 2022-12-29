@@ -1,7 +1,6 @@
 ﻿using BO;
 namespace BlApi;
-                    //ADD DOCUMENTATION
-                    //cart, order, product
+                   
 public interface IBl
 {
     /// <summary>
