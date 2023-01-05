@@ -13,7 +13,7 @@ public class OrderForList
     /// <summary>
     /// Name of customer making order
     /// </summary>
-    public String CustomerName { get; set; }
+    public String? CustomerName { get; set; }
     /// <summary>
     /// status of order
     /// </summary>

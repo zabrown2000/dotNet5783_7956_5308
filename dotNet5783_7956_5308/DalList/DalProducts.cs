@@ -18,7 +18,7 @@ internal class DalProducts : IProducts
         if (DataSource._productList.Count() < 50) //checking that the product cap hasn't been reached
         {
             //Case 1: New product, need to initialize it and add it
-            if (product.Name == "") //Product's default ctor makes the name empty string, so we want to make sure it's a new product to add to our catalog
+            if (product.Name == null) //Product's default ctor makes the name empty string, so we want to make sure it's a new product to add to our catalog
             {
                 //product.ID = DataSource.Config.NextProductNumber; //giving this new product a unique id
                 DataSource._productList.Add(product); //add product to the Product list
@@ -119,5 +119,28 @@ internal class DalProducts : IProducts
         {
             throw new EntityDoesNotExistException(product);
         }
+    }
+
+    /// <summary>
+    /// method to get a product by using a filter
+    /// </summary>
+    /// <param name="filter">filter to search</param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="Exception"></exception>
+    public Products ReadByFilter(Func<Products?, bool>? filter)
+    {
+        if (filter == null)
+        {
+            throw new ArgumentNullException(nameof(filter)); //filter is null
+        }
+        foreach (Products? p in DataSource._productList)
+        {
+            if (p != null && filter(p))
+            {
+                return (Products)p; //casting to non-null value
+            }
+        }
+        throw new Exception("The product requested does not exist\n");
     }
 }

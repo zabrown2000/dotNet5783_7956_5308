@@ -6,19 +6,19 @@ public class Cart
     /// <summary>
     /// Name of customer making cart
     /// </summary>
-    public String CustomerName { get; set; }
+    public String? CustomerName { get; set; }
     /// <summary>
     /// Email of customer making cart
     /// </summary>
-    public String CustomerEmail { get; set; }
+    public String? CustomerEmail { get; set; }
     /// <summary>
     /// Address of customer making cart
     /// </summary>
-    public String CustomerAddress { get; set; }
+    public String? CustomerAddress { get; set; }
     /// <summary>
     /// list of order items in the cart
     /// </summary>
-    public List<OrderItem> Items { get; set; }
+    public List<OrderItem?> Items { get; set; }
     /// <summary>
     /// total price of cart
     /// </summary>

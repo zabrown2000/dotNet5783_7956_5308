@@ -10,7 +10,7 @@ public class ProductItem
     /// <summary>
     /// Name of product item
     /// </summary>
-    public String Name { get; set; }
+    public String? Name { get; set; }
     /// <summary>
     /// Category of product item
     /// </summary>

@@ -10,12 +10,12 @@ public struct Order
 {
     public Order()
     {
-        CustomerName = "";
-        CustomerEmail = "";
-        CustomerAddress = "";
-        OrderDate = DateTime.MinValue;
-        ShipDate = DateTime.MinValue;
-        DeliveryDate = DateTime.MinValue;
+        CustomerName = null;
+        CustomerEmail = null;
+        CustomerAddress = null;
+        OrderDate = null;
+        ShipDate = null;
+        DeliveryDate = null;
     }
     static int counter = 10; //2 digit order ids
 
@@ -26,27 +26,27 @@ public struct Order
     /// <summary>
     /// Name of customer making order
     /// </summary>
-    public String CustomerName { get; set; }
+    public String? CustomerName { get; set; }
     /// <summary>
     /// Email of customer making order
     /// </summary>
-    public String CustomerEmail { get; set; }
+    public String? CustomerEmail { get; set; }
     /// <summary>
     /// Address of customer making order
     /// </summary>
-    public String CustomerAddress { get; set; }
+    public String? CustomerAddress { get; set; }
     /// <summary>
     /// Date order was made
     /// </summary>
-    public DateTime OrderDate { get; set; }
+    public DateTime? OrderDate { get; set; }
     /// <summary>
     /// Date order was shipped
     /// </summary>
-    public DateTime ShipDate { get; set; }
+    public DateTime? ShipDate { get; set; }
     /// <summary>
     /// Date order was delivered
     /// </summary>
-    public DateTime DeliveryDate { get; set; }
+    public DateTime? DeliveryDate { get; set; }
     public override String ToString() => $@"
         Order ID={ID}: 
         Customer Details:   

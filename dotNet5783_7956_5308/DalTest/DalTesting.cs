@@ -360,7 +360,7 @@ internal class DalTesting
         /// </summary>
         static internal void ReadAllP()
         {
-            IEnumerable<Products> products = dalList.dalProduct.ReadAll(); //calling CRUD readAll
+            IEnumerable<Products?> products = dalList.dalProduct.ReadAll(); //calling CRUD readAll
             foreach (Products p in products) //printing the list
             {
                 Console.WriteLine(p);
@@ -413,7 +413,7 @@ internal class DalTesting
         /// </summary>
         static internal void UpdateO()
         {
-            order.ID = HelperFunctions.ReadIntUser("enter order ID:\n");
+            //order.ID = HelperFunctions.ReadIntUser("enter order ID:\n");
             Console.WriteLine("enter customer name:\n");
             order.CustomerName = Console.ReadLine() ?? "";
             Console.WriteLine("enter customer mail:\n");
@@ -444,7 +444,7 @@ internal class DalTesting
         /// </summary>
         static internal void ReadAllO()
         {
-            IEnumerable<Order> order = dalList.dalOrder.ReadAll(); //calling CRUD readAll
+            IEnumerable<Order?> order = dalList.dalOrder.ReadAll(); //calling CRUD readAll
             foreach (Order o in order) //printing the list
             {
                 Console.WriteLine(o);
@@ -571,8 +571,8 @@ internal class DalTesting
             {
                 try
                 {
-                    orderItem.ID = HelperFunctions.ReadIntUser("Enter orderItem ID\n");
-                    orderItem = dalList.dalOrderItem.ReadId(orderItem.ID); //need to get the product and order ids so assigning the whole item and will reset necessary fields below
+                    int id = HelperFunctions.ReadIntUser("Enter orderItem ID\n");
+                    orderItem = dalList.dalOrderItem.ReadId(id); //need to get the product and order ids so assigning the whole item and will reset necessary fields below
                     check = false;//not found
                 }
                 catch
@@ -622,7 +622,7 @@ internal class DalTesting
         /// </summary>
         static internal void ReadAllOI()
         {
-            IEnumerable<OrderItem> orderItem = dalList.dalOrderItem.ReadAll(); //calling CRUD readAll
+            IEnumerable<OrderItem?> orderItem = dalList.dalOrderItem.ReadAll(); //calling CRUD readAll
             foreach (OrderItem oi in orderItem) //printing the list
             {
                 Console.WriteLine(oi);

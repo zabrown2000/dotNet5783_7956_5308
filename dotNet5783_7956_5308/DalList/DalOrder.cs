@@ -17,7 +17,7 @@ internal class DalOrder : IOrder
         if (DataSource._orderList.Count() < 100) //checking that the order cap hasn't been reached
         {
             //Case 1: New order, need to initialize it and add it
-            if (order.CustomerName == "") //Orders's default name is empty string
+            if (order.CustomerName == null) //Orders's default name is empty string
             {
                 //order.ID = DataSource.Config.NextOrderNumber;//giving this new order a unique id
                 DataSource._orderList.Add(order); //add order to the order list
@@ -117,5 +117,28 @@ internal class DalOrder : IOrder
         {
             throw new EntityDoesNotExistException(order);
         }
+    }
+
+    /// <summary>
+    /// method to get an order by using a filter
+    /// </summary>
+    /// <param name="filter">filter to search</param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="Exception"></exception>
+    public Order ReadByFilter(Func<Order?, bool>? filter)
+    {
+        if (filter == null)
+        {
+            throw new ArgumentNullException(nameof(filter)); //filter is null
+        }
+        foreach (Order? o in DataSource._orderList)
+        {
+            if (o != null && filter(o))
+            {
+                return (Order)o; //casting to non-null value
+            }
+        }
+        throw new Exception("The order that was requested does not exist");
     }
 }

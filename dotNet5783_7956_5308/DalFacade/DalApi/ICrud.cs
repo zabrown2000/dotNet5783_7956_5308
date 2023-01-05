@@ -8,4 +8,5 @@ public interface ICrud<T> where T : struct
     void Delete(int id);
 
     IEnumerable<T?> ReadAll(Func<T?, bool>? filter = null);
+    T ReadByFilter(Func<T?, bool>? filter);
 }

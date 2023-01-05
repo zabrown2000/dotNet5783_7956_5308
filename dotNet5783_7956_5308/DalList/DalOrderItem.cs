@@ -1,5 +1,7 @@
 ﻿using DO;
 using DalApi;
+using System;
+
 namespace Dal;
 
 
@@ -179,4 +181,26 @@ internal class DalOrderItem : IOrderItem
 
     public void Update(OrderItem orderItem) { }
 
+    /// <summary>
+    /// method to get an orderItem by using a filter
+    /// </summary>
+    /// <param name="filter">filter to search</param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    /// <exception cref="Exception"></exception>
+    public OrderItem ReadByFilter(Func<OrderItem?, bool>? filter)
+    {
+        if (filter == null)
+        {
+            throw new ArgumentNullException(nameof(filter)); //filter is null
+        }
+        foreach (OrderItem? o in DataSource._orderItemList)
+        {
+            if (o != null && filter(o))
+            {
+                return (OrderItem)o; //casting to non-null value
+            }
+        }
+        throw new Exception("The order item requested does not exist\n");
+    }
 }

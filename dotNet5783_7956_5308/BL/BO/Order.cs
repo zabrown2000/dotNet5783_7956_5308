@@ -11,15 +11,15 @@ public class Order
     /// <summary>
     /// Name of customer making order
     /// </summary>
-    public String CustomerName { get; set; }
+    public String? CustomerName { get; set; }
     /// <summary>
     /// Email of customer making order
     /// </summary>
-    public String CustomerEmail { get; set; }
+    public String? CustomerEmail { get; set; }
     /// <summary>
     /// Address of customer making order
     /// </summary>
-    public String CustomerAddress { get; set; }
+    public String? CustomerAddress { get; set; }
     /// <summary>
     /// Date order was made
     /// </summary>
@@ -39,7 +39,7 @@ public class Order
     /// <summary>
     /// list of order items that correspond to order
     /// </summary>
-    public List<OrderItem> Items { get; set; }
+    public List<OrderItem?> Items { get; set; }
     /// <summary>
     /// total price of order
     /// </summary>

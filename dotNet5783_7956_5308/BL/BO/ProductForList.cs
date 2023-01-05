@@ -11,7 +11,7 @@ public class ProductForList
     /// <summary>
     /// Name of product for list
     /// </summary>
-    public String Name { get; set; }
+    public String? Name { get; set; }
     /// <summary>
     /// Category of product for list
     /// </summary>
