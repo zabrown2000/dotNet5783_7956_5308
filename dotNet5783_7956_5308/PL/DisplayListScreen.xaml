@@ -12,11 +12,10 @@
             <RowDefinition Height="500*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0"
-              VerticalAlignment="Stretch" Width="auto"/>
-        <ComboBox Name="Category" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Grid Name="UpGrid" Height="auto" Grid.Row="0" Width="auto"/>
+        <ComboBox Name="Category" Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" SelectionChanged="Category_SelectionChanged" Grid.ColumnSpan="2" Text="" />
         <Label Grid.Column="0" Content="Category:" FontSize="24" FontFamily="Cambria"/>
-        <ListView x:Name="ItemsListView" Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}" SelectionChanged="ItemsListView_SelectionChanged">
+        <ListView x:Name="ProdListView" d:ItemsSource="{d:SampleData ItemCount=5}" Margin="0,46,0,0" Grid.RowSpan="2">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
@@ -24,8 +23,9 @@
             </ListView.View>
         </ListView>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="400*"/>
+            <ColumnDefinition Width="379*"/>
+            <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
     </Grid>
 </Window>
