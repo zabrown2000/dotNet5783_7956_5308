@@ -1,6 +1,4 @@
-﻿using BlApi;
-using BlImplementation;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,27 +10,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
-using BlImplementation;
 
 namespace PL
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for ProductView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class ProductView : Window
     {
-        private IBl bl = new Bl();
-
-        public MainWindow()
+        public ProductView()
         {
             InitializeComponent();
-        }
-
-        private void GoToDisplayView_Click(object sender, RoutedEventArgs e)
-        {
-            new DisplayListScreen(bl).ShowDialog();
         }
     }
 }

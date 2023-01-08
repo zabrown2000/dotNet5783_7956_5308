@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Button Content="Admin" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" FontFamily="Cambria" Click="GoToDisplayView_Click"/>
 
     </Grid>
 </Window>
