@@ -11,4 +11,7 @@ public interface IProducts
 
     //customer user functions
     public IEnumerable<ProductItem?> GetCatalog();
+
+    //helper functions
+    public int GetNextID();
 }

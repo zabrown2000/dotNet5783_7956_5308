@@ -1,0 +1,62 @@
+﻿<Window x:Class="PL.ProductWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        mc:Ignorable="d"
+        Title="ProductWindow" Height="450" Width="800">
+    <Grid Background="LightGoldenrodYellow">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="55"/>
+            <RowDefinition Height="55"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions >
+
+
+        <Label Name="l1" Content="ID:" FontSize="27"  FontWeight="Bold"
+               Height="40" Width="116" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Margin="10,5,0,0" FontFamily="Ravie"/>
+        <Label Name="l2" Content="Name:" FontSize="27"  FontWeight="Bold"
+               Height="40" Width="116" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="1" Margin="10,5,0,0" FontFamily="Ravie"/>
+        <Label Name="l3" Content="Price:" FontSize="27" FontWeight="Bold"
+               Height="40" Width="190" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="2" Margin="10,0,0,0" FontFamily="Ravie"/>
+        <Label Name="l4" Content="Category:" FontSize="27" FontWeight="Bold"
+               Height="66" Width="243" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="3" Margin="10,0,0,0" Grid.RowSpan="2" FontFamily="Ravie"/>
+        <Label Name="l5" Content="Amount in Stock:" FontSize="27" FontWeight="Bold"
+               Height="40" Width="343" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="4" Margin="10,0,0,0" FontFamily="Ravie"/>
+
+        <ComboBox Name="CategoryBox" Grid.Column="1" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="3" VerticalAlignment="Center" Width="214" Height="40" SelectionChanged="SelectCategory_SelectionChanged" IsEditable="True" IsReadOnly="True" Text="Select a category" SelectedItem="" FontSize="21"/>
+        <TextBox Name="ID" Grid.Column="1" FontSize="20" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="0" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="214" Height="40" IsReadOnly="True"/>
+        <TextBox Name="tname" Grid.Column="1" FontSize="20" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="Enter Name: " VerticalAlignment="Center" Width="214" Height="40" 
+                PreviewTextInput="tname_previewtextinput"  TextChanged="tname_TextChanged" PreviewMouseDown="tname_PreviewMouseDown" />
+        <TextBox Name="tprice" Grid.Column="1" FontSize="20" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="Enter Price: " VerticalAlignment="Center" Width="214" Height="40" 
+                 PreviewTextInput="tprice_previewtextinput" TextChanged="tprice_TextChanged" PreviewMouseDown="tprice_PreviewMouseDown"/>
+        <TextBox Name="tinstock" Grid.Column="1" FontSize="20" MaxLength="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="4" TextWrapping="Wrap" Text="Enter Amount: " VerticalAlignment="Center" Width="214" Height="40"
+                 PreviewTextInput="tinstock_previewtextinput" TextChanged="tinstock_TextChanged" PreviewMouseDown="tinstock_PreviewMouseDown"/>
+        <TextBox Name="uname" Grid.Column="1" FontSize="20" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="1" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="214" Height="40" 
+                 PreviewTextInput="uname_previewtextinput"  TextChanged="uname_TextChanged" PreviewMouseDown="tname_PreviewMouseDown" />
+        <TextBox Name="uprice" Grid.Column="1" FontSize="20" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="2" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="214" Height="40" 
+                 PreviewTextInput="uprice_previewtextinput" TextChanged="uprice_TextChanged" PreviewMouseDown="tprice_PreviewMouseDown"/>
+        <TextBox Name="uinstock" Grid.Column="1" FontSize="20" MaxLength="2" HorizontalAlignment="Left" Margin="10,0,0,0" Grid.Row="4" TextWrapping="Wrap" Text="" VerticalAlignment="Center" Width="214" Height="40"
+                 PreviewTextInput="uinstock_previewtextinput" TextChanged="uinstock_TextChanged" PreviewMouseDown="tinstock_PreviewMouseDown"/>
+        <Button Name="addProductButton" Content="Add Product" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Margin="260,5,0,5" Padding="5" Click="AddProductButton_Click" FontSize="15" FontStyle="Normal" FontWeight="Bold" Foreground="Black" Background="Teal" FontFamily="Britannic Bold">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Name="updateProductButton" Content="Update Product" Grid.Row="5" Grid.Column="1" HorizontalAlignment="Left" Margin="260,5,0,5" Padding="5" Click="UpdateProductButton_Click" FontSize="15" FontStyle="Normal" FontWeight="Bold" Foreground="Black" Background="Teal" FontFamily="Britannic Bold">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+
+
+    </Grid>
+</Window>

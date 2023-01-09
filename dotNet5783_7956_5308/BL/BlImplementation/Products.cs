@@ -150,4 +150,13 @@ internal class Products : BlApi.IProducts
                 };
         return v;
     }
+
+    /// <summary>
+    /// method to get next product id that will be used 
+    /// </summary>
+    /// <returns></returns>
+    public int GetNextID()
+    {
+        return DO.Products.counter;
+    }
 }

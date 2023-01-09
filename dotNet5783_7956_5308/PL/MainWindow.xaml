@@ -5,9 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        <Button Content="Admin" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="48" FontFamily="Cambria" Click="GoToDisplayView_Click"/>
-
+        Title="MainWindow" Height="640" Width="800">
+    <Window.Resources>
+        <Style x:Name="TextStyle" TargetType="TextBlock" >
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontFamily" Value="Italic"/>
+            <Setter Property="FontSize" Value="27"/>
+        </Style>
+    </Window.Resources>
+    <Grid Name = "MainGrid" Background="LightGoldenrodYellow">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="500*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions >
+            <!--<Label Content="Pharmacy" HorizontalAlignment="Left" Margin="118,0,0,0" VerticalAlignment="Center"/>-->
+            <Button Click="ShowProductsButton_Click" Grid.ColumnSpan="2" Margin="200,262,238,-368" FontSize="48" FontStyle="Normal" FontWeight="Bold" Foreground="Black" Background="Teal" FontFamily="Britannic Bold">Admin
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
+        </Grid>
+        <Border BorderBrush="Black" BorderThickness="1" Grid.Row="1"/>
     </Grid>
 </Window>

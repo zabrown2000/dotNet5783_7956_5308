@@ -609,7 +609,7 @@ internal class DalTesting
         {
             
             int num = HelperFunctions.ReadIntUser("Enter the order ID:\n");
-            IEnumerable<OrderItem> orderItem = dalList.dalOrderItem.OrdersInOrderItem(num); 
+            IEnumerable<OrderItem?> orderItem = dalList.dalOrderItem.OrdersInOrderItem(num); 
             foreach (OrderItem oi in orderItem) //printing the list
             {
                 Console.WriteLine(oi);

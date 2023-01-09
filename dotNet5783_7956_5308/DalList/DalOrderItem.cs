@@ -150,12 +150,12 @@ internal class DalOrderItem : IOrderItem
     /// </summary>
     /// <param name="orderId">id of order item with the products we want</param>
     /// <returns>returns a list of products (by id) in order number of id</returns>
-    public IEnumerable<OrderItem> OrdersInOrderItem (int orderId)   
+    public IEnumerable<OrderItem?> OrdersInOrderItem (int orderId)   
     {
-        List<OrderItem> OrdersInOrder = new List<OrderItem>(); //list to place ids of products
-        foreach (OrderItem orderItem in DataSource._orderItemList) //go over OrderItem list
+        List<OrderItem?> OrdersInOrder = new List<OrderItem?>(); //list to place ids of products
+        foreach (OrderItem? orderItem in DataSource._orderItemList) //go over OrderItem list
         {
-            if (orderItem.OrderID == orderId) //if found a matching order id to the one sent
+            if (orderItem?.OrderID == orderId) //if found a matching order id to the one sent
                 OrdersInOrder.Add(orderItem); //add that orderItem to the list
         }
         return OrdersInOrder.ToList(); //return the products

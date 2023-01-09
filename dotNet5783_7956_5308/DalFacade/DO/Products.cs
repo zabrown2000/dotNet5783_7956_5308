@@ -15,7 +15,7 @@ public struct Products
         InStock = 0;
     }
 
-    static int counter = 100; //3 digit product ids
+    public static int counter = 100; //3 digit product ids
 
     /// <summary>
     /// Unique id for a product
