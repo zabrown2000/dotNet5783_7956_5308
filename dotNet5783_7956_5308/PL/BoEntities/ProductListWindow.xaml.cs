@@ -10,7 +10,7 @@ namespace PL
     /// <summary>
     /// Interaction logic for ProductListWindow.xaml
     /// </summary>
-    public partial class ProductListWindow : Window // changed from Window
+    public partial class ProductListWindow : Window 
     {
         private IBl bl = new Bl();
         public ProductListWindow()
@@ -19,12 +19,22 @@ namespace PL
             ProductsListView.ItemsSource = bl.products.ReadProductsForList();
             CategorySelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.ProdCategory));
         }
-        private void AddButton_Click(object sender, RoutedEventArgs e) => new ProductWindow().Show();
+
+        /// <summary>
+        /// This method is called when the user clicks on the "Add" button.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            new ProductWindow().Show(); //we changed this from the "=>" operator to fix a bug we had with new products not showing right away
+            this.Close();
+        } 
 
         private void CategorySelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            BO.Enums.ProdCategory productCategory = (BO.Enums.ProdCategory)CategorySelector.SelectedItem; // saves the selected category
-            if (productCategory == BO.Enums.ProdCategory.None) // if the user would like to view all the products
+            BO.Enums.ProdCategory productCategory = (BO.Enums.ProdCategory)CategorySelector.SelectedItem; //saves the selected category
+            if (productCategory == BO.Enums.ProdCategory.None) //if the user would like to view all the products
             {
                 ProductsListView.ItemsSource = bl.products.ReadProductsForList();
                 CategorySelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.ProdCategory));
@@ -32,8 +42,7 @@ namespace PL
             }
             if (productCategory is BO.Enums.ProdCategory cat)
             {
-                //show the filtered list
-                ProductsListView.ItemsSource = bl?.products?.ReadProductsForList()?.Select(x => x.Category == cat);
+                ProductsListView.ItemsSource = bl?.products?.ReadProductsForList()?.Select(x => x.Category == cat); //show the filtered list
 
 
             }
@@ -47,6 +56,11 @@ namespace PL
 
         }
 
+        /// <summary>
+        /// This method is called when the user double clicks on a product in the list
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void DoubleClickEvent(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             if (ProductsListView.SelectedItem is BO.ProductForList productForList)
@@ -57,7 +71,6 @@ namespace PL
             }
             ProductsListView.ItemsSource = bl?.products.ReadProductsForList(); // update list view after add
         }
-
     }
 }
 

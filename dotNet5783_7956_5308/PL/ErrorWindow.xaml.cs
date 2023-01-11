@@ -35,10 +35,5 @@ namespace PL
         {
             Close();
         }
-
-        //private void ErrorTitle_TextChanged(object sender, TextChangedEventArgs e)
-        //{
-
-        //}
     }
 }

@@ -27,11 +27,11 @@ namespace PL
     {
         private IBl bl = new Bl();
         private BO.Products product = new BO.Products();
-        public ProductWindow() // constructor
+        public ProductWindow() 
         {
             InitializeComponent();
             CategoryBox.ItemsSource = Enum.GetValues(typeof(BO.Enums.ProdCategory));
-            updateProductButton.Visibility = Visibility.Collapsed;//update invisible 
+            updateProductButton.Visibility = Visibility.Collapsed; //update button is invisible 
             uinstock.Visibility = Visibility.Collapsed;
             uprice.Visibility = Visibility.Collapsed;
             uname.Visibility = Visibility.Collapsed;
@@ -42,7 +42,7 @@ namespace PL
         {
             InitializeComponent();
             CategoryBox.ItemsSource = Enum.GetValues(typeof(BO.Enums.ProdCategory));
-            addProductButton.Visibility = Visibility.Collapsed;//add invisible
+            addProductButton.Visibility = Visibility.Collapsed; //add button is invisible
             updateProductButton.Visibility = Visibility.Visible;//show update
             tinstock.Visibility = Visibility.Collapsed;
             tprice.Visibility = Visibility.Collapsed;
@@ -62,38 +62,37 @@ namespace PL
         }
         private void tid_previewtextinput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);//only gets numbers for id
+            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text); //making sure it only only gets numbers for id
         }
 
         private void tinstock_previewtextinput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);//only gets numbers for instock
+            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text); //making sure it only gets numbers for instock
         }
 
         private void tprice_previewtextinput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);//only gets numbers for price
+            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text); //making sure it only only gets numbers for price
         }
         private void tname_previewtextinput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = new Regex("[^a-z]+[A-Z]+").IsMatch(e.Text);//only get letters 
+            e.Handled = new Regex("[^a-z]+[A-Z]+").IsMatch(e.Text); //making sure it only only get letters for name
         }
 
         private void uinstock_previewtextinput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);//only gets numbers for instock
+            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text); //making sure it only only gets numbers for instock
         }
 
         private void uprice_previewtextinput(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);//only gets numbers for price
+            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);//making sure it only only gets numbers for price
         }
         private void uname_previewtextinput(object sender, TextCompositionEventArgs e)
         {
-            //e.Handled = new Regex("[^0-9.-]+").IsMatch(e.Text);
             try
             {
-                e.Handled = new Regex("[^a-z]+[^A-Z]+").IsMatch(e.Text);//only get letters  // HAD A PLUS AFTER THE []
+                e.Handled = new Regex("[^a-z]+[^A-Z]+").IsMatch(e.Text); //making sure it only only get letters for name 
             }
             catch (BO.InvalidInputException exc)
             {
@@ -101,7 +100,7 @@ namespace PL
             }
         }
 
-
+        //the following functions are handling text user inputted for new product fields and updating product fields
         private void tname_TextChanged(object sender, TextChangedEventArgs e)
         {
             if (tname != null && tname.Text != "")
@@ -189,81 +188,62 @@ namespace PL
 
         private void SelectCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            BO.Enums.ProdCategory productCategory = (BO.Enums.ProdCategory)CategoryBox.SelectedItem; // saves the selected category
+            BO.Enums.ProdCategory productCategory = (BO.Enums.ProdCategory)CategoryBox.SelectedItem; //saves the selected category
             product.Category = productCategory;
         }
 
-
+        /// <summary>
+        /// method handling the add product button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AddProductButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
-                bl!.products.AddProduct(product);//add product to BO
+                bl!.products.AddProduct(product); //add BO product 
             }
-            catch (BO.InvalidInputException ex)//IncorrectInput error on the screen 
+            catch (BO.InvalidInputException ex) //InvalidInput error on the screen 
             {
                 new ErrorWindow("Add Product Window\n", ex.Message).ShowDialog();
-                //Console.WriteLine("Add Product Window\n");
-                //Console.WriteLine(ex.Message);
-                //Console.WriteLine("your input is incorrect\n");
-                //Console.WriteLine(ex.InnerException?.ToString());
             }
-            catch (BO.BOEntityAlreadyExistsException ex)//IdExistException error on the screen 
+            catch (BO.BOEntityAlreadyExistsException ex) //EntityAlreadyExistsException error on the screen 
             {
                 new ErrorWindow("Add Product Window\n", ex.Message).ShowDialog();
-                //Console.WriteLine("Add Product Window\n");
-                //Console.WriteLine(ex.Message);
-                //Console.WriteLine("the ID you requested to add already exists\n");
-                //Console.WriteLine(ex.InnerException?.ToString());
             }
-            //trigger of a pup op message
+            //trigger of a pop up message
             ID.Text = "Enter ID";
             tname.Text = "Enter Name";
             tprice.Text = "Enter Price";
-            tinstock.Text = "Enter Amount";//returned previous text
-            Close();//close this window
-
-            /*try
-            {
-                bl.products.AddProduct(product);
-            }
-            catch (BO.InvalidInputException exc)
-            {
-                new ErrorWindow("Add Product Window\n", exc.Message).ShowDialog();
-            }
-            Close();*/
+            tinstock.Text = "Enter Amount"; 
+            Close(); //close this window
+            new ProductListWindow().Show(); //open productList back up to see newly added product
         }
 
+        /// <summary>
+        /// method handling the update product button
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void UpdateProductButton_Click(object sender, RoutedEventArgs e)
         {
             try    
             {
-                bl!.products.UpdateProduct(product);//add product to BO
+                bl!.products.UpdateProduct(product); //update BO product
             }
-            catch (BO.InvalidInputException ex)//IncorrectInput error on the screen 
+            catch (BO.InvalidInputException ex) //InvalidInput error on the screen 
             {
-                new ErrorWindow("Add Product Window\n", ex.Message).ShowDialog();
-                //Console.WriteLine("Add Product Window\n");
-                //Console.WriteLine(ex.Message);
-                //Console.WriteLine("your input is incorrect\n");
-                //Console.WriteLine(ex.InnerException?.ToString());
+                new ErrorWindow("Update Product Window\n", ex.Message).ShowDialog();
             }
-            catch (BO.BOEntityDoesNotExistException ex)//IdExistException error on the screen 
+            catch (BO.BOEntityDoesNotExistException ex) //EntityDoesNotExistException error on the screen 
             {
-                new ErrorWindow("Add Product Window\n", ex.Message).ShowDialog();
-                //Console.WriteLine("Add Product Window\n");
-                //Console.WriteLine(ex.Message);
-                //Console.WriteLine("the ID you requested to update does not exists\n");
-                //Console.WriteLine(ex.InnerException?.ToString());
+                new ErrorWindow("Update Product Window\n", ex.Message).ShowDialog();
             }
             ID.Text = "Enter ID";
             tname.Text = "Enter Name";
             tprice.Text = "Enter Price";
-            tinstock.Text = "Enter Amount";//returned previous text
-            Close();//close this window
-
-            //bl.products.UpdateProduct(product); //problem: the fields are empty and throwing exception
-            //Close();
+            tinstock.Text = "Enter Amount";
+            Close(); //close this window
         }
     }
 }
