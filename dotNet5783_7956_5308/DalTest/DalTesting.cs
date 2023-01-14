@@ -11,7 +11,7 @@ namespace Test;
 
 internal class DalTesting
 {
-    public static IDal dalList { get; set; } = new DalList(); //Use properties to access this variable. Do not allow direct access to it. - HOW?
+    public static DalApi.IDal? dal = DalApi.Factory.Get();
 
     static void Main(String[] args)
     {
@@ -311,7 +311,7 @@ internal class DalTesting
             product.Category = (Enums.Categories)num;
             product.InStock = HelperFunctions.ReadIntUser("Enter the product stock\n");
 
-            return dalList.dalProduct.Add(product); //calling CRUD add
+            return dal.dalProduct.Add(product); //calling CRUD add
         }
 
         /// <summary>
@@ -320,7 +320,7 @@ internal class DalTesting
         /// <param name="id">id of product to delete</param>
         static internal void DeleteP(int id)
         {
-            dalList.dalProduct.Delete(id); //calling CRUD delete
+            dal?.dalProduct.Delete(id); //calling CRUD delete
         }
 
         /// <summary>
@@ -340,7 +340,7 @@ internal class DalTesting
             product.Category = (Enums.Categories)num;
             product.InStock = HelperFunctions.ReadIntUser("Enter the product stock:\n");
 
-            dalList.dalProduct.Update(product); //calling CRUD update
+            dal?.dalProduct.Update(product); //calling CRUD update
             Console.WriteLine(product); //update was successful, print new product
 
         }
@@ -352,7 +352,7 @@ internal class DalTesting
         /// <returns>product to read</returns>
         static internal Products ReadIdP(int id)
         {
-            return dalList.dalProduct.ReadId(id); //calling CRUD readId
+            return (DO.Products)dal?.dalProduct.ReadId(id); //calling CRUD readId
         }
 
         /// <summary>
@@ -360,7 +360,7 @@ internal class DalTesting
         /// </summary>
         static internal void ReadAllP()
         {
-            IEnumerable<Products?> products = dalList.dalProduct.ReadAll(); //calling CRUD readAll
+            IEnumerable<Products?> products = dal?.dalProduct.ReadAll(); //calling CRUD readAll
             foreach (Products p in products) //printing the list
             {
                 Console.WriteLine(p);
@@ -395,7 +395,7 @@ internal class DalTesting
             order.ShipDate = DateTime.MinValue;
             order.DeliveryDate = DateTime.MinValue;
 
-            int id = dalList.dalOrder.Add(order); //calling CRUD add
+            int id = dal.dalOrder.Add(order); //calling CRUD add
             return id;
         }
 
@@ -405,7 +405,7 @@ internal class DalTesting
         /// <param name="id">id of order to delete</param>
         static internal void DeleteO(int id)
         {
-            dalList.dalOrder.Delete(id); //calling CRUD delete
+            dal?.dalOrder.Delete(id); //calling CRUD delete
         }
 
         /// <summary>
@@ -424,7 +424,7 @@ internal class DalTesting
             order.ShipDate = DateTime.MinValue;
             order.DeliveryDate = DateTime.MinValue;
 
-            dalList.dalOrder.Update(order); //calling CRUD update
+            dal?.dalOrder.Update(order); //calling CRUD update
             Console.WriteLine(order); //update was successful, print new product
         }
 
@@ -435,7 +435,7 @@ internal class DalTesting
         /// <returns>order want to read</returns>
         static internal Order ReadIdO(int id)
         {
-            return dalList.dalOrder.ReadId(id); //calling CRUD readId
+            return dal.dalOrder.ReadId(id); //calling CRUD readId
 
         }
 
@@ -444,7 +444,7 @@ internal class DalTesting
         /// </summary>
         static internal void ReadAllO()
         {
-            IEnumerable<Order?> order = dalList.dalOrder.ReadAll(); //calling CRUD readAll
+            IEnumerable<Order?> order = dal?.dalOrder.ReadAll(); //calling CRUD readAll
             foreach (Order o in order) //printing the list
             {
                 Console.WriteLine(o);
@@ -476,7 +476,7 @@ internal class DalTesting
                 try
                 {
                     orderItem.ProductID = HelperFunctions.ReadIntUser("enter product ID:\n");
-                    dalList.dalProduct.ReadId(orderItem.ProductID);
+                    dal?.dalProduct.ReadId(orderItem.ProductID);
                     check = false; //if not found
                 }
                 catch
@@ -493,7 +493,7 @@ internal class DalTesting
                 try
                 {
                     orderItem.OrderID = HelperFunctions.ReadIntUser("enter order id:\n");
-                    dalList.dalOrder.ReadId(orderItem.OrderID);
+                    dal?.dalOrder.ReadId(orderItem.OrderID);
                     check = false;
                 }
                 catch
@@ -502,9 +502,9 @@ internal class DalTesting
                 }
             }
             orderItem.Amount = HelperFunctions.ReadIntUser("enter amount:\n");
-            orderItem.Price = dalList.dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
+            orderItem.Price = dal.dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
 
-            int id = dalList.dalOrderItem.Add(orderItem); //calling CRUD add
+            int id = dal.dalOrderItem.Add(orderItem); //calling CRUD add
             return id;
         }
 
@@ -514,7 +514,7 @@ internal class DalTesting
         /// <param name="id">id of orderItem to be deleted</param>
         static internal void DeleteOI(int id)
         {
-            dalList.dalOrderItem.Delete(id); //calling CRUD delete
+            dal?.dalOrderItem.Delete(id); //calling CRUD delete
 
         }
 
@@ -530,7 +530,7 @@ internal class DalTesting
                 try
                 {
                     orderItem.ProductID = HelperFunctions.ReadIntUser("enter product ID:\n");
-                    dalList.dalProduct.ReadId(orderItem.ProductID);
+                    dal?.dalProduct.ReadId(orderItem.ProductID);
                     check = false;
                 }
                 catch
@@ -546,7 +546,7 @@ internal class DalTesting
                 try
                 {
                     orderItem.OrderID = HelperFunctions.ReadIntUser("enter order id:\n");
-                    dalList.dalOrder.ReadId(orderItem.OrderID);
+                    dal?.dalOrder.ReadId(orderItem.OrderID);
                     check = false;
                 }
                 catch
@@ -555,9 +555,9 @@ internal class DalTesting
                 }
             }
             orderItem.Amount = HelperFunctions.ReadIntUser("enter new amount:\n");
-            orderItem.Price = dalList.dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
+            orderItem.Price = dal.dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
 
-            dalList.dalOrderItem.SetByOrdProdID(orderItem);
+            dal?.dalOrderItem.SetByOrdProdID(orderItem);
             Console.WriteLine(orderItem);
         }
         /// <summary>
@@ -572,7 +572,7 @@ internal class DalTesting
                 try
                 {
                     int id = HelperFunctions.ReadIntUser("Enter orderItem ID\n");
-                    orderItem = dalList.dalOrderItem.ReadId(id); //need to get the product and order ids so assigning the whole item and will reset necessary fields below
+                    orderItem = (DO.OrderItem)dal?.dalOrderItem.ReadId(id); //need to get the product and order ids so assigning the whole item and will reset necessary fields below
                     check = false;//not found
                 }
                 catch
@@ -581,9 +581,9 @@ internal class DalTesting
                 }
             }
             orderItem.Amount = HelperFunctions.ReadIntUser("enter new amount:\n");
-            orderItem.Price = dalList.dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
+            orderItem.Price = dal.dalProduct.ReadId(orderItem.ProductID).Price * orderItem.Amount;
 
-            dalList.dalOrderItem.SetByOrderItem(orderItem);
+            dal?.dalOrderItem.SetByOrderItem(orderItem);
             Console.WriteLine(orderItem);
 
         }
@@ -599,7 +599,7 @@ internal class DalTesting
            
             int ordNum = HelperFunctions.ReadIntUser("Enter the order ID:\n");
             int prodNum = HelperFunctions.ReadIntUser("Enter the product ID:\n");
-            return dalList.dalOrderItem.GetOrderItem(ordNum, prodNum);
+            return dal.dalOrderItem.GetOrderItem(ordNum, prodNum);
            
         }
         /// <summary>
@@ -609,7 +609,7 @@ internal class DalTesting
         {
             
             int num = HelperFunctions.ReadIntUser("Enter the order ID:\n");
-            IEnumerable<OrderItem?> orderItem = dalList.dalOrderItem.OrdersInOrderItem(num); 
+            IEnumerable<OrderItem?> orderItem = dal?.dalOrderItem.OrdersInOrderItem(num); 
             foreach (OrderItem oi in orderItem) //printing the list
             {
                 Console.WriteLine(oi);
@@ -622,7 +622,7 @@ internal class DalTesting
         /// </summary>
         static internal void ReadAllOI()
         {
-            IEnumerable<OrderItem?> orderItem = dalList.dalOrderItem.ReadAll(); //calling CRUD readAll
+            IEnumerable<OrderItem?> orderItem = dal?.dalOrderItem.ReadAll(); //calling CRUD readAll
             foreach (OrderItem oi in orderItem) //printing the list
             {
                 Console.WriteLine(oi);

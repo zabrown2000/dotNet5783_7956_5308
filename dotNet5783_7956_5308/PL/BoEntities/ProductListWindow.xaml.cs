@@ -12,11 +12,11 @@ namespace PL
     /// </summary>
     public partial class ProductListWindow : Window 
     {
-        private IBl bl = new Bl();
+        private BlApi.IBl? bl = BlApi.Factory.Get();
         public ProductListWindow()
         {
             InitializeComponent();
-            ProductsListView.ItemsSource = bl.products.ReadProductsForList();
+            ProductsListView.ItemsSource = bl?.products.ReadProductsForList();
             CategorySelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.ProdCategory));
         }
 
@@ -36,7 +36,7 @@ namespace PL
             BO.Enums.ProdCategory productCategory = (BO.Enums.ProdCategory)CategorySelector.SelectedItem; //saves the selected category
             if (productCategory == BO.Enums.ProdCategory.None) //if the user would like to view all the products
             {
-                ProductsListView.ItemsSource = bl.products.ReadProductsForList();
+                ProductsListView.ItemsSource = bl?.products.ReadProductsForList();
                 CategorySelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.ProdCategory));
                 return;
             }
@@ -66,7 +66,7 @@ namespace PL
             if (ProductsListView.SelectedItem is BO.ProductForList productForList)
             {
                 BO.Products prod = new BO.Products();
-                prod = bl.products.ManagerProduct(productForList.ID);
+                prod = bl?.products.ManagerProduct(productForList.ID);
                 new ProductWindow(prod).ShowDialog();
             }
             ProductsListView.ItemsSource = bl?.products.ReadProductsForList(); // update list view after add

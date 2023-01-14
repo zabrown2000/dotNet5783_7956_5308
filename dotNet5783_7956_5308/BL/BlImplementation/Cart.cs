@@ -1,13 +1,12 @@
 ﻿using BlApi;
-using DalApi;
 using Dal;
 using BO;
 namespace BlImplementation;
 
 internal class Cart : ICart
 {
-    static IDal? dal = new DalList();
-    
+    static DalApi.IDal? dal = DalApi.Factory.Get();
+
     /// <summary>
     /// Method to add product to cart
     /// </summary>
@@ -22,7 +21,7 @@ internal class Cart : ICart
         DO.Products? product = new DO.Products?();//creating new DO product
         try
         {
-            product = dal.dalProduct.ReadId(pID); //getting the actual product for corresponding id user wants to add
+            product = dal?.dalProduct.ReadId(pID); //getting the actual product for corresponding id user wants to add
         }
         catch
         {
@@ -65,10 +64,10 @@ internal class Cart : ICart
     public BO.Cart UpdateCart(BO.Cart myCart, int pID, int amount)
     {
         int index = myCart.Items.FindIndex(x => x.ProductID == pID); //getting index of the product in the cart (if it's there)
-        DO.Products product = new DO.Products(); //create a new DO product
+        DO.Products? product = new DO.Products(); //create a new DO product
         try
         {
-            product = dal.dalProduct.ReadId(pID); //getting product based on id
+            product = dal?.dalProduct.ReadId(pID); //getting product based on id
         }catch
         {
             throw new BO.BOEntityDoesNotExistException("Product does not exist\n");
@@ -83,13 +82,13 @@ internal class Cart : ICart
                 return myCart;
             }
             product = dal.dalProduct.ReadId(myCart.Items[index].ProductID); //get product from the orderItem in Items to check stock
-            if (myCart.Items[index].Amount + amount > product.InStock)      //if amount to add is more than available stock throw exception
+            if (myCart.Items[index].Amount + amount > product?.InStock)      //if amount to add is more than available stock throw exception
             {
                 throw new BO.OutOfStockException("Amount entered is more than amount in stock.");
             }
             else
             {
-                double unitPrice = product.Price;
+                double unitPrice = (double)product?.Price;
                 myCart.Items[index].Amount += amount;//set new amount (adds or subtracts)
                 myCart.Items[index].Price += unitPrice * amount; // add/subtract to make the price reflect addition/subtraction of items to cart 
                 myCart.TotalPrice += unitPrice * amount;//add/subtract the new total cart price
@@ -121,7 +120,7 @@ internal class Cart : ICart
         {
             try
             {
-                if (item.ProductID == dal.dalProduct.ReadId(item.ProductID).ID && item.Amount > 0 && item.Amount <= dal.dalProduct.ReadId(item.ProductID).InStock) //if orderItem exists and is instock
+                if (item.ProductID == dal?.dalProduct.ReadId(item.ProductID).ID && item.Amount > 0 && item.Amount <= dal.dalProduct.ReadId(item.ProductID).InStock) //if orderItem exists and is instock
                 {
                     DO.Order order = new DO.Order(); //new DO order
                     order.OrderDate = DateTime.Now; //ordered now
@@ -129,10 +128,10 @@ internal class Cart : ICart
                     DO.OrderItem oi = new(); //creating new DO order item
                     oi.ProductID = item.ProductID; //save product id
                     oi.OrderID = num; //save order id
-                    dal.dalOrderItem.Add(oi); //add to DO order item list 
-                    DO.Products p = dal.dalProduct.ReadId(oi.ProductID); //get matching product
+                    dal?.dalOrderItem.Add(oi); //add to DO order item list 
+                    DO.Products p = (DO.Products)dal?.dalProduct.ReadId(oi.ProductID); //get matching product
                     p.InStock -= item.Amount; //subtract the amount of products in stock
-                    dal.dalProduct.Update(p); //update product in DO
+                    dal?.dalProduct.Update(p); //update product in DO
                 }
             } catch
             {

@@ -25,7 +25,7 @@ namespace PL
     /// </summary>
     public partial class ProductWindow : Window
     {
-        private IBl bl = new Bl();
+        private BlApi.IBl? bl = BlApi.Factory.Get();
         private BO.Products product = new BO.Products();
         public ProductWindow() 
         {
@@ -35,7 +35,7 @@ namespace PL
             uinstock.Visibility = Visibility.Collapsed;
             uprice.Visibility = Visibility.Collapsed;
             uname.Visibility = Visibility.Collapsed;
-            ID.Text = bl.products.GetNextID().ToString();
+            ID.Text = bl?.products.GetNextID().ToString();
         }
 
         public ProductWindow(Products prod)

@@ -6,7 +6,7 @@ using System;
 namespace BlTest;
 class BlTesting
 {
-    static IBl bl = new Bl();
+    static BlApi.IBl? bl = BlApi.Factory.Get();
     static void Main(string[] args)
     {
         Cart? cart = new() { Items = new List<BO.OrderItem?>() }; //new cart
@@ -49,7 +49,7 @@ class BlTesting
                             id = GetNumberFromUser("Enter product ID:\n");
                             try
                             {
-                                Console.WriteLine(bl.cart.AddToCart(cart, id));
+                                Console.WriteLine(bl?.cart.AddToCart(cart, id));
                                 //Note to Grader: 
                                 //Customer details will be left blank until
                                 //an order is made. Just like when browsing online and you aren't
@@ -75,7 +75,7 @@ class BlTesting
                             int amount = GetNumberFromUser("please enter how much to add or reduce:");
                             try
                             {
-                                cart = bl.cart.UpdateCart(cart, id, amount);
+                                cart = bl?.cart.UpdateCart(cart, id, amount);
                             }
                             catch (BOEntityDoesNotExistException e)
                             {
@@ -99,7 +99,7 @@ class BlTesting
 
                             try
                             {
-                                bl.cart.MakeOrder(cart, name, email, address);
+                                bl?.cart.MakeOrder(cart, name, email, address);
                                 Console.WriteLine("Order approved!");
                             }
                             catch (BO.InvalidInputException e)
@@ -146,7 +146,7 @@ class BlTesting
                         case 1: //display all orders
                             try
                             {
-                                printList<BO.OrderForList?>(bl.order.ReadAllOrderForList());
+                                printList<BO.OrderForList?>(bl?.order.ReadAllOrderForList());
                             }
                             catch (BO.BOEntityDoesNotExistException e)//for inner status func
                             {
@@ -162,7 +162,7 @@ class BlTesting
                             id = GetNumberFromUser("Enter order id:");
                             try
                             {
-                                Console.WriteLine(bl.order.ReadBoOrder(id));
+                                Console.WriteLine(bl?.order.ReadBoOrder(id));
                             }
                             catch (BO.BOEntityDoesNotExistException e)
                             {
@@ -178,7 +178,7 @@ class BlTesting
                             id = GetNumberFromUser("Enter order id:");
                             try
                             {
-                                Console.WriteLine(bl.order.ShipUpdate(id));
+                                Console.WriteLine(bl?.order.ShipUpdate(id));
                             }
                             catch (BO.BOEntityDoesNotExistException e)
                             {
@@ -194,7 +194,7 @@ class BlTesting
                             id = GetNumberFromUser("Enter order id:");
                             try
                             {
-                                Console.WriteLine(bl.order.DeliveredUpdate(id));
+                                Console.WriteLine(bl?.order.DeliveredUpdate(id));
                             }
                             catch (BO.BOEntityDoesNotExistException e)
                             {
@@ -229,13 +229,13 @@ class BlTesting
                     switch (actionChoice)
                     {
                         case 1: //display all products for m
-                            printList<ProductForList?>(bl.products.ReadProductsForList());
+                            printList<ProductForList?>(bl?.products.ReadProductsForList());
                             break;
                             
                         case 2: //display a product for m
                             try
                             {
-                                Console.WriteLine(bl.products.ManagerProduct(GetNumberFromUser("Enter Product ID: \n")));
+                                Console.WriteLine(bl?.products.ManagerProduct(GetNumberFromUser("Enter Product ID: \n")));
                             }
                             catch (BO.BOEntityDoesNotExistException e)
                             {
@@ -257,7 +257,7 @@ class BlTesting
                             p.Price = GetNumberFromUser("Enter price of Product\n");
                             try
                             {
-                                bl.products.AddProduct(p);
+                                bl?.products.AddProduct(p);
                             }
                             catch (BO.BOEntityAlreadyExistsException e)
                             {
@@ -277,7 +277,7 @@ class BlTesting
                             id = GetNumberFromUser("Enter product ID:\n");
                             try
                             {
-                                bl.products.DeleteProduct(id);
+                                bl?.products.DeleteProduct(id);
                             }
                             catch (BO.BOEntityDoesNotExistException e)
                             {
@@ -304,7 +304,7 @@ class BlTesting
                             p.Price = GetNumberFromUser("Enter price of Product\n");
                             try
                             {
-                                bl.products.UpdateProduct(p);
+                                bl?.products.UpdateProduct(p);
                             }
 
                             catch (BOEntityDoesNotExistException e)
@@ -322,7 +322,7 @@ class BlTesting
                             break;
                             
                         case 6: //display products for c
-                            printList<ProductForList?>(bl.products.ReadProductsForList());
+                            printList<ProductForList?>(bl?.products.ReadProductsForList());
                             break;
                             
                         case 7: //return to main menu

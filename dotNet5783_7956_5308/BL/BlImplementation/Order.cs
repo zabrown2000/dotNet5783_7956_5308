@@ -1,12 +1,11 @@
 ﻿using BlApi;
-using DalApi;
 using Dal;
 using BO;
 namespace BlImplementation;
 
 internal class Order : BlApi.IOrder
 {
-    static IDal? dal = new DalList();
+    static DalApi.IDal? dal = DalApi.Factory.Get();
     /// <summary>
     /// Getting all orders in data layer and forming a list of type OrderForList for the business layer
     /// </summary>
@@ -14,8 +13,8 @@ internal class Order : BlApi.IOrder
     /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
     public IEnumerable<OrderForList?> ReadAllOrderForList()
     {
-        IEnumerable<DO.Order?> orders = dal.dalOrder.ReadAll(); //getting all DO orders 
-        IEnumerable<DO.OrderItem?> orderItems = dal.dalOrderItem.ReadAll(); //getting all DO orderItems
+        IEnumerable<DO.Order?> orders = dal?.dalOrder.ReadAll(); //getting all DO orders 
+        IEnumerable<DO.OrderItem?> orderItems = dal?.dalOrderItem.ReadAll(); //getting all DO orderItems
         
         return from DO.Order? o in orders
                select new BO.OrderForList //for each order we have we add an entry to the OrderForList list
@@ -54,14 +53,14 @@ internal class Order : BlApi.IOrder
         DO.Order order;
         try
         {
-            order = dal.dalOrder.ReadId(orderId);//get right DO Order
+            order = (DO.Order)dal?.dalOrder.ReadId(orderId);//get right DO Order
         } catch
         {
             throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
         }
         
         double tempPrice = 0;
-        foreach (DO.OrderItem o in dal.dalOrderItem.ReadAll())
+        foreach (DO.OrderItem o in dal?.dalOrderItem.ReadAll())
         {
             if (o.OrderID == orderId)
             {
@@ -97,7 +96,7 @@ internal class Order : BlApi.IOrder
         DO.Order order;
         try
         {
-            order = dal.dalOrder.ReadId(orderId); //get right DO Order
+            order = (DO.Order)dal?.dalOrder.ReadId(orderId); //get right DO Order
         }
         catch
         {
@@ -117,7 +116,7 @@ internal class Order : BlApi.IOrder
             }; //set new ship date in new DO Order
             dal.dalOrder.Update(o); //update the order in DO
             double tempPrice = 0;
-            foreach (DO.OrderItem temp in dal.dalOrderItem.ReadAll())
+            foreach (DO.OrderItem temp in dal?.dalOrderItem.ReadAll())
             {
                 if (temp.OrderID == o.ID)
                 {
@@ -150,7 +149,7 @@ internal class Order : BlApi.IOrder
         DO.Order order;
         try
         {
-            order = dal.dalOrder.ReadId(orderId); //get right DO Order
+            order = (DO.Order)dal?.dalOrder.ReadId(orderId); //get right DO Order
         }
         catch
         {
@@ -168,9 +167,9 @@ internal class Order : BlApi.IOrder
                 ShipDate = order.ShipDate,
                 DeliveryDate = DateTime.Now, //the only difference, setting updated delivery date
             };
-            dal.dalOrder.Update(o);//update the order in DO
+            dal?.dalOrder.Update(o);//update the order in DO
             double tempPrice = 0;
-            foreach (DO.OrderItem temp in dal.dalOrderItem.ReadAll())
+            foreach (DO.OrderItem temp in dal?.dalOrderItem.ReadAll())
             {
                 if (temp.OrderID == o.ID)
                 {

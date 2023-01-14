@@ -1,19 +1,18 @@
 ﻿using BlApi;
-using DalApi;
 using Dal;
 using BO;
 namespace BlImplementation;
 
 internal class Products : BlApi.IProducts
 {
-    static IDal? dal = new DalList();
+    static DalApi.IDal? dal = DalApi.Factory.Get();
     /// <summary>
     /// Method to get a list of products for the manager
     /// </summary>
     /// <returns>List of ProductForList</returns>
     public IEnumerable<BO.ProductForList?> ReadProductsForList()
     {
-        return from DO.Products? prod in dal.dalProduct.ReadAll() //getting all DO products and details needed for manager
+        return from DO.Products? prod in dal?.dalProduct.ReadAll() //getting all DO products and details needed for manager
                where prod != null 
                select new BO.ProductForList  //add to ProductForList List
                {
@@ -37,7 +36,7 @@ internal class Products : BlApi.IProducts
         DO.Products product = new DO.Products();
         try
         {
-            product = dal.dalProduct.ReadId(id); //getting the product from id
+            product = (DO.Products)dal?.dalProduct.ReadId(id); //getting the product from id
         } catch
         {
             throw new BO.BOEntityDoesNotExistException("Product does not exist");
@@ -67,7 +66,7 @@ internal class Products : BlApi.IProducts
         }
         try
         {
-            DO.Products prod = dal.dalProduct.ReadId(p.ID); //get product with id
+            DO.Products prod = (DO.Products)dal?.dalProduct.ReadId(p.ID); //get product with id
         } catch
         {   //comes here if product didn't exist
             DO.Products newP = new DO.Products(); //create new DO product
@@ -76,7 +75,7 @@ internal class Products : BlApi.IProducts
             newP.InStock = p.InStock;
             newP.Category = (DO.Enums.Categories)p.Category;
 
-            dal.dalProduct.Add(newP);//add to product list
+            dal?.dalProduct.Add(newP);//add to product list
             return;
         }
         throw new BO.BOEntityAlreadyExistsException("Product already exists"); //if made it here then DO product already exists     
@@ -90,16 +89,16 @@ internal class Products : BlApi.IProducts
     public void DeleteProduct(int id)
     {
         //get the prod with matching id to given id
-        var v = from ords in dal.dalOrder.ReadAll()
+        var v = from ords in dal?.dalOrder.ReadAll()
                 where ords != null 
-                select from oi in dal.dalOrderItem.ReadAll()
+                select from oi in dal?.dalOrderItem.ReadAll()
                        where oi != null && oi?.OrderID == ords?.ID && oi?.ProductID == id
                        select oi;
         if (v.Any() == false) //no matching order items were found containg this product
         {
             throw new BO.BOEntityDoesNotExistException("Product is not in any orders");
         }
-        dal.dalProduct.Delete(id); //delete product (no need to catch since if made it here product was in an orderitem so exists) 
+        dal?.dalProduct.Delete(id); //delete product (no need to catch since if made it here product was in an orderitem so exists) 
     }
 
     /// <summary>
@@ -123,7 +122,7 @@ internal class Products : BlApi.IProducts
         temp.Category = (DO.Enums.Categories)p.Category;
         try
         {
-            dal.dalProduct.Update(temp); //update product
+            dal?.dalProduct.Update(temp); //update product
         }
         catch
         {
@@ -137,7 +136,7 @@ internal class Products : BlApi.IProducts
     /// <returns>list of product items</returns>
     public IEnumerable<ProductItem?> GetCatalog()
     {
-        var v = from prods in dal.dalProduct.ReadAll() //creating new productItems based on existing DO products
+        var v = from prods in dal?.dalProduct.ReadAll() //creating new productItems based on existing DO products
                 where prods != null
                 select new ProductItem()
                 {
