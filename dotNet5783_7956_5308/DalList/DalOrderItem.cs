@@ -50,9 +50,9 @@ internal class DalOrderItem : IOrderItem
     public OrderItem ReadId(int id)
     {
         OrderItem? orderItem = DataSource._orderItemList.Find(x => x?.ID == id); //checking to see if orderItem exists
-        if (orderItem.Value.ID == 0)  //if not found the item id will be the default 0
+        if (orderItem?.ID == 0)  //if not found the item id will be the default 0
             throw new EntityDoesNotExistException(new OrderItem());
-        return orderItem.Value;
+        return orderItem!.Value;
     }
 
     /// <summary>
@@ -101,11 +101,11 @@ internal class DalOrderItem : IOrderItem
     public void SetByOrderItem(OrderItem orderItem)
     {
         int index = -1; //flag for checking if orderItem exists
-        foreach (OrderItem? ori in DataSource._orderItemList) //go over orderItem list
+        foreach (OrderItem? oi in DataSource._orderItemList) //go over orderItem list
         {
-            if (orderItem.ID == ori.Value.ID) //if found id in the list
+            if (orderItem.ID == oi!.Value.ID) //if found id in the list
             {
-                index = DataSource._orderItemList.IndexOf(ori); //save index of that orderItem
+                index = DataSource._orderItemList.IndexOf(oi); //save index of that orderItem
                 break;
             }
         }
@@ -128,7 +128,7 @@ internal class DalOrderItem : IOrderItem
         int index = -1;
         foreach (OrderItem? oi in DataSource._orderItemList) //go over OrderItem list
         {
-            if (oi.Value.OrderID == orderItem.OrderID && oi.Value.ProductID == orderItem.ProductID) //if found an orderItem that matches the given ID and product
+            if (oi!.Value.OrderID == orderItem.OrderID && oi.Value.ProductID == orderItem.ProductID) //if found an orderItem that matches the given ID and product
             {
                 index = DataSource._orderItemList.IndexOf(oi); //save index of that orderItem
                 break;

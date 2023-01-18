@@ -51,7 +51,7 @@ internal class DalOrder : IOrder
     public Order ReadId(int id)
     {
         Order? order = DataSource._orderList.Find(x => x?.ID == id); //checking to see if order exists
-        if (order.Value.ID == 0) //if not found the order id will be the default 0
+        if (order!.Value.ID == 0) //if not found the order id will be the default 0
             throw new EntityDoesNotExistException(new Order());
         return order.Value;
     }

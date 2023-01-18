@@ -1,6 +1,21 @@
 ﻿
 
+using System.Runtime.Serialization;
+
 namespace DO;
+
+/// <summary>
+/// Default exception class
+/// </summary>
+public class Exceptions : Exception
+{
+    public Exceptions() : base() { }
+    public Exceptions(string message) : base(message) { }
+    public Exceptions(string message, Exception innerException) : base(message, innerException) { }
+    protected Exceptions(SerializationInfo info, StreamingContext context) : base(info, context) { }
+    public override string ToString() => base.ToString();
+
+}
 
 public class EntityDoesNotExistException : Exception
 {

@@ -12,16 +12,15 @@ internal class Products : BlApi.IProducts
     /// <returns>List of ProductForList</returns>
     public IEnumerable<BO.ProductForList?> ReadProductsForList()
     {
-        return from DO.Products? prod in dal?.dalProduct.ReadAll() //getting all DO products and details needed for manager
-               where prod != null 
+        return from DO.Products? prod in dal?.dalProduct.ReadAll()! //getting all DO products and details needed for manager
+               where prod != null
                select new BO.ProductForList  //add to ProductForList List
                {
                    ID = prod.Value.ID,
-                   Name = prod?.Name,
-                   Price = (double)prod?.Price,
-                   Category = (BO.Enums.ProdCategory)prod?.Category
+                   Name = prod?.Name!,
+                   Price = (double)prod?.Price!,
+                   Category = (BO.Enums.ProdCategory)prod?.Category!
                };
-
     }
 
     /// <summary>
@@ -32,11 +31,11 @@ internal class Products : BlApi.IProducts
     /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
     public BO.Products ManagerProduct(int id)
     {
-        BO.Products p = new BO.Products();
-        DO.Products product = new DO.Products();
+        BO.Products p = new();
+        DO.Products product;
         try
         {
-            product = (DO.Products)dal?.dalProduct.ReadId(id); //getting the product from id
+            product = (DO.Products)(dal?.dalProduct.ReadId(id)!); //getting the product from id
         } catch
         {
             throw new BO.BOEntityDoesNotExistException("Product does not exist");
@@ -64,7 +63,27 @@ internal class Products : BlApi.IProducts
         {
             throw new BO.InvalidInputException("Invalid field value");
         }
+
+        DO.Products newProduct = new()
+        {
+            ID = p.ID,
+            Name = p.Name ?? "",
+            Price = p.Price,
+            InStock = p.InStock,
+            Category = (DO.Enums.Categories)p.Category,
+        }; //create new DO product
+
         try
+        {
+            newProduct.ID = (int)(dal?.dalProduct.Add(newProduct)!);//add to product list
+        }
+        catch (DO.EntityAlreadyExistsException)
+        {
+            throw new BO.BOEntityAlreadyExistsException("Product already exists");
+        }
+
+
+        /*try
         {
             DO.Products prod = (DO.Products)dal?.dalProduct.ReadId(p.ID); //get product with id
         } catch
@@ -78,7 +97,7 @@ internal class Products : BlApi.IProducts
             dal?.dalProduct.Add(newP);//add to product list
             return;
         }
-        throw new BO.BOEntityAlreadyExistsException("Product already exists"); //if made it here then DO product already exists     
+        throw new BO.BOEntityAlreadyExistsException("Product already exists"); //if made it here then DO product already exists   */
     }
 
     /// <summary>
@@ -98,7 +117,14 @@ internal class Products : BlApi.IProducts
         {
             throw new BO.BOEntityDoesNotExistException("Product is not in any orders");
         }
-        dal?.dalProduct.Delete(id); //delete product (no need to catch since if made it here product was in an orderitem so exists) 
+        try
+        {
+            dal?.dalProduct.Delete(id); //delete product (no need to catch since if made it here product was in an orderitem so exists) 
+        }
+        catch (DO.EntityDoesNotExistException)
+        {
+            throw new BO.BOEntityDoesNotExistException("Product does not exist");
+        }
     }
 
     /// <summary>
@@ -116,7 +142,7 @@ internal class Products : BlApi.IProducts
         }
         DO.Products temp = new DO.Products();
         temp.ID = p.ID; //replacing auto-incremented id
-        temp.Name = p.Name;
+        temp.Name = p.Name ?? "";
         temp.Price = p.Price;
         temp.InStock = p.InStock;
         temp.Category = (DO.Enums.Categories)p.Category;
@@ -134,18 +160,18 @@ internal class Products : BlApi.IProducts
     /// get product list of DO and and return productItem list of BO  
     /// </summary>
     /// <returns>list of product items</returns>
-    public IEnumerable<ProductItem?> GetCatalog()
+    public IEnumerable<ProductItem> GetCatalog()
     {
         var v = from prods in dal?.dalProduct.ReadAll() //creating new productItems based on existing DO products
                 where prods != null
                 select new ProductItem()
                 {
-                    ID = prods.Value.ID,
-                    Name = prods?.Name,
-                    Price = (double)prods?.Price,
-                    Amount = (int)prods?.InStock,
+                    ID = prods?.ID ?? throw new BO.BOEntityDoesNotExistException("Product does not exist"),
+                    Name = prods?.Name!,
+                    Price = (double)prods?.Price!,
+                    Amount = (int)prods?.InStock!,
                     InStock = (prods?.InStock > 0) ? true : false,
-                    Category = (BO.Enums.ProdCategory)prods?.Category
+                    Category = (BO.Enums.ProdCategory)prods?.Category!
                 };
         return v;
     }

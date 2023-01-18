@@ -1,6 +1,8 @@
 ﻿using BlApi;
 using Dal;
 using BO;
+using System.Security.Cryptography;
+
 namespace BlImplementation;
 
 internal class Order : BlApi.IOrder
@@ -13,8 +15,8 @@ internal class Order : BlApi.IOrder
     /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
     public IEnumerable<OrderForList?> ReadAllOrderForList()
     {
-        IEnumerable<DO.Order?> orders = dal?.dalOrder.ReadAll(); //getting all DO orders 
-        IEnumerable<DO.OrderItem?> orderItems = dal?.dalOrderItem.ReadAll(); //getting all DO orderItems
+        IEnumerable<DO.Order?> orders = dal?.dalOrder.ReadAll()!; //getting all DO orders 
+        IEnumerable<DO.OrderItem?> orderItems = dal?.dalOrderItem.ReadAll()!; //getting all DO orderItems
         
         return from DO.Order? o in orders
                select new BO.OrderForList //for each order we have we add an entry to the OrderForList list
@@ -23,7 +25,7 @@ internal class Order : BlApi.IOrder
                    CustomerName = o?.CustomerName,
                    Status = GetOrderStatus(o.Value),
                    AmountOfItems = orderItems.Select(orderItems => orderItems?.ID == o?.ID).Count(), //counting amount of orders in the orderitem list and setting that for BO orderForList amount
-                   TotalPrice = (double)orderItems.Sum(orderItems => orderItems?.Price) //summing up each orderitem for this new BO list entry
+                   TotalPrice = (double)(orderItems.Sum(orderItems => orderItems?.Price)!) //summing up each orderitem for this new BO list entry
                };
     }
 
@@ -53,14 +55,47 @@ internal class Order : BlApi.IOrder
         DO.Order order;
         try
         {
-            order = (DO.Order)dal?.dalOrder.ReadId(orderId);//get right DO Order
+            order = (DO.Order)dal?.dalOrder.ReadId(orderId)!;//get right DO Order
         } catch
         {
             throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
         }
         
         double tempPrice = 0;
-        foreach (DO.OrderItem o in dal?.dalOrderItem.ReadAll())
+        tempPrice = (double)(dal?.dalOrderItem.ReadAll()!.Where(x => x != null && x?.OrderID == orderId).Sum(x => x?.Price)!);
+
+        if (order.ID == orderId)//if exists 
+        {
+            List<DO.OrderItem?> temp = dal?.dalOrderItem.ReadAll()!.Where(x => x != null && x?.OrderID == orderId).ToList()!;
+            List<BO.OrderItem> bList = new();
+            foreach (DO.OrderItem o in temp)
+            {
+                bList.Add(new BO.OrderItem()
+                {
+                    Amount = o.Amount,
+                    ID = o.ID,
+                    ProductID = o.ProductID,
+                    Price = o.Price,
+                });
+            }
+
+            return new BO.Order
+            {
+                ID = orderId,
+                CustomerAddress = order.CustomerAddress,
+                CustomerEmail = order.CustomerEmail,
+                CustomerName = order.CustomerName,
+                OrderDate = order.OrderDate,
+                ShipDate = order.ShipDate,
+                DeliveryDate = order.DeliveryDate,
+                Status = GetOrderStatus(order),
+                TotalPrice = tempPrice,
+                Items = bList!
+            };//new BO Order
+        }
+        throw new BO.BOEntityDoesNotExistException("Order does not exist\n"); //taking into account any errors we missed
+
+        /*foreach (DO.OrderItem o in dal?.dalOrderItem.ReadAll())
         {
             if (o.OrderID == orderId)
             {
@@ -82,7 +117,7 @@ internal class Order : BlApi.IOrder
                 TotalPrice = tempPrice,
             }; //new BO Order
         }
-        throw new BO.BOEntityDoesNotExistException("Order does not exist\n"); //taking into account any errors we missed
+        throw new BO.BOEntityDoesNotExistException("Order does not exist\n"); //taking into account any errors we missed*/
     }
     
     /// <summary>
@@ -96,13 +131,13 @@ internal class Order : BlApi.IOrder
         DO.Order order;
         try
         {
-            order = (DO.Order)dal?.dalOrder.ReadId(orderId); //get right DO Order
+            order = (DO.Order)dal?.dalOrder.ReadId(orderId)!; //get right DO Order
         }
-        catch
+        catch (DO.EntityDoesNotExistException)
         {
             throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
         }
-        if (order.ID == orderId && order.ShipDate != DateTime.MinValue) //if order exists and has not been shipped 
+        if (order.ID == orderId /*&& order.ShipDate != DateTime.MinValue*/) //if order exists and has not been shipped 
         {
             DO.Order o = new()
             {
@@ -116,13 +151,14 @@ internal class Order : BlApi.IOrder
             }; //set new ship date in new DO Order
             dal.dalOrder.Update(o); //update the order in DO
             double tempPrice = 0;
-            foreach (DO.OrderItem temp in dal?.dalOrderItem.ReadAll())
+            tempPrice = (double)(dal?.dalOrderItem.ReadAll()!.Where(x => x != null && x?.OrderID == o.ID).Sum(x => x?.Price)!);
+            /*foreach (DO.OrderItem temp in dal?.dalOrderItem.ReadAll())
             {
                 if (temp.OrderID == o.ID)
                 {
                     tempPrice += temp.Price;//add up all of prices in the order
                 }
-            }
+            }*/
             return new BO.Order
             {
                 ID = orderId,
@@ -149,13 +185,13 @@ internal class Order : BlApi.IOrder
         DO.Order order;
         try
         {
-            order = (DO.Order)dal?.dalOrder.ReadId(orderId); //get right DO Order
+            order = (DO.Order)dal?.dalOrder.ReadId(orderId)!; //get right DO Order
         }
-        catch
+        catch (DO.EntityDoesNotExistException)
         {
             throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
         }
-        if (order.ID == orderId && order.DeliveryDate != DateTime.MinValue) //if order exists and has not been shipped (would have set it already if delivered) 
+        if (order.ID == orderId /*&& order.DeliveryDate != DateTime.MinValue*/) //if order exists and has not been shipped (would have set it already if delivered) 
         {
             DO.Order o = new()
             {
@@ -167,15 +203,23 @@ internal class Order : BlApi.IOrder
                 ShipDate = order.ShipDate,
                 DeliveryDate = DateTime.Now, //the only difference, setting updated delivery date
             };
-            dal?.dalOrder.Update(o);//update the order in DO
+            try
+            {
+                dal?.dalOrder.Update(o);//update the order in DO
+            }
+            catch (DO.EntityDoesNotExistException)
+            {
+                throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
+            }
             double tempPrice = 0;
-            foreach (DO.OrderItem temp in dal?.dalOrderItem.ReadAll())
+            tempPrice = (double)(dal?.dalOrderItem.ReadAll()!.Where(x => x != null && x?.OrderID == o.ID).Sum(x => x?.Price)!);
+            /*foreach (DO.OrderItem temp in dal?.dalOrderItem.ReadAll())
             {
                 if (temp.OrderID == o.ID)
                 {
                     tempPrice += temp.Price; //add up all prices of this order in the orderItem list
                 }
-            }
+            }*/
             return new BO.Order
             {
                 ID = orderId,
@@ -190,6 +234,5 @@ internal class Order : BlApi.IOrder
             }; //new BO Order
         }
         throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
-
     }
 }

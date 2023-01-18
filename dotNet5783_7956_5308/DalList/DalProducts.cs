@@ -57,7 +57,7 @@ internal class DalProducts : IProducts
         {
             throw new EntityDoesNotExistException(new Products());
         }
-        return item.Value;
+        return item!.Value;
     }
 
     /// <summary>

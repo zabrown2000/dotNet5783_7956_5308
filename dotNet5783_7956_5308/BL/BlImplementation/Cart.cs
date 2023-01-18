@@ -34,9 +34,9 @@ internal class Cart : ICart
         }
         if (index != -1) //index wasn't -1 so exists in cart
         {
-            myCart.Items[index].Amount++; //adding another product to the cart
-            double unitPrice = product.Value.Price; //getting price of just one of that product
-            myCart.Items[index].Price += unitPrice; //adding to the total price of order item
+            myCart.Items[index]!.Amount++; //adding another product to the cart
+            double unitPrice = product!.Value.Price; //getting price of just one of that product
+            myCart.Items[index]!.Price += unitPrice; //adding to the total price of order item
             myCart.TotalPrice += unitPrice;//updating cart price
             return myCart;
         }
@@ -44,7 +44,7 @@ internal class Cart : ICart
         BO.OrderItem oi = new BO.OrderItem //creating new orderitem to contain the product to add 
         {
             ID = pID,
-            Price = (double)product.Value.Price,
+            Price = (double)product!.Value.Price,
             Amount = 1,
             ProductID = product.Value.ID
         };
@@ -74,23 +74,23 @@ internal class Cart : ICart
         }
         if (index != -1) //product in cart already
         {
-            if (myCart.Items[index].Amount + amount <= 0) //want to remove item
+            if (myCart.Items[index]!.Amount + amount <= 0) //want to remove item
             {
-                BO.OrderItem oi = myCart.Items[index]; //save the orderitem with id
-                myCart.TotalPrice -= myCart.Items[index].Price;
+                BO.OrderItem oi = myCart.Items[index]!; //save the orderitem with id
+                myCart.TotalPrice -= myCart.Items[index]!.Price;
                 myCart.Items.Remove(oi); //remove orderItem from cart
                 return myCart;
             }
-            product = dal.dalProduct.ReadId(myCart.Items[index].ProductID); //get product from the orderItem in Items to check stock
-            if (myCart.Items[index].Amount + amount > product?.InStock)      //if amount to add is more than available stock throw exception
+            product = dal!.dalProduct.ReadId(myCart.Items[index]!.ProductID); //get product from the orderItem in Items to check stock
+            if (myCart.Items[index]!.Amount + amount > product?.InStock)      //if amount to add is more than available stock throw exception
             {
                 throw new BO.OutOfStockException("Amount entered is more than amount in stock.");
             }
             else
             {
-                double unitPrice = (double)product?.Price;
-                myCart.Items[index].Amount += amount;//set new amount (adds or subtracts)
-                myCart.Items[index].Price += unitPrice * amount; // add/subtract to make the price reflect addition/subtraction of items to cart 
+                double unitPrice = (double)product?.Price!;
+                myCart.Items[index]!.Amount += amount;//set new amount (adds or subtracts)
+                myCart.Items[index]!.Price += unitPrice * amount; // add/subtract to make the price reflect addition/subtraction of items to cart 
                 myCart.TotalPrice += unitPrice * amount;//add/subtract the new total cart price
                 return myCart;
             }
@@ -107,9 +107,119 @@ internal class Cart : ICart
     /// <param name="CustomerAddress">address of customer</param>
     /// <exception cref="BO.InvalidInputException"></exception>
     /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
-    public void MakeOrder(BO.Cart myCart, string CustomerName, string CustomerEmail, string CustomerAddress)
+    public void MakeOrder(BO.Cart myCart, string CustomerName, string CustomerEmail, string CustomerAddress)      //edit comments to be what was before
     {
-        if (CustomerName == "" || CustomerEmail == "" || CustomerAddress == "") //validating input
+        if (myCart.CustomerName == "" || myCart.CustomerEmail == "" || myCart.CustomerAddress == "")//check input
+        {
+            throw new BO.InvalidInputException("Incorrect Input");
+        }
+        IEnumerable<DO.Products?> productList = dal?.dalProduct.ReadAll()!;//get all products from dal
+        IEnumerable<string> checkOrderItem = from BO.OrderItem item in myCart.Items!
+                                             let product = productList.FirstOrDefault(x => x?.ID == item.ID)
+                                             where item.Amount < 1 || product?.InStock < item.Amount
+                                             select "Product ID: " + item.ProductID + " is not in stock\n";//check if all of the products in cart are in stock
+        if (checkOrderItem.Any()) //if no products are available 
+            throw new BO.BOEntityDoesNotExistException("The product requested does not exist\n");
+
+        int? orderId = dal?.dalOrder.Add(new DO.Order()
+        {
+            CustomerAddress = myCart.CustomerAddress!,
+            CustomerEmail = myCart.CustomerEmail!,
+            CustomerName = myCart.CustomerName!,
+            OrderDate = DateTime.Now
+        });//add a new order for the cart and get order ID
+        try
+        {
+            myCart.Items!.ForEach(x => dal?.dalOrderItem.Add(new DO.OrderItem()
+            {
+                Amount = (int)x?.Amount!,
+                ID = x.ID,
+                OrderID = (int)orderId!,
+                Price = x.Price,
+                ProductID = x.ProductID
+            }));//go over cart order items and add each to dal
+        }
+        catch (DO.Exceptions ex)
+        {
+            throw new BO.Exceptions(ex.Message);
+        }
+        catch (DO.EntityDoesNotExistException ex)
+        {
+            throw new BO.Exceptions(ex.Message);
+        }
+        
+        IEnumerable<DO.Products?> products;
+        try
+        {
+            products = from item in myCart.Items
+                       select dal?.dalProduct.ReadId(item.ProductID);//list of products in cart
+        }
+        catch (DO.EntityDoesNotExistException)
+        {
+            throw new BO.BOEntityDoesNotExistException("The product requested does not exist\n");
+        }
+
+        DO.OrderItem oi = new();//create order item
+        foreach (BO.OrderItem? item in myCart.Items!) //go over orderItems in the cart
+        {
+            try
+            {
+                if (item!.ProductID == dal?.dalProduct.ReadId(item.ProductID).ID && item.Amount > 0 && item.Amount <= dal?.dalProduct.ReadId(item.ProductID).InStock)//if orderItem exists and is instock
+                {
+                    DO.Order order = new DO.Order();//new DO order
+                    order.OrderDate = DateTime.Now;//ordered now
+                    int num;
+                    try
+                    {
+                        num = (int)(dal?.dalOrder.Add(order)!);//add to DO orderlist and get order id
+                    }
+                    catch (DO.EntityDoesNotExistException)
+                    {
+                        throw new BO.BOEntityDoesNotExistException("The product requested does not exist\n");
+                    }
+                    oi.ProductID = item.ProductID;//save product id
+                    oi.OrderID = num;//save order id
+                    try
+                    {
+                        dal?.dalOrderItem.Add(oi);//add to DO order item list 
+                    }
+                    catch (DO.EntityDoesNotExistException)
+                    {
+                        throw new BO.BOEntityDoesNotExistException("The product requested does not exist");
+                    }
+                    DO.Products p;
+                    try
+                    {
+                        p = (DO.Products)(dal?.dalProduct.ReadId(oi.ProductID)!);//get matching product
+                    }
+                    catch (DO.EntityDoesNotExistException)
+                    {
+                        throw new BO.BOEntityDoesNotExistException("The product requested does not exist\n");
+                    }
+                    p.InStock -= item.Amount;//subtract the amount of products in stock
+                    try
+                    {
+                        dal?.dalProduct.Update(p);//update product in DO
+                    }
+                    catch (DO.EntityDoesNotExistException)
+                    {
+                        throw new BO.BOEntityDoesNotExistException("The product requested does not exist\n");
+                    }
+                }
+            }
+            catch (DO.EntityDoesNotExistException)
+            {
+                throw new BO.BOEntityDoesNotExistException("The product requested does not exist\n");
+            }
+            catch
+            {
+                throw new BO.Exceptions("Cannot place order");
+            }
+            //
+        }
+        //return (int)orderId!;
+
+        /*if (CustomerName == "" || CustomerEmail == "" || CustomerAddress == "") //validating input
         {
             throw new BO.InvalidInputException("Incorrect Input");
         }
@@ -138,7 +248,7 @@ internal class Cart : ICart
                 throw new BO.BOEntityDoesNotExistException("Cannot place order\n");
 
             }
-        }
+        }*/
         Console.WriteLine(myCart);  
         //resetting cart values
         myCart.Items.Clear(); 
