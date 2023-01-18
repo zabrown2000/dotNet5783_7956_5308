@@ -341,7 +341,6 @@ class BlTesting
         }
     }
 
-
     /// <summary>
     /// a func to get number from user (and makes sure its not letters)
     /// </summary>
