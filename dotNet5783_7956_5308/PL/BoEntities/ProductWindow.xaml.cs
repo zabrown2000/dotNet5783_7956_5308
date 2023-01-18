@@ -151,10 +151,7 @@ namespace PL
                 {
                     product.Price = val;
                 }
-            } else
-            {
-                product.Price = int.Parse(tprice.Text);
-            }
+            } 
         }
 
         private void uinstock_TextChanged(object sender, TextChangedEventArgs e)
@@ -165,10 +162,8 @@ namespace PL
                 {
                     product.InStock = val;
                 }
-            } else
-            {
-                product.InStock = int.Parse(tinstock.Text);
             }
+            
         }
 
         private void tname_PreviewMouseDown(object sender, MouseButtonEventArgs e)

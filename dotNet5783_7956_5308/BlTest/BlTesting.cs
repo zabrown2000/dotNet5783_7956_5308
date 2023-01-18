@@ -294,7 +294,6 @@ class BlTesting
                             category = GetNumberFromUser("Enter category of new product:\n");
                             while (category < 1 || category > 7)
                             {
-                                Console.WriteLine("Invalid category, try again\n");
                                 category = GetNumberFromUser("Invalid category, try again\n");
                             }
                             p.Category = (BO.Enums.ProdCategory)category;
