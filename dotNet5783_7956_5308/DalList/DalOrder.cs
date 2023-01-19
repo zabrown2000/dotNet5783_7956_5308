@@ -51,9 +51,9 @@ internal class DalOrder : IOrder
     public Order ReadId(int id)
     {
         Order? order = DataSource._orderList.Find(x => x?.ID == id); //checking to see if order exists
-        if (order!.Value.ID == 0) //if not found the order id will be the default 0
+        if (order?.ID != id) //if not found the order id will be the default 0
             throw new EntityDoesNotExistException(new Order());
-        return order.Value;
+        return order ?? throw new EntityDoesNotExistException(new Order()); ;
     }
 
     /// <summary>
@@ -62,7 +62,14 @@ internal class DalOrder : IOrder
     /// <returns>a list with all the orders</returns>
     public IEnumerable<Order?> ReadAll(Func<Order?, bool>? filter = null)
     {
-        return DataSource._orderList.ToList(); //list of orders
+        if (filter == null) 
+        {
+            return DataSource._orderList.ToList(); //list of orders
+        }
+
+        return from v in DataSource._orderList//select with filter
+               where filter(v)
+               select v;
     }
 
     /// <summary>
@@ -72,24 +79,11 @@ internal class DalOrder : IOrder
     /// <exception cref="Exception">Exception if order doesn't exist</exception>
     public void Delete(int id)
     {
-        int index = -1; //flag for checking if order exists
-        foreach (Order order in DataSource._orderList) //searching for order in list based on ID
-        {
-            if (order.ID == id) //if found id in the list
-            {
-                index = DataSource._orderList.IndexOf(order);//save index of that order
-                break;
-            }
-        }
-        if (index != -1) //check to make sure actually deleting order that exists
-        {
-            Order? toDelete = DataSource._orderList[index]; //getting order at index of id want to delete
-            DataSource._orderList.Remove(toDelete); //removing order from the list
-        }
-        else
-        {
+        int index = DataSource._orderList.FindIndex(x => x?.ID == id);
+
+        if (index == -1 )//if does not exist
             throw new EntityDoesNotExistException(new Order());
-        }
+        DataSource._orderList.RemoveAt(index); //remove from list
     }
 
     /// <summary>
@@ -99,24 +93,11 @@ internal class DalOrder : IOrder
     /// <exception cref="Exception">Exception if order doesn't exist</exception>
     public void Update(Order order)
     {
-        int index = -1; //flag for checking if order exists
-        foreach (Order or in DataSource._orderList)//go over order list
-        {
-            if (order.ID == or.ID)//if found id in the list
-            {
-                index = DataSource._orderList.IndexOf(or); //save index of that order
-                break;
-            }
-        }
-        if (index != -1)
-        {
-            DataSource._orderList[index] = order; //updating order using same place in memory
+        int index = DataSource._orderList.FindIndex(x => x?.ID == order.ID);
 
-        }
-        else
-        {
-            throw new EntityDoesNotExistException(order);
-        }
+        if (index == -1)//if does not exist
+            throw new EntityDoesNotExistException(new Order());
+        DataSource._orderList[index] = order; //updating order using same place in memory
     }
 
     /// <summary>
@@ -130,14 +111,12 @@ internal class DalOrder : IOrder
     {
         if (filter == null)
         {
-            throw new ArgumentNullException(nameof(filter)); //filter is null
+            throw new ArgumentNullException(nameof(filter));//filter is null
         }
-        foreach (Order? o in DataSource._orderList)
+        Order? order = DataSource._orderList.Find(x => x != null && filter(x))!;
+        if (order != null)
         {
-            if (o != null && filter(o))
-            {
-                return (Order)o; //casting to non-null value
-            }
+            return (Order)order; //casting to non null value
         }
         throw new Exception("The order that was requested does not exist");
     }

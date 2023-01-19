@@ -53,11 +53,11 @@ internal class DalProducts : IProducts
     {
         Products? item = DataSource._productList.Find(x => x?.ID == id); //checking to see if product exists
        
-        if (item?.ID == 0) //if not found the item id will be the default 0
+        if (item?.ID != id) //if not found the item id will be the default 0
         {
             throw new EntityDoesNotExistException(new Products());
         }
-        return item!.Value;
+        return item ?? throw new EntityDoesNotExistException(new Products()); ;
     }
 
     /// <summary>
@@ -66,7 +66,13 @@ internal class DalProducts : IProducts
     /// <returns>a list with all the products</returns>
     public IEnumerable<Products?> ReadAll (Func<Products?, bool>? filter = null)
     {
-        return DataSource._productList.ToList(); //list of products
+        if (filter == null)
+        {
+            return DataSource._productList.ToList(); //list of products
+        }
+        return from v in DataSource._productList//select with filter
+               where filter(v)
+               select v;
     }
 
     /// <summary>
@@ -76,24 +82,11 @@ internal class DalProducts : IProducts
     /// <exception cref="Exception">Exception if product doesn't exist</exception>
     public void Delete(int id)
     {
-        int index = -1; //flag for checking if product exists
-        foreach (Products product in DataSource._productList) //searching for product in list based on ID
-        {
-            if (product.ID == id) //if found id in the catalog
-            {
-                index = DataSource._productList.IndexOf(product); //save index of that Product
-                break;
-            }
-                
-        }
-        if (index != -1) //check to make sure actually deleting item that exists
-        {
-            Products? toDelete = DataSource._productList[index]; //getting product at index of id want to delete
-            DataSource._productList.Remove(toDelete); //removing product from the list
-        } else
-        {
+        int index = DataSource._productList.FindIndex(x => x?.ID == id);
+
+        if (index == -1) //if does not exist
             throw new EntityDoesNotExistException(new Products());
-        }
+        DataSource._productList.RemoveAt(index);//remove from list
     }
 
     /// <summary>
@@ -103,22 +96,11 @@ internal class DalProducts : IProducts
     /// <exception cref="Exception">Exception if product doesn't exist</exception>
     public void Update(Products product)
     {
-        int index = -1; //flag for checking if product exists
-        foreach (Products p in DataSource._productList) //go over Product list
-        {
-            if (product.ID == p.ID) //if found id in the catalog
-            { 
-                index = DataSource._productList.IndexOf(p); //save index of that Product
-                break;
-            }
-        }
-        if (index != -1)
-        {
-            DataSource._productList[index] = product; //updating item using same place in memory
-        } else
-        {
-            throw new EntityDoesNotExistException(product);
-        }
+        int index = DataSource._productList.FindIndex(x => x?.ID == product.ID);
+
+        if (index == -1) //if does not exist
+            throw new EntityDoesNotExistException(new Products());
+        DataSource._productList[index] = product; //updating item using same place in memory
     }
 
     /// <summary>
@@ -132,14 +114,14 @@ internal class DalProducts : IProducts
     {
         if (filter == null)
         {
-            throw new ArgumentNullException(nameof(filter)); //filter is null
+            throw new ArgumentNullException(nameof(filter));//filter is null
         }
-        foreach (Products? p in DataSource._productList)
+        
+        Products? p = DataSource._productList.FirstOrDefault(x => x != null && filter(x));
+        
+        if (p != null)
         {
-            if (p != null && filter(p))
-            {
-                return (Products)p; //casting to non-null value
-            }
+            return (Products)p;
         }
         throw new Exception("The product requested does not exist\n");
     }
