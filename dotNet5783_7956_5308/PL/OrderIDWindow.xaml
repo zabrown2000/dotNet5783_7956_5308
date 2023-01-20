@@ -1,0 +1,14 @@
+﻿<Window x:Class="PL.OrderIDWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        mc:Ignorable="d"
+        Title="OrderIDWindow" Height="450" Width="800">
+    <Grid>
+        <TextBlock HorizontalAlignment="Center" Margin="0,114,0,0" TextWrapping="Wrap" Text="Enter Order Tracking Number" VerticalAlignment="Top" FontSize="36"/>
+        <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="328"  BorderThickness="5" Margin="234,188,0,0" PreviewTextInput="tid_previewTextInput" PreviewKeyDown="keyPressed" Height="29"/>
+
+    </Grid>
+</Window>
