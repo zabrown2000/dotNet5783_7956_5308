@@ -107,17 +107,17 @@ internal class Cart : ICart
     /// <param name="CustomerAddress">address of customer</param>
     /// <exception cref="BO.InvalidInputException"></exception>
     /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
-    public void MakeOrder(BO.Cart myCart, string CustomerName, string CustomerEmail, string CustomerAddress)      //edit comments to be what was before
+    public void MakeOrder(BO.Cart myCart, string CustomerName, string CustomerEmail, string CustomerAddress) 
     {
-        if (myCart.CustomerName == "" || myCart.CustomerEmail == "" || myCart.CustomerAddress == "")//check input
+        if (myCart.CustomerName == "" || myCart.CustomerEmail == "" || myCart.CustomerAddress == "") //validating input
         {
             throw new BO.InvalidInputException("Incorrect Input");
         }
-        IEnumerable<DO.Products?> productList = dal?.dalProduct.ReadAll()!;//get all products from dal
+        IEnumerable<DO.Products?> productList = dal?.dalProduct.ReadAll()!; //get all products from dal
         IEnumerable<string> checkOrderItem = from BO.OrderItem item in myCart.Items!
                                              let product = productList.FirstOrDefault(x => x?.ID == item.ID)
                                              where item.Amount < 1 || product?.InStock < item.Amount
-                                             select "Product ID: " + item.ProductID + " is not in stock\n";//check if all of the products in cart are in stock
+                                             select "Product ID: " + item.ProductID + " is not in stock\n"; //go over all of the products in cart to make sure they are in stock
         if (checkOrderItem.Any()) //if no products are available 
             throw new BO.BOEntityDoesNotExistException("The product requested does not exist\n");
 
@@ -127,7 +127,7 @@ internal class Cart : ICart
             CustomerEmail = myCart.CustomerEmail!,
             CustomerName = myCart.CustomerName!,
             OrderDate = DateTime.Now
-        });//add a new order for the cart and get order ID
+        });//add a new order to cart and get orderID
         try
         {
             myCart.Items!.ForEach(x => dal?.dalOrderItem.Add(new DO.OrderItem()
@@ -137,7 +137,7 @@ internal class Cart : ICart
                 OrderID = (int)orderId!,
                 Price = x.Price,
                 ProductID = x.ProductID
-            }));//go over cart order items and add each to dal
+            }));//go over cart orderItems and add each to dal
         }
         catch (DO.Exceptions ex)
         {
@@ -152,19 +152,19 @@ internal class Cart : ICart
         try
         {
             products = from item in myCart.Items
-                       select dal?.dalProduct.ReadId(item.ProductID);//list of products in cart
+                       select dal?.dalProduct.ReadId(item.ProductID); //list of products in cart
         }
         catch (DO.EntityDoesNotExistException)
         {
             throw new BO.BOEntityDoesNotExistException("The product requested does not exist\n");
         }
 
-        DO.OrderItem oi = new();//create order item
+        DO.OrderItem oi = new();//create orderItem
         foreach (BO.OrderItem? item in myCart.Items!) //go over orderItems in the cart
         {
             try
             {
-                if (item!.ProductID == dal?.dalProduct.ReadId(item.ProductID).ID && item.Amount > 0 && item.Amount <= dal?.dalProduct.ReadId(item.ProductID).InStock)//if orderItem exists and is instock
+                if (item!.ProductID == dal?.dalProduct.ReadId(item.ProductID).ID && item.Amount > 0 && item.Amount <= dal?.dalProduct.ReadId(item.ProductID).InStock)//if orderItem exists and is in stock
                 {
                     DO.Order order = new DO.Order();//new DO order
                     order.OrderDate = DateTime.Now;//ordered now
@@ -181,7 +181,7 @@ internal class Cart : ICart
                     oi.OrderID = num;//save order id
                     try
                     {
-                        dal?.dalOrderItem.Add(oi);//add to DO order item list 
+                        dal?.dalOrderItem.Add(oi);//add to DO orderItem list 
                     }
                     catch (DO.EntityDoesNotExistException)
                     {
@@ -217,38 +217,7 @@ internal class Cart : ICart
             }
             //
         }
-        //return (int)orderId!;
-
-        /*if (CustomerName == "" || CustomerEmail == "" || CustomerAddress == "") //validating input
-        {
-            throw new BO.InvalidInputException("Incorrect Input");
-        }
-        myCart.CustomerAddress = CustomerAddress;
-        myCart.CustomerEmail = CustomerEmail;
-        myCart.CustomerName = CustomerName;
-        foreach (BO.OrderItem? item in myCart.Items) //go over orderItems in the cart and make sure all info is correct
-        {
-            try
-            {
-                if (item.ProductID == dal?.dalProduct.ReadId(item.ProductID).ID && item.Amount > 0 && item.Amount <= dal.dalProduct.ReadId(item.ProductID).InStock) //if orderItem exists and is instock
-                {
-                    DO.Order order = new DO.Order(); //new DO order
-                    order.OrderDate = DateTime.Now; //ordered now
-                    int num = dal.dalOrder.Add(order); //add to DO orderlist and get order id
-                    DO.OrderItem oi = new(); //creating new DO order item
-                    oi.ProductID = item.ProductID; //save product id
-                    oi.OrderID = num; //save order id
-                    dal?.dalOrderItem.Add(oi); //add to DO order item list 
-                    DO.Products p = (DO.Products)dal?.dalProduct.ReadId(oi.ProductID); //get matching product
-                    p.InStock -= item.Amount; //subtract the amount of products in stock
-                    dal?.dalProduct.Update(p); //update product in DO
-                }
-            } catch
-            {
-                throw new BO.BOEntityDoesNotExistException("Cannot place order\n");
-
-            }
-        }*/
+       
         Console.WriteLine(myCart);  
         //resetting cart values
         myCart.Items.Clear(); 

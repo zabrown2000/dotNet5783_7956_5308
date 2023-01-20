@@ -66,7 +66,7 @@ internal class Order : BlApi.IOrder
 
         if (order.ID == orderId)//if exists 
         {
-            List<DO.OrderItem?> temp = dal?.dalOrderItem.ReadAll()!.Where(x => x != null && x?.OrderID == orderId).ToList()!;
+            List<DO.OrderItem?> temp = dal?.dalOrderItem.ReadAll()!.Where(x => x != null && x?.OrderID == orderId).ToList()!; //get matching dal orderItems
             List<BO.OrderItem> bList = new();
             foreach (DO.OrderItem o in temp)
             {
@@ -76,7 +76,7 @@ internal class Order : BlApi.IOrder
                     ID = o.ID,
                     ProductID = o.ProductID,
                     Price = o.Price,
-                });
+                }); //populate bo orderItem list with dal orderItems
             }
 
             return new BO.Order
@@ -94,30 +94,6 @@ internal class Order : BlApi.IOrder
             };//new BO Order
         }
         throw new BO.BOEntityDoesNotExistException("Order does not exist\n"); //taking into account any errors we missed
-
-        /*foreach (DO.OrderItem o in dal?.dalOrderItem.ReadAll())
-        {
-            if (o.OrderID == orderId)
-            {
-                tempPrice += o.Price; //add up all prices of all orders in orderItem lists
-            }
-        }
-        if (order.ID == orderId) //at this point we know it exists
-        {
-            return new BO.Order
-            {
-                ID = orderId,
-                CustomerAddress = order.CustomerAddress,
-                CustomerEmail = order.CustomerEmail,
-                CustomerName = order.CustomerName,
-                OrderDate = order.OrderDate,
-                ShipDate = order.ShipDate,
-                DeliveryDate = order.DeliveryDate,
-                Status = GetOrderStatus(order),
-                TotalPrice = tempPrice,
-            }; //new BO Order
-        }
-        throw new BO.BOEntityDoesNotExistException("Order does not exist\n"); //taking into account any errors we missed*/
     }
     
     /// <summary>
@@ -152,13 +128,6 @@ internal class Order : BlApi.IOrder
             dal.dalOrder.Update(o); //update the order in DO
             double tempPrice = 0;
             tempPrice = (double)(dal?.dalOrderItem.ReadAll()!.Where(x => x != null && x?.OrderID == o.ID).Sum(x => x?.Price)!);
-            /*foreach (DO.OrderItem temp in dal?.dalOrderItem.ReadAll())
-            {
-                if (temp.OrderID == o.ID)
-                {
-                    tempPrice += temp.Price;//add up all of prices in the order
-                }
-            }*/
             return new BO.Order
             {
                 ID = orderId,
@@ -213,13 +182,7 @@ internal class Order : BlApi.IOrder
             }
             double tempPrice = 0;
             tempPrice = (double)(dal?.dalOrderItem.ReadAll()!.Where(x => x != null && x?.OrderID == o.ID).Sum(x => x?.Price)!);
-            /*foreach (DO.OrderItem temp in dal?.dalOrderItem.ReadAll())
-            {
-                if (temp.OrderID == o.ID)
-                {
-                    tempPrice += temp.Price; //add up all prices of this order in the orderItem list
-                }
-            }*/
+           
             return new BO.Order
             {
                 ID = orderId,

@@ -81,23 +81,6 @@ internal class Products : BlApi.IProducts
         {
             throw new BO.BOEntityAlreadyExistsException("Product already exists");
         }
-
-
-        /*try
-        {
-            DO.Products prod = (DO.Products)dal?.dalProduct.ReadId(p.ID); //get product with id
-        } catch
-        {   //comes here if product didn't exist
-            DO.Products newP = new DO.Products(); //create new DO product
-            newP.Name = p.Name;
-            newP.Price = p.Price;
-            newP.InStock = p.InStock;
-            newP.Category = (DO.Enums.Categories)p.Category;
-
-            dal?.dalProduct.Add(newP);//add to product list
-            return;
-        }
-        throw new BO.BOEntityAlreadyExistsException("Product already exists"); //if made it here then DO product already exists   */
     }
 
     /// <summary>
