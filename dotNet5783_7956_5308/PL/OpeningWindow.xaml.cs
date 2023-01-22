@@ -19,6 +19,7 @@ namespace PL
     /// </summary>
     public partial class Window1 : Window
     {
+        private BlApi.IBl? bl = BlApi.Factory.Get();
         public Window1()
         {
             InitializeComponent();
@@ -32,8 +33,13 @@ namespace PL
 
         private void openCatalog_Click(object sender, RoutedEventArgs e)
         {
-            new CatalogWindow().ShowDialog();
+            //new CatalogWindow().ShowDialog();
             Close();//close this window
+        }
+        private void OpenAdmin_Click(object sender, RoutedEventArgs e)
+        {
+            new AdminScreen().ShowDialog();
+            Close(); 
         }
     }
 }

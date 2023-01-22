@@ -1,0 +1,126 @@
+﻿<Window x:Class="PL.AdminScreen"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        mc:Ignorable="d"
+        Title="AdminScreen" Height="450" Width="800">
+
+
+    <Grid x:Name="MainGrid">
+        <TabControl>
+            <!--<Products-->
+            <TabItem Header="Products">
+
+                <Grid Name="UpGrid" Height="auto" Grid.Row="0" Grid.Column="0" Width="auto">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="38*"/>
+                        <ColumnDefinition Width="43*"/>
+                        <ColumnDefinition Width="14*"/>
+                        <ColumnDefinition Width="34*"/>
+                        <ColumnDefinition Width="268*"/>
+                        <ColumnDefinition Width="397*"/>
+                    </Grid.ColumnDefinitions >
+
+                    <ComboBox Name="AttributeSelector" HorizontalAlignment= "Left" VerticalAlignment="Top" SelectionChanged="AttributeSelector_SelectionChanged" Text="choose" Grid.Column="5" Margin="160,-2,0,0" Width="226" Height="42" />
+
+
+                    <DataGrid Name="ProductItemGrid" Grid.Column="0"
+                  CanUserAddRows="False"
+                  IsTextSearchEnabled="True" 
+                  AutoGenerateColumns="False" 
+                  GridLinesVisibility="Vertical" 
+                  Cursor="Arrow"
+                  AreRowDetailsFrozen="True"
+                  HorizontalGridLinesBrush="Transparent"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                  ScrollViewer.CanContentScroll="True"
+                  CanUserDeleteRows="False" 
+                  CanUserResizeRows="False"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  Foreground="Black"
+                  IsReadOnly="True"
+                  FontSize="16"
+                  ItemsSource= "{Binding}" Grid.ColumnSpan="6" Margin="0,0,249,10" MouseDoubleClick="ProductItemGrid_updates" >
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="ID" Binding="{Binding ID}"
+                                    MinWidth="10" Width="*"/>
+                            <DataGridTextColumn Header="Product" Binding="{Binding ProductName}"
+                                    MinWidth="10" Width="*"/>
+                            <DataGridTextColumn Header="Price" Binding="{Binding Price}"
+                                    MinWidth="10" Width="*"/>
+                            <DataGridTextColumn Header="Amount" Binding="{Binding Category}"
+                                    MinWidth="10" Width="*"/>
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+                    <Button x:Name="btnAdd" Content="Add Product" FontSize="15" Background="LavenderBlush" FontWeight="Bold" FontStyle="Italic" Grid.Column="5" BorderBrush="Transparent" Click="btnAdd_Click" Height="50" Width="110" Margin="209,508,78,38"/>
+
+                </Grid>
+
+            </TabItem>
+
+
+            <!--orders-->
+            <TabItem Header="Orders" Height="20" VerticalAlignment="Top">
+                <Grid Name="OrderGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" Grid.Column="1"
+             VerticalAlignment="Stretch" Width="auto">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions >
+
+                    <DataGrid Name="ItemGrid" Grid.Column="0"
+                  CanUserAddRows="False"
+                  IsTextSearchEnabled="True" 
+                  AutoGenerateColumns="False" 
+                  GridLinesVisibility="Vertical" 
+                  Cursor="Arrow"
+                  AreRowDetailsFrozen="True"
+                  HorizontalGridLinesBrush="Transparent"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                  ScrollViewer.CanContentScroll="True"
+                  CanUserDeleteRows="False" 
+                  CanUserResizeRows="False"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  Foreground="Black"
+                  IsReadOnly="True"
+                  FontSize="16"
+                  ItemsSource="{Binding}" Grid.ColumnSpan="2" MouseDoubleClick="Orders_updates" Margin="0,0,198,0">
+                        <DataGrid.Columns>
+
+                            <DataGridTextColumn Header="   ID" Binding="{Binding ID}"
+                                    MinWidth="10" Width="*"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}"
+                                    MinWidth="10" Width="*"/>
+                            <DataGridTextColumn Header="Status" Binding="{Binding Status}"
+                                    MinWidth="10" Width="*"/>
+                            <DataGridTextColumn Header="Amount" Binding="{Binding Amount}"
+                                    MinWidth="10" Width="*"/>
+                            <DataGridTextColumn Header="Total Price" Binding="{Binding TotalPrice}"
+                                    MinWidth="10" Width="*"/>
+
+
+                        </DataGrid.Columns>
+                    </DataGrid>
+
+
+
+                </Grid>
+
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>
+
+
+

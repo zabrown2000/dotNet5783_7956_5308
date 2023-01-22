@@ -26,7 +26,7 @@ namespace PL
         private BlApi.IBl? bl = BlApi.Factory.Get();
         public MainWindow()
         {
-            InitializeComponent();
+            //InitializeComponent();
         }
 
         private void ShowProductsButton_Click(object sender, RoutedEventArgs e) => new ProductListWindow().Show();

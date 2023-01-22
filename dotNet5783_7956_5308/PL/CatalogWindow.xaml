@@ -1,12 +1,14 @@
-﻿<Window x:Class="PL.CatalogWindow"
+﻿<Window x:Class="PL.Catalog"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="CatalogWindow" Height="450" Width="1075">
-    <Window.Resources>
+        Title="Catalog" Height="450" Width="800">
+
+    <!--<Window.Resources>
 
         <Style x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
@@ -25,11 +27,11 @@
             </Setter>
         </Style>
 
-        <!--// Toggle Button Style Template //-->
 
-        <ImageBrush x:Key="tb_mouse_over"
-                    ImageSource="images/backBtn.jpg"/>
-        <!--// Text font style //-->
+
+        --><!-- Toggle Button Style Template-->
+
+        <!-- Text font style--><!--
 
         <Style x:Key="font_style" TargetType="TextBlock">
 
@@ -50,7 +52,7 @@
 
         </Style>
 
-        <!--// Tooltip Style Template //-->
+        --><!-- Style Template--><!--
 
         <Style TargetType="ToolTip" x:Key="tt_style">
 
@@ -70,7 +72,50 @@
             <Setter Property="HorizontalContentAlignment" Value="Center"/>
 
         </Style>
-         <Style x:Key="tb_style" TargetType="{x:Type ToggleButton}">
+
+        --><!-- Close Button Style Template--><!--
+
+        
+        <Style x:Key="Close_btn" TargetType="{x:Type Button}">
+
+            <Setter Property="Template">
+
+                <Setter.Value>
+
+                    <ControlTemplate TargetType="{x:Type Button}">
+
+                        <Border x:Name="button"
+                                BorderThickness="0"
+                                Background="{TemplateBinding Background}"
+                                SnapsToDevicePixels="True">
+
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <Trigger Property="IsMouseOver"
+                                     Value="True">
+
+                                <Setter Property="Background"
+                                        TargetName="button"
+                                        Value="{StaticResource CloseBtn_MouseOver}"/>
+
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+
+                    </ControlTemplate>
+
+                </Setter.Value>
+
+            </Setter>
+
+        </Style>
+
+
+
+
+        <Style x:Key="tb_style" TargetType="{x:Type ToggleButton}">
 
             <Setter Property="Template">
 
@@ -124,4 +169,106 @@
     </Window.Resources>
 
 
+    <Grid>
+
+
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40*"/>
+            <RowDefinition Height="500*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+
+
+        --><!--// Background Image--><!--
+
+        <Grid x:Name="BG" PreviewMouseLeftButtonDown="BG_PreviewMouseLeftButtonDown" Grid.RowSpan="3">
+
+           
+
+        </Grid>
+        <Grid>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="60"/>
+                <ColumnDefinition Width="30"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+
+
+        </Grid>
+
+
+        <Grid Name="UpGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" Grid.Column="0"
+             VerticalAlignment="Stretch" Width="auto">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="65"/>
+            </Grid.ColumnDefinitions >
+            <ComboBox Name="AttributeSelector" Grid.Column="1" Background="Transparent" SelectionChanged="AttributeSelector_SelectionChanged" Text="" Margin="0,0,218,0" />
+
+        </Grid>
+        <DataGrid Name="catalogGrid" Grid.Column="0" Grid.RowSpan="3" Width="415" HorizontalAlignment="Left"
+                  CanUserAddRows="False"
+                  IsTextSearchEnabled="True" 
+                  AutoGenerateColumns="False" 
+                  GridLinesVisibility="Vertical" 
+                  Cursor="Arrow"
+                  AreRowDetailsFrozen="True"
+                  HorizontalGridLinesBrush="Transparent"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                  ScrollViewer.CanContentScroll="True"
+                  CanUserDeleteRows="False" 
+                  CanUserResizeRows="False"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  Foreground="Black"
+                  IsReadOnly="True"
+                  FontSize="16"
+                  ItemsSource="{Binding}" MouseDoubleClick="ProductItemView_click" >
+            <DataGrid.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource ResourceKey=GroupHeaderStyle}">
+                    <GroupStyle.Panel>
+                        <ItemsPanelTemplate>
+                            <DataGridRowsPresenter/>
+                        </ItemsPanelTemplate>
+                    </GroupStyle.Panel>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+
+            <DataGrid.Columns>
+                <DataGridTemplateColumn x:Name="AddProductToCart" MinWidth="10" Width="30">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Background="White" BorderBrush="Transparent" Click="AddToCart_Click"
+                                    Height="30" Width="30"
+                                    HorizontalAlignment="Center" >
+                                <Image Source="images/57563.png" IsEnabled="True"/>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Header="ID" Binding="{Binding ID}"
+                                    MinWidth="10" Width="*"/>
+                <DataGridTextColumn Header="Product" Binding="{Binding ProductName}"
+                                    MinWidth="10" Width="*"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price}"
+                                    MinWidth="10" Width="*"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Category}"
+                                    MinWidth="10" Width="*"/>
+            </DataGrid.Columns>
+
+
+        </DataGrid>
+    </Grid>-->
 </Window>

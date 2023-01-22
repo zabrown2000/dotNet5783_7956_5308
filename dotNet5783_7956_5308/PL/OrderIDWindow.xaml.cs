@@ -29,7 +29,7 @@ namespace PL
             e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);//only gets numbers for id
         }
 
-        private void keyPressed(object sender, TextCompositionEventArgs e)
+        private void keyPressed(object sender, KeyEventArgs e)
         {
             //go to order tracking
         }

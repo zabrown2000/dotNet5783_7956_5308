@@ -8,7 +8,7 @@
         Title="OrderIDWindow" Height="450" Width="800">
     <Grid>
         <TextBlock HorizontalAlignment="Center" Margin="0,114,0,0" TextWrapping="Wrap" Text="Enter Order Tracking Number" VerticalAlignment="Top" FontSize="36"/>
-        <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="328"  BorderThickness="5" Margin="234,188,0,0" PreviewTextInput="tid_previewTextInput" PreviewKeyDown="keyPressed" Height="29"/>
+        <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="328"  BorderThickness="5" Margin="234,188,0,0" PreviewTextInput="tid_previewTextInput" KeyDown="keyPressed" Height="29"/>
 
     </Grid>
 </Window>
