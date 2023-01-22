@@ -24,7 +24,7 @@ namespace PL
         {
             InitializeComponent();
         }
-        private void tid_previewTextInput(object sender, TextCompositionEventArgs e)
+        private void tOrderId_previewTextInput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);//only gets numbers for id
         }
@@ -32,6 +32,12 @@ namespace PL
         private void keyPressed(object sender, KeyEventArgs e)
         {
             //go to order tracking
+            
+        }
+
+        private void tOrderId_TextChanged(object sender, TextChangedEventArgs e)
+        {
+
         }
     }
 }

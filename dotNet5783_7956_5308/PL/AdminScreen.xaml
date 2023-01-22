@@ -59,7 +59,7 @@
 
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button x:Name="btnAdd" Content="Add Product" FontSize="15" Background="LavenderBlush" FontWeight="Bold" FontStyle="Italic" Grid.Column="5" BorderBrush="Transparent" Click="btnAdd_Click" Height="50" Width="110" Margin="209,508,78,38"/>
+                    <Button x:Name="btnAdd" Content="Add Product" FontSize="15" Background="LavenderBlush" FontWeight="Bold" FontStyle="Italic" Grid.Column="5" BorderBrush="Transparent" Click="btnAdd_Click" Margin="160,98,99,224"/>
 
                 </Grid>
 

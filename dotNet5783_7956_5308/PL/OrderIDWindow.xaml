@@ -6,9 +6,8 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="OrderIDWindow" Height="450" Width="800">
-    <Grid>
-        <TextBlock HorizontalAlignment="Center" Margin="0,114,0,0" TextWrapping="Wrap" Text="Enter Order Tracking Number" VerticalAlignment="Top" FontSize="36"/>
-        <TextBox HorizontalAlignment="Left" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="328"  BorderThickness="5" Margin="234,188,0,0" PreviewTextInput="tid_previewTextInput" KeyDown="keyPressed" Height="29"/>
-
+    <Grid RenderTransformOrigin="0.5,0.525">
+        <TextBox Name="tOrderID" FontSize="20" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Enter Order ID" VerticalAlignment="Top" Width="328"  BorderThickness="5" Margin="234,188,0,0" 
+                 PreviewTextInput="tOrderId_previewTextInput" TextChanged="tOrderId_TextChanged" PreviewMouseDown="tOrderId_PreviewMouseDown" KeyDown="keyPressed" Height="66"/>
     </Grid>
 </Window>

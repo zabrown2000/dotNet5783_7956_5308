@@ -66,7 +66,7 @@ namespace PL
             if (ProductsListView.SelectedItem is BO.ProductForList productForList)
             {
                 BO.Products prod = new BO.Products();
-                prod = bl?.products.ManagerProduct(productForList.ID);
+                prod = bl!.products.ManagerProduct(productForList.ID);
                 new ProductWindow(prod).ShowDialog();
             }
             ProductsListView.ItemsSource = bl?.products.ReadProductsForList(); // update list view after add

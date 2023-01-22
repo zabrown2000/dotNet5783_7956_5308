@@ -35,7 +35,8 @@ namespace PL
             uinstock.Visibility = Visibility.Collapsed;
             uprice.Visibility = Visibility.Collapsed;
             uname.Visibility = Visibility.Collapsed;
-            ID.Text = bl?.products.GetNextID().ToString();
+            product.ID = bl!.products.GetNextID();
+            ID.Text = product.ID.ToString();
         }
 
         public ProductWindow(Products prod)
@@ -60,6 +61,21 @@ namespace PL
             product.Category = prod.Category;
             product.Name = prod.Name;
         }
+
+        public ProductWindow(BO.ProductForList productForList, BlApi.IBl? b)//update ctor
+        {
+            InitializeComponent();
+            bl = b;//new bl
+            BO.Products prod = bl!.products.ManagerProduct(productForList.ID);//save the matching product or product for list
+            DataContext = productForList;//set product as data context
+
+            CategoryBox.ItemsSource = Enum.GetValues(typeof(BO.Enums.ProdCategory));//set combobox values to enums
+            addProductButton.Visibility = Visibility.Collapsed;//add invisible
+            updateProductButton.Visibility = Visibility.Visible;//show update
+            ID.IsReadOnly = true;//cant change id of a product to update
+            tinstock.Text = prod.InStock.ToString();
+        }
+
         private void tid_previewtextinput(object sender, TextCompositionEventArgs e)
         {
             e.Handled = new Regex("[^0-9]+").IsMatch(e.Text); //making sure it only only gets numbers for id
@@ -212,7 +228,7 @@ namespace PL
             tprice.Text = "Enter Price";
             tinstock.Text = "Enter Amount"; 
             Close(); //close this window
-            new ProductListWindow().Show(); //open productList back up to see newly added product
+            //new ProductListWindow().Show(); //open productList back up to see newly added product
         }
 
         /// <summary>
