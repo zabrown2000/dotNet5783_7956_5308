@@ -63,8 +63,6 @@ namespace PL
                 {
 
                     productsForList = PL.Extensions.ToObservableCollection((bl?.products.ReadProductsForList()!)); //get catalog products from BO
-
-                    //ItemListview.ItemsSource = bl?.Product.GetProductsForList();//original list with no filter
                 }
                 catch (BO.Exceptions ex)
                 {
@@ -79,8 +77,6 @@ namespace PL
             {
                 try
                 {
-                    //ItemListview.ItemsSource = bl?.Product.GetProductsForList().Select(x => x!.Category == ca);//show filtered list
-
                     productsForList = PL.Extensions.ToObservableCollection(from p in bl?.products.ReadProductsForList()//get all products
                                                                        where p.Category == c
                                                                        select p);//show filtered list
