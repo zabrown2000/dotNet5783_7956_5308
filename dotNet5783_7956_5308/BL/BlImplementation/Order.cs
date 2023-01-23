@@ -35,7 +35,7 @@ internal class Order : BlApi.IOrder
     /// <param name="order">order we want status of</param>
     /// <returns></returns>
     private BO.Enums.OrderStatus GetOrderStatus(DO.Order order)
-    {
+    {   
         return order.DeliveryDate != null ? BO.Enums.OrderStatus.Recieved : order.ShipDate != null ?
             BO.Enums.OrderStatus.Shipped : BO.Enums.OrderStatus.JustOrdered; //determining order status by checking if the dates are set
     }
@@ -197,5 +197,24 @@ internal class Order : BlApi.IOrder
             }; //new BO Order
         }
         throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
+    }
+
+    public OrderTracking GetOrderTracking(int orderId)
+    {
+        DO.Order order = new();
+        try
+        {
+            order = (DO.Order)dal?.dalOrder.ReadId(orderId)!;//get the requested order from dal
+        }
+        catch
+        {
+            throw new BO.BOEntityDoesNotExistException("The order requested does not exist\n");//order does not exist
+        }
+        return new OrderTracking()
+        {
+            Id = orderId,
+            Status = GetOrderStatus(order),
+        };//create new order tracking
+
     }
 }

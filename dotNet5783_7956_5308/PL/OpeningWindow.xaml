@@ -1,11 +1,11 @@
-﻿<Window x:Class="PL.Window1"
+﻿<Window x:Class="PL.OpeningWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Window1" Height="450" Width="800">
+        Title="OpeningWindow" Height="450" Width="800">
     <Grid>
         <Button Content="Manager View" HorizontalAlignment="Left" Margin="239,140,0,0" VerticalAlignment="Top" Height="43" Width="245" Background="#FFDBB0B0" FontSize="24" FontFamily="Century Gothic" Click="OpenAdmin_Click"/>
         <Button Content="New Order" HorizontalAlignment="Left" Margin="239,217,0,0" VerticalAlignment="Top" Height="40" Width="245" FontSize="24" FontFamily="Century Gothic" Background="#FFDBB0B0" Click="openCatalog_Click"/>

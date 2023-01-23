@@ -7,5 +7,7 @@ public interface IOrder
     public IEnumerable<OrderForList?> ReadAllOrderForList();
     public Order ReadBoOrder(int orderId);
     public Order DeliveredUpdate(int orderId);
-    public Order ShipUpdate(int orderId); 
+    public Order ShipUpdate(int orderId);
+
+    public BO.OrderTracking GetOrderTracking(int orderId);
 }

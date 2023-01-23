@@ -1,0 +1,79 @@
+﻿<Window x:Class="PL.OrderTracking"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="OrderTracking" Height="450" Width="800">
+
+
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="337"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+
+        <Grid Background="#eeee">
+            <Grid VerticalAlignment="Center" Height="220">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <!--Back Button-->
+                <Button x:Name="btnBack" Height ="40" Width="55" BorderBrush="Transparent" Grid.Row="0" Background="Red" Content="Back" Padding="2" Click="clickBackBtn" HorizontalAlignment="Right" Margin="0,-100,101,133">
+                </Button>
+                <TextBlock Text="ID :" 
+                               Grid.Column="0" HorizontalAlignment="Center"
+                               Grid.Row="0" FontSize="24" FontWeight="DemiBold" Width="106"/>
+                <TextBlock Name="tid" FontSize="22" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding ID}" Grid.Column="1"  VerticalAlignment="Top" Width="180" Height="37"/>
+
+
+                <TextBlock Text="Status :"
+                               Grid.Row="1"
+                               Grid.Column="0"
+                               Margin="30,17,30,5" FontSize="24" FontWeight="DemiBold"/>
+                <TextBlock Name="StatusBox" Text="{Binding Status}" FontSize="22"
+                               Grid.Row="1" Height="40" Grid.Column="1"/>
+
+
+                <StackPanel Grid.Row="3" Margin="10,5,0,5"
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Center" 
+                                >
+                    <TextBlock Text="Location :" HorizontalAlignment="Center" VerticalAlignment="Center" 
+                               FontSize="24" FontWeight="DemiBold"/>
+                    <Button x:Name="locationMap" Height="40" Width="40" Padding="0,0,0,0" Background="#009E9E9E" 
+                            BorderBrush="#009E9E9E"  Margin="10,0,0,0">
+                    </Button>
+
+                </StackPanel>
+
+                <TextBlock Text="Tracking :" FontSize="24" FontWeight="DemiBold" Margin="331,-86,-321,0" Grid.Column="1" Height="51" VerticalAlignment="Top"/>
+                <ListView ItemsSource="{Binding Tracking}" HorizontalAlignment="Center" FontSize="20" Name="ttracking" VerticalAlignment="Top" Height="230" Width="260" Margin="234,-30,-378,0" Grid.Column="1" Grid.RowSpan="3">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="Date + Status"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+
+            </Grid>
+        </Grid>
+        <Button x:Name="OrderDetails" Content="Show Order Details" FontSize="15" Background="LavenderBlush" FontWeight="Bold" FontStyle="Italic" Grid.Column="1" Height="40" Width="200" HorizontalAlignment="Center" VerticalAlignment="Bottom" Padding="5" Click="OrderDetails_Click" BorderBrush="Transparent"/>
+
+        <Button Name="homeBtn" Background="Transparent" BorderBrush="Transparent" Click="HomeBtn_Click" Grid.Column="0" Margin="250,320,0,42">
+        </Button>
+
+    </Grid>
+
+
+
+</Window>

@@ -119,6 +119,9 @@
             </TabItem>
         </TabControl>
 
+        <!--Home Button-->
+        <Button x:Name="btnHome" Margin="584,78,152,304" Padding="5" Click="clickOnHomeBtn" Background="Red" Content="Back" BorderBrush="Transparent"/>
+
     </Grid>
 </Window>
 

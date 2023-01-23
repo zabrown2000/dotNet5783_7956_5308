@@ -159,4 +159,10 @@ public partial class AdminScreen : Window
         }
         ItemGrid.DataContext = ordersForList;
     }
+
+    void clickOnHomeBtn(object sender, RoutedEventArgs e)
+    {
+        new OpeningWindow().ShowDialog();
+        Close();//close this window
+    }
 }

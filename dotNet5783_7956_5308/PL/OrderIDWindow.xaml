@@ -6,8 +6,20 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="OrderIDWindow" Height="450" Width="800">
-    <Grid RenderTransformOrigin="0.5,0.525">
-        <TextBox Name="tOrderID" FontSize="20" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Enter Order ID" VerticalAlignment="Top" Width="328"  BorderThickness="5" Margin="234,188,0,0" 
-                 PreviewTextInput="tOrderId_previewTextInput" TextChanged="tOrderId_TextChanged" PreviewMouseDown="tOrderId_PreviewMouseDown" KeyDown="keyPressed" Height="66"/>
-    </Grid>
+    <Border CornerRadius="52" BorderThickness="10" BorderBrush="White">
+
+        <Border Padding="50" Background="#eee" CornerRadius="35" BorderThickness="10">
+            <StackPanel>
+                <TextBlock x:Name="EnterOrderId" FontSize="25" TextAlignment="Center" FontWeight="DemiBold" FontFamily="italic" Text="Enter Your Order ID:"/>
+                <TextBox x:Name="orderId" FontSize="25" TextAlignment="Center" FontFamily="italic" Background="GhostWhite" BorderThickness="5" Margin="50,20,50,20" PreviewTextInput="tid_previewtextinput"
+                     KeyDown="EnterPressed_KeyDown" MaxLength="4"/>
+                <Button x:Name="OKBtn" Background="LightGray" FontSize="25" Width="100" Height="50" Content="OK"
+                    FontWeight="DemiBold" BorderBrush="Transparent" Click="OKBtn_Click" Margin="0,20,0,0"/>
+                <!--Back Button-->
+                <Button x:Name="btnBack" Height ="50" Width="74" Margin="-860, -380, -200,-10" Padding="2" Click="clickBackBtn" BorderBrush="Transparent" Background="Red" Content="Back">
+                </Button>
+
+            </StackPanel>
+        </Border>
+    </Border>
 </Window>

@@ -17,17 +17,18 @@ namespace PL
     /// <summary>
     /// Interaction logic for Window1.xaml
     /// </summary>
-    public partial class Window1 : Window
+    public partial class OpeningWindow : Window
     {
         private BlApi.IBl? bl = BlApi.Factory.Get();
-        public Window1()
+        BO.Cart myCart = new();
+        public OpeningWindow()
         {
             InitializeComponent();
         }
 
         private void OrderIDWindow_Click(object sender, RoutedEventArgs e)
         {
-            new OrderIDWindow().ShowDialog();
+            new OrderIDWindow(myCart, bl!).ShowDialog();
             Close();//close this window
         }
 

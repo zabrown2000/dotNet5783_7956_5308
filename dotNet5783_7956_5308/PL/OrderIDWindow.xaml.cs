@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,31 +14,49 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PL
+namespace PL;
+
+/// <summary>
+/// Interaction logic for OrderIDWindow.xaml
+/// </summary>
+public partial class OrderIDWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for OrderIDWindow.xaml
-    /// </summary>
-    public partial class OrderIDWindow : Window
+    BlApi.IBl? bl = BlApi.Factory.Get();
+    BO.Cart myCart = new();
+    public OrderIDWindow(BO.Cart cart, BlApi.IBl b)
     {
-        public OrderIDWindow()
-        {
-            InitializeComponent();
-        }
-        private void tOrderId_previewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);//only gets numbers for id
-        }
+        InitializeComponent();
+        bl = b;//new bl
+        cart = myCart;
+        orderId.Text = "";
+    }
 
-        private void keyPressed(object sender, KeyEventArgs e)
+    private void OKBtn_Click(object sender, RoutedEventArgs e)
+    {
+        int id = 0;
+        try
         {
-            //go to order tracking
-            
+            id = int.Parse(orderId.Text);//save the entered id as a number
         }
-
-        private void tOrderId_TextChanged(object sender, TextChangedEventArgs e)
+        catch (System.FormatException)
         {
-
+            new ErrorWindow("Enter Order ID Window", "Wrong id number entered").ShowDialog();
         }
+        new OrderTracking(id, myCart, bl!).ShowDialog();//open order tracking window with entered id
+        this.Close(); //close current window
+    }
+    private void tid_previewtextinput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = new Regex("[^0-9]+").IsMatch(e.Text);//only gets numbers for id
+    }
+
+    void clickBackBtn(object sender, RoutedEventArgs e)
+    {
+        new OpeningWindow().ShowDialog();
+        Close(); //close this window
+    }
+    private void EnterPressed_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter) OKBtn_Click(sender, e);
     }
 }
