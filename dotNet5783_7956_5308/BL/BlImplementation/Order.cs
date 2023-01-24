@@ -123,7 +123,7 @@ internal class Order : BlApi.IOrder
                 CustomerName = order.CustomerName,
                 OrderDate = order.OrderDate,
                 ShipDate = DateTime.Now,
-                DeliveryDate = DateTime.MinValue,
+                DeliveryDate = null,
             }; //set new ship date in new DO Order
             dal.dalOrder.Update(o); //update the order in DO
             double tempPrice = 0;

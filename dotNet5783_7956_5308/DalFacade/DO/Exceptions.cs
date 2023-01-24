@@ -38,4 +38,16 @@ public class DalConfigException : Exception
     public DalConfigException(string msg, Exception ex) : base(msg, ex) { }
 }
 
-
+/// <summary>
+/// Exception class for dal layer - an ID does not exist
+/// </summary>
+[Serializable]
+public class IDDoesNotExistException : Exception
+{
+    public IDDoesNotExistException() { }
+    public IDDoesNotExistException(string message) : base(message) { }
+    public IDDoesNotExistException(string message, Exception inner) : base(message, inner) { }
+    protected IDDoesNotExistException(
+      System.Runtime.Serialization.SerializationInfo info,
+      System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+}

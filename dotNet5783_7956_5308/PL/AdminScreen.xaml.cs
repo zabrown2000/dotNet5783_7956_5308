@@ -146,7 +146,7 @@ public partial class AdminScreen : Window
     {
         if (ItemGrid.SelectedItem is BO.OrderForList orderForList)
         {
-           // new UpdateOrdersAdmin(orderForList, bl!).ShowDialog();
+            new UpdateOrdersAdmin(orderForList, bl!).ShowDialog();
         }
         try
         {
