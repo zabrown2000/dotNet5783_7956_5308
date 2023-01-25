@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Collections.ObjectModel;
 using BO;
+using System.ComponentModel;
 
 namespace PL;
 
@@ -165,4 +166,23 @@ public partial class AdminScreen : Window
         new OpeningWindow().ShowDialog();
         Close();//close this window
     }
+    private void GroupByStatus_Click(object sender, RoutedEventArgs e)
+    {
+        RemoveGroupings_Click(sender, e);//remove prev grouping
+        CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(ItemGrid.ItemsSource);
+        PropertyGroupDescription groupDescription = new PropertyGroupDescription("Status");
+        SortDescription sortDscription = new SortDescription("Status", ListSortDirection.Ascending);
+        view.GroupDescriptions.Add(groupDescription);
+        view.SortDescriptions.Add(sortDscription);
+        Group.IsEnabled = false;
+    }
+
+    private void RemoveGroupings_Click(object sender, RoutedEventArgs e)
+    {
+        CollectionView view = (CollectionView)CollectionViewSource.GetDefaultView(ordersForList);
+        view.GroupDescriptions.Clear();
+        view.SortDescriptions.Clear();
+        UndoGroup.IsEnabled = false;
+    }
 }
+

@@ -69,7 +69,7 @@ namespace PL
 
             }
 
-
+        Close();
         }
 
         private void updateDelivery_Click(object sender, RoutedEventArgs e)
@@ -82,6 +82,7 @@ namespace PL
             {
                 new ErrorWindow("Update Orders For Admin\n", ex.Message).ShowDialog();
             }
+            Close();
 
         }
 

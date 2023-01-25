@@ -10,8 +10,8 @@
 
         <!--<Image Name="ErrorImage" Source="/errorIcon.png" Margin="200,20,200,0" Height="150"/>-->
         <TextBox x:Name="ErrorTitle" Background="LightGray" FontSize="25" FontWeight="Bold" BorderThickness="4" Margin="50,71,50,289"
-                TextAlignment="Center"/>
-        <TextBox x:Name="ErrorDetails" Background="Transparent" FontSize="22" Margin="50,150,50,217" TextAlignment="Center"/>
+                TextAlignment="Center" IsReadOnly="True"/>
+        <TextBox x:Name="ErrorDetails" Background="Transparent" FontSize="22" Margin="50,150,50,217" TextAlignment="Center" IsReadOnly="True"/>
         <Button x:Name="OKButton" Background="LightGray" FontSize="25" Width="100" Height="50" Content="OK"
             FontWeight="DemiBold" BorderBrush="Transparent" Click="OKButton_Click" Margin="350,232,350,152" />
     </Grid>
