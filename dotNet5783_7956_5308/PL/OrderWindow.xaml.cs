@@ -48,7 +48,7 @@ public partial class OrderWindow : Window
 
     void clickBackBtn(object sender, RoutedEventArgs e)
     {
-        new OrderTracking(myCart, bl!).ShowDialog();
-        Close();//close this window
+        //new OrderTracking(myCart, bl!).ShowDialog();
+        //Close();//close this window
     }
 }

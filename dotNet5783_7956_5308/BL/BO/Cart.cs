@@ -23,7 +23,11 @@ public class Cart
     /// total price of cart
     /// </summary>
     public double TotalPrice { get; set; }
-    
+    /// <summary>
+    /// amount of items in cart
+    /// </summary>
+    public int AmountOfItems { get; set; }
+
 
     public override String ToString() => this.ToStringProperty(); 
 }

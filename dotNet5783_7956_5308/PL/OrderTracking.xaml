@@ -11,69 +11,41 @@
 
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto" MinHeight="3.649"/>
+            <RowDefinition Height="auto" MinHeight="0"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="337"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="50"/>
+            <ColumnDefinition Width="auto" MinWidth="98"/>
+            <ColumnDefinition Width="auto" MinWidth="262.863"/>
+            <ColumnDefinition Width="auto" MinWidth="98"/>
+
         </Grid.ColumnDefinitions>
 
-        <Grid Background="#eeee">
-            <Grid VerticalAlignment="Center" Height="220">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                    <RowDefinition/>
-                </Grid.RowDefinitions>
-                <!--Back Button-->
-                <Button x:Name="btnBack" Height ="40" Width="55" BorderBrush="Transparent" Grid.Row="0" Background="Red" Content="Back" Padding="2" Click="clickBackBtn" HorizontalAlignment="Right" Margin="0,-100,101,133">
-                </Button>
-                <TextBlock Text="ID :" 
-                               Grid.Column="0" HorizontalAlignment="Center"
-                               Grid.Row="0" FontSize="24" FontWeight="DemiBold" Width="106"/>
-                <TextBlock Name="tid" FontSize="22" HorizontalAlignment="Center" TextWrapping="Wrap" Text="{Binding ID}" Grid.Column="1"  VerticalAlignment="Top" Width="180" Height="37"/>
 
+        <TextBlock Name="_id" Grid.Row="1" Grid.Column="2" Margin="0,0,0,2"/>
 
-                <TextBlock Text="Status :"
-                               Grid.Row="1"
-                               Grid.Column="0"
-                               Margin="30,17,30,5" FontSize="24" FontWeight="DemiBold"/>
-                <TextBlock Name="StatusBox" Text="{Binding Status}" FontSize="22"
-                               Grid.Row="1" Height="40" Grid.Column="1"/>
+        <TextBlock Text="Status: " FontSize="20" Grid.Row="2" Grid.Column="1" Margin="0,0,3,0" Grid.RowSpan="3"/>
 
+        <TextBox Name="r_status" Grid.Row="2" Grid.Column="2" TextWrapping="Wrap" Text="{Binding Status, Mode=TwoWay}" Margin="13,0,108,1" FontSize="15"/>
+        <ListView ItemsSource ="{Binding Tracking}" Name="trackinglist"  Grid.Column="3" Grid.Row="3" Margin="8,2,-215,-102" Grid.RowSpan="2">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Date + Status"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
 
-                <StackPanel Grid.Row="3" Margin="10,5,0,5"
-                                Orientation="Horizontal" 
-                                HorizontalAlignment="Center" 
-                                >
-                    <TextBlock Text="Location :" HorizontalAlignment="Center" VerticalAlignment="Center" 
-                               FontSize="24" FontWeight="DemiBold"/>
-                    <Button x:Name="locationMap" Height="40" Width="40" Padding="0,0,0,0" Background="#009E9E9E" 
-                            BorderBrush="#009E9E9E"  Margin="10,0,0,0">
-                    </Button>
-
-                </StackPanel>
-
-                <TextBlock Text="Tracking :" FontSize="24" FontWeight="DemiBold" Margin="331,-86,-321,0" Grid.Column="1" Height="51" VerticalAlignment="Top"/>
-                <ListView ItemsSource="{Binding Tracking}" HorizontalAlignment="Center" FontSize="20" Name="ttracking" VerticalAlignment="Top" Height="230" Width="260" Margin="234,-30,-378,0" Grid.Column="1" Grid.RowSpan="3">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn Header="Date + Status"/>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
-
-            </Grid>
-        </Grid>
-        <Button x:Name="OrderDetails" Content="Show Order Details" FontSize="15" Background="LavenderBlush" FontWeight="Bold" FontStyle="Italic" Grid.Column="1" Height="40" Width="200" HorizontalAlignment="Center" VerticalAlignment="Bottom" Padding="5" Click="OrderDetails_Click" BorderBrush="Transparent"/>
-
-        <Button Name="homeBtn" Background="Transparent" BorderBrush="Transparent" Click="HomeBtn_Click" Grid.Column="0" Margin="250,320,0,42">
-        </Button>
-
+        
     </Grid>
 
+    <!-- <Button x:Name="OrderDetails" Content="Show Order Details" FontSize="15" Background="LavenderBlush" FontWeight="Bold" FontStyle="Italic" Grid.Column="1" Height="40" Width="200" HorizontalAlignment="Center" VerticalAlignment="Bottom" Padding="5" Click="OrderDetails_Click" BorderBrush="Transparent"/>
 
-
+    <Button Name="homeBtn" Background="Transparent" BorderBrush="Transparent" Click="HomeBtn_Click" Grid.Column="0" Margin="250,320,0,42">
+    </Button> -->
+    
 </Window>

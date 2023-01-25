@@ -1,0 +1,159 @@
+﻿<Window x:Class="PL.CartWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PL"
+
+        mc:Ignorable="d"
+        Title="CartWindow" Height="450" Width="800">
+    <Window.Resources>
+        <Style x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                        <Expander x:Name="expander" IsExpanded="True"
+                                  Background="Transparent"
+                                  Foreground="#2b331f">
+                            <Expander.Header>
+                                <TextBlock Text="{Binding Name}"/>
+                            </Expander.Header>
+                            <ItemsPresenter/>
+                        </Expander>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+    <Grid Margin="0,0,198,0">
+        <DataGrid Name="cartGrid" Width="600" HorizontalAlignment="Center"
+                  CanUserAddRows="False"
+                  IsTextSearchEnabled="True" 
+                  AutoGenerateColumns="False" 
+                  GridLinesVisibility="Vertical" 
+                  Cursor="Arrow"
+                  AreRowDetailsFrozen="True"
+                  HorizontalGridLinesBrush="Transparent"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible" 
+                  ScrollViewer.HorizontalScrollBarVisibility="Visible"
+                  ScrollViewer.CanContentScroll="True"
+                  CanUserDeleteRows="False" 
+                  CanUserResizeRows="False"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  Foreground="Black"
+                  IsReadOnly="True"
+                  FontSize="16"
+                  ItemsSource="{Binding}" MouseDoubleClick="ProductItemView_click" Margin="0,40,0,70" >
+            <DataGrid.GroupStyle>
+                <GroupStyle ContainerStyle="{StaticResource ResourceKey=GroupHeaderStyle}">
+                    <GroupStyle.Panel>
+                        <ItemsPanelTemplate>
+                            <DataGridRowsPresenter/>
+                        </ItemsPanelTemplate>
+                    </GroupStyle.Panel>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+
+            <DataGrid.Columns>
+
+                <DataGridTextColumn Header="ID" Binding="{Binding ID, Mode=TwoWay}"
+                                    MinWidth="10" Width="*"/>
+                <DataGridTextColumn Header="Product" Binding="{Binding ProductName, Mode=TwoWay}"
+                                    MinWidth="10" Width="*"/>
+                <DataGridTextColumn Header="Price" Binding="{Binding Price, Mode=TwoWay}"
+                                    MinWidth="10" Width="*"/>
+                <DataGridTextColumn Header="Amount in Cart" Binding="{Binding Amount, Mode=TwoWay}"
+                                    MinWidth="10" Width="*"/>
+                <DataGridTemplateColumn x:Name="IncreaseAmount" MinWidth="10" Width="30">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Increase_Click"
+                                    Height="30" Width="30"
+                                    HorizontalAlignment="Center">
+                                <Image Source="\Images\plussign.png"></Image>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTemplateColumn x:Name="DecreaseAmount" MinWidth="10" Width="30">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Click="Decrease_Click"
+                                    Height="30" Width="30"
+                                    HorizontalAlignment="Center" >
+                                <Image Source="\Images\minussign.png"></Image>
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+
+
+        </DataGrid>
+
+
+        <Button Content="Check Out" HorizontalAlignment="Right" Margin="0,218,-165,160" Padding="5" Click="CheckOut_Click" FontSize="15" FontStyle="Normal" FontWeight="Bold" Foreground="White" Background="Red" RenderTransformOrigin="0.443,-0.035">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button Content="Return to Home" HorizontalAlignment="Right" Margin="0,316,-165,54" Padding="5" Click="ReturnHome_Click" FontSize="15" FontStyle="Normal" FontWeight="Bold" Foreground="White" Background="Red">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <TextBox x:Name="TotalPrice" HorizontalAlignment="Left" Margin="408,364,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="120" Height="42" FontSize="16"/>
+        <Label x:Name="TotalPriceLabel" Content="Total Price:" HorizontalAlignment="Left" Margin="322,370,0,0" VerticalAlignment="Top" FontSize="16" Height="30" Width="81"/>
+        <!--<StackPanel Margin="0,103,0,40" Grid.RowSpan="3">
+            <ListView x:Name="PList" ItemsSource="{Binding}" SelectiveScrollingGrid.SelectiveScrollingOrientation="Vertical" ScrollViewer.VerticalScrollBarVisibility="Visible" ScrollViewer.CanContentScroll="True" ScrollViewer.IsDeferredScrollingEnabled="True" >
+                <ListView.Resources>
+                    <Style TargetType="{x:Type ListViewItem}">
+                        <EventSetter Event="PreviewGotKeyboardFocus" Handler="SelectCurrentItem"/>
+                    </Style>
+                </ListView.Resources>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Background="#E5E9EA" Margin="0 15 0 0" HorizontalAlignment="Center">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="112"/>
+                                <ColumnDefinition Width="120"/>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="30"/>
+                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="60"/>
+                            </Grid.ColumnDefinitions>
+                            <Ellipse Height="80" Width="80" Margin="25 10 0 10" HorizontalAlignment="Left"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Path=ProductName, Mode=TwoWay}" Padding="5" FontWeight="SemiBold" FontSize="16" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" Text="{Binding Path=ID, Mode=TwoWay}" Padding="5" FontSize="13" VerticalAlignment="Center" Margin="0 38 0 0"/>
+
+                            <TextBlock Grid.Column="2" Text="{Binding Path=Price, Mode=TwoWay}" Padding="5" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="16"/>
+
+                            <TextBlock Grid.Column="3" Text="{Binding Path=Amount, Mode=TwoWay}" Padding="5" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="16"/>
+
+                            <StackPanel Grid.Column="4" VerticalAlignment="Center" HorizontalAlignment="Left">
+                                <Button x:Name="addBtn" Style="{StaticResource buttonCounter}" Click="AddItem_Click">
+                                    <Image Source="images\add.png"/>
+                                </Button>
+
+                                <Button x:Name="lowBtn" Style="{StaticResource buttonCounter}" Margin="0 5 0 0" Click="ReduceItem_Click">
+                                    <Image Source="images/low.png"/>
+                                </Button>
+                            </StackPanel>
+
+                            <TextBlock Grid.Column="5" Text="{Binding Path=ProductPrice, Mode=TwoWay}" Padding="5" VerticalAlignment="Center" FontWeight="SemiBold" FontSize="16"/>
+
+                            <Button Style="{StaticResource buttonDelete}" Grid.Column="6" Click="RemoveItem_Click">
+                                <Image Source="images/remove.png" Width="18" Style="{StaticResource icon}"/>
+                            </Button>
+                        </Grid>
+                    </DataTemplate>
+
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackPanel>-->
+
+    </Grid>
+</Window>

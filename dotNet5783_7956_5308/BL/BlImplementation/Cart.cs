@@ -50,6 +50,7 @@ internal class Cart : ICart
         };
         myCart.Items.Add(oi); //adding the orderitem to cart
         myCart.TotalPrice += oi.Price; //updating price of the cart
+        myCart.AmountOfItems += 1;
         return myCart;
 
     }
@@ -79,6 +80,7 @@ internal class Cart : ICart
                 BO.OrderItem oi = myCart.Items[index]!; //save the orderitem with id
                 myCart.TotalPrice -= myCart.Items[index]!.Price;
                 myCart.Items.Remove(oi); //remove orderItem from cart
+                myCart.AmountOfItems -= 1;
                 return myCart;
             }
             product = dal!.dalProduct.ReadId(myCart.Items[index]!.ProductID); //get product from the orderItem in Items to check stock
@@ -225,6 +227,80 @@ internal class Cart : ICart
         myCart.CustomerAddress = "";
         myCart.CustomerEmail = "";
         myCart.CustomerName = "";
+    }
+
+    /// <summary>
+    /// method to get the items in the cart
+    /// </summary>
+    /// <param name="cart"></param>
+    /// <returns></returns>
+    public IEnumerable<BO.OrderItem> GetItems(BO.Cart cart)
+    {
+        return from items in cart.Items select items;
+    }
+
+    /// <summary>
+    /// method to adjust the amount of a product is in the cart
+    /// </summary>
+    public BO.Cart IncreaseCart(BO.Cart cart, int _ID)
+    {
+        int index = cart.Items!.FindIndex(x => x?.ProductID == _ID); // find the index in the items list where the product sits
+        DO.Products? product = new DO.Products(); // create a new DO product
+        try
+        {
+            product = dal!.dalProduct.ReadId(_ID); //retrieve the product with the matching ID
+        }
+        catch
+        {
+            throw new BO.BOEntityDoesNotExistException();
+        }
+        if (index != -1) // this means the product is in the cart
+        {
+            if (product?.InStock < cart?.Items[index]!.Amount + 1)
+            {
+                throw new BO.OutOfStockException();
+            }
+            //cart.TotalPrice -= cart.Items[index]!.Price * cart.Items[index]!.Quantity; // subtract the cost of any of this specific product sitting in the cart
+            //cart.Items[index]!.Quantity = quantity; // change the quantity of that product to the user's input
+            double unitPrice = (double)product?.Price!;
+            cart!.Items[index]!.Amount += 1;
+            cart.TotalPrice += unitPrice; // adjust the price accordingly 
+            cart!.Items[index]!.Price += unitPrice;
+            cart.AmountOfItems += 1;
+
+            return cart;
+        }
+        throw new BO.BOEntityDoesNotExistException();
+    }
+
+    public BO.Cart DecreaseCart(BO.Cart cart, int ID)
+    {
+        int index = cart.Items!.FindIndex(x => x?.ProductID == ID); // find the index in the items list where the product sits
+        DO.Products? product = new DO.Products(); // create a new DO product
+        try
+        {
+            product = dal!.dalProduct.ReadId(ID); //retrieve the product with the matching ID
+        }
+        catch
+        {
+            throw new BO.BOEntityDoesNotExistException();
+        }
+        if (index != -1) // this means the product is in the cart
+        {
+            if (cart!.Items[index]!.Amount == 1)
+            {
+                cart.Items.RemoveAt(index);
+                //cart.Items[index].Quantity = 0;
+                return cart;
+            }
+            double unitPrice = (double)product?.Price!;
+            cart!.Items[index]!.Amount -= 1;
+            cart.TotalPrice -= unitPrice; // adjust the price accordingly 
+            cart.AmountOfItems -= 1;
+
+            return cart;
+        }
+        throw new BO.BOEntityDoesNotExistException();
     }
 }
 

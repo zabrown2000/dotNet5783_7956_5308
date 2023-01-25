@@ -12,35 +12,34 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PL
+namespace PL;
+
+/// <summary>
+/// Interaction logic for Window1.xaml
+/// </summary>
+public partial class OpeningWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for Window1.xaml
-    /// </summary>
-    public partial class OpeningWindow : Window
+    private BlApi.IBl? bl = BlApi.Factory.Get();
+    BO.Cart myCart = new();
+    public OpeningWindow()
     {
-        private BlApi.IBl? bl = BlApi.Factory.Get();
-        BO.Cart myCart = new();
-        public OpeningWindow()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+    }
 
-        private void OrderIDWindow_Click(object sender, RoutedEventArgs e)
-        {
-            new OrderIDWindow(myCart, bl!).ShowDialog();
-            Close();//close this window
-        }
+    private void OrderIDWindow_Click(object sender, RoutedEventArgs e)
+    {
+        new OrderIDWindow().ShowDialog();
+        Close();//close this window
+    }
 
-        private void openCatalog_Click(object sender, RoutedEventArgs e)
-        {
-            //new CatalogWindow().ShowDialog();
-            Close();//close this window
-        }
-        private void OpenAdmin_Click(object sender, RoutedEventArgs e)
-        {
-            new AdminScreen().ShowDialog();
-            Close(); 
-        }
+    private void openCatalog_Click(object sender, RoutedEventArgs e)
+    {
+        new CatalogWindow().ShowDialog();
+        Close();//close this window
+    }
+    private void OpenAdmin_Click(object sender, RoutedEventArgs e)
+    {
+        new AdminScreen().ShowDialog();
+        Close(); 
     }
 }
