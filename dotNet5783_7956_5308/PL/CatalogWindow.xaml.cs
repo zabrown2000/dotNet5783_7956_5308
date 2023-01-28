@@ -82,14 +82,13 @@ public partial class CatalogWindow : Window
         catalogGrid.DataContext = catalog;
     }
 
-    // FIX THIS!! ONLY DID THIS TO BE ABLE TO RUN THE PROGRAM!!
     private void ProductItemView_click(object sender, MouseButtonEventArgs e)
     {
         if (catalogGrid.SelectedItem is BO.ProductItem productItem)
         {
             BO.Products prod = new BO.Products();
             prod = bl?.products.ManagerProduct(productItem.ID)!;
-            new ProductWindow(prod).ShowDialog();
+            new ProductWindow(prod).ShowDialog(); //another param, "overload" for the product window, why?
         }
         try
         {
@@ -105,19 +104,6 @@ public partial class CatalogWindow : Window
     private void ProductsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
 
-    }
-
-    //FOR SURE GOING TO NEED TO CHANGE THIS!!
-    private void DoubleClickEvent(object sender, System.Windows.Input.MouseButtonEventArgs e)
-    {
-        //if (ProductsListView.SelectedItem is BO.ProductForList productForList)
-        //{
-        //    BO.Product prod = new BO.Product();
-        //    prod = bl?.Product.GetProduct(productForList.ID);
-        //    new ProductWindow(prod).ShowDialog();
-        //}
-        //ProductsListView.ItemsSource = bl?.Product.GetProductsForList(); // update list view after add
-        //Close();
     }
 
     private void AddToCart_Click(object sender, RoutedEventArgs e)
