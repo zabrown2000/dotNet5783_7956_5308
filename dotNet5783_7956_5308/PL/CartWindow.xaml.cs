@@ -30,10 +30,12 @@ public partial class CartWindow : Window
         InitializeComponent();
     }
 
-    public CartWindow(BO.Cart cart)
+    public CartWindow(BO.Cart myCart)
     {
         InitializeComponent();
         items.Clear();
+        cart = myCart;
+   
         try
         {
             items = Extensions.ToObservableCollection(bl!.cart.GetItems(cart));
@@ -95,8 +97,9 @@ public partial class CartWindow : Window
         }
         //cartGrid.DataContext = items;
         
-        Close();
+        
         new CartWindow(cart).Show();
+        Close();
     }
     private void Decrease_Click(object sender, RoutedEventArgs e)
     {

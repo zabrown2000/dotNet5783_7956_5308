@@ -33,7 +33,8 @@ public partial class CheckOutWindow : Window
     {
         InitializeComponent();
         cart.TotalPrice = myCart.TotalPrice;
-        foreach (BO.OrderItem item in myCart.Items)
+        cart.Items = new List<OrderItem?>();
+        foreach (BO.OrderItem? item in myCart.Items)
         {
             cart?.Items?.Add(item);
         }
@@ -105,6 +106,8 @@ public partial class CheckOutWindow : Window
             MessageBox.Show(exc.Message, "Checkout Window", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         MessageBox.Show("Your order has been placed! \n Thank you for shopping with us!");
+
+        new OpeningWindow().Show();
         Close();
     }
 

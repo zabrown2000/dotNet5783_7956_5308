@@ -3,7 +3,7 @@
 using System.ComponentModel;
 
 namespace BO;
-public class OrderTrackings
+public class OrderTracking
 
 {
 

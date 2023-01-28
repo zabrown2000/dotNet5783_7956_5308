@@ -59,8 +59,8 @@
 
                 <DataGridTextColumn Header="ID" Binding="{Binding ID, Mode=TwoWay}"
                                     MinWidth="10" Width="*"/>
-                <DataGridTextColumn Header="Product" Binding="{Binding ProductName, Mode=TwoWay}"
-                                    MinWidth="10" Width="*"/>
+                <!--<DataGridTextColumn Header="Product" Binding="{Binding ProductName, Mode=TwoWay}"
+                                    MinWidth="10" Width="*"/> -->
                 <DataGridTextColumn Header="Price" Binding="{Binding Price, Mode=TwoWay}"
                                     MinWidth="10" Width="*"/>
                 <DataGridTextColumn Header="Amount in Cart" Binding="{Binding Amount, Mode=TwoWay}"
@@ -70,8 +70,7 @@
                         <DataTemplate>
                             <Button Click="Increase_Click"
                                     Height="30" Width="30"
-                                    HorizontalAlignment="Center">
-                                <Image Source="\Images\plussign.png"></Image>
+                                    HorizontalAlignment="Center" Content="+">
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
@@ -81,8 +80,7 @@
                         <DataTemplate>
                             <Button Click="Decrease_Click"
                                     Height="30" Width="30"
-                                    HorizontalAlignment="Center" >
-                                <Image Source="\Images\minussign.png"></Image>
+                                    HorizontalAlignment="Center" Content="-">
                             </Button>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>

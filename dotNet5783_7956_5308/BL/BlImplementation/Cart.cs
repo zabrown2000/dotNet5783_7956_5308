@@ -1,6 +1,9 @@
 ﻿using BlApi;
 using Dal;
 using BO;
+using System.Net;
+using System.Xml.Linq;
+
 namespace BlImplementation;
 
 internal class Cart : ICart
@@ -17,6 +20,10 @@ internal class Cart : ICart
     /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
     public BO.Cart AddToCart(BO.Cart myCart, int pID)
     {
+        if (myCart.Items == null) //if nothing has been added to the cart yet
+        {
+            myCart.Items = new List<BO.OrderItem?>();
+        }
         int index = myCart.Items.FindIndex(x => x != null && x.ProductID == pID); //getting index of the product in the cart (if it's there)
         DO.Products? product = new DO.Products?();//creating new DO product
         try
@@ -104,14 +111,14 @@ internal class Cart : ICart
     /// Method to make checkout cart and make new order
     /// </summary>
     /// <param name="myCart">current user's cart</param>
-    /// <param name="CustomerName">name of customer</param>
-    /// <param name="CustomerEmail">email of customer</param>
-    /// <param name="CustomerAddress">address of customer</param>
+    /// <param name="name">name of customer</param>
+    /// <param name="email">email of customer</param>
+    /// <param name="address">address of customer</param>
     /// <exception cref="BO.InvalidInputException"></exception>
     /// <exception cref="BO.BOEntityDoesNotExistException"></exception>
-    public void MakeOrder(BO.Cart myCart, string CustomerName, string CustomerEmail, string CustomerAddress) 
+    public void MakeOrder(BO.Cart myCart, string name, string email, string address) 
     {
-        if (myCart.CustomerName == "" || myCart.CustomerEmail == "" || myCart.CustomerAddress == "") //validating input
+        /*if (CustomerName == "" || CustomerEmail == "" || CustomerAddress == "") //validating input
         {
             throw new BO.InvalidInputException("Incorrect Input");
         }
@@ -125,11 +132,11 @@ internal class Cart : ICart
 
         int? orderId = dal?.dalOrder.Add(new DO.Order()
         {
-            CustomerAddress = myCart.CustomerAddress!,
-            CustomerEmail = myCart.CustomerEmail!,
-            CustomerName = myCart.CustomerName!,
+            myCart.CustomerAddress = CustomerAddress,
+            myCart.CustomerEmail = CustomerEmail,
+            myCart.CustomerName = CustomerName,
             OrderDate = DateTime.Now
-        });//add a new order to cart and get orderID
+        }); ;//add a new order to cart and get orderID
         try
         {
             myCart.Items!.ForEach(x => dal?.dalOrderItem.Add(new DO.OrderItem()
@@ -218,11 +225,63 @@ internal class Cart : ICart
                 throw new BO.Exceptions("Cannot place order");
             }
             //
+        }*/
+
+        if (name == "" || email == "" || address == "") // validating the user's input
+        {
+            throw new BO.InvalidInputException();
         }
-       
+        myCart.CustomerName = name;
+        myCart.CustomerEmail = email;
+        myCart.CustomerAddress = address;
+
+        // add a new order for the cart and get its ID
+        IEnumerable<DO.Products?> productList = dal?.dalProduct.ReadAll()!;//get all products from dal
+        //might need to change type
+        int? ordID = dal?.dalOrder.Add(new DO.Order()
+        {
+            CustomerName = myCart.CustomerName!,
+            CustomerEmail = myCart.CustomerEmail!,
+            CustomerAddress = myCart.CustomerAddress!,
+            OrderDate = DateTime.Now,
+            //TotalPrice = cart.TotalPrice,
+            //AmountOfItems = cart.AmountOfItems
+        });
+
+        try
+        {
+            //go over cart orderItems and add each to dal
+            myCart.Items?.ForEach(x => dal?.dalOrderItem.Add(new DO.OrderItem()
+            {
+                Amount = x!.Amount,
+                ID = x.ID,
+                OrderID = (int)ordID!,
+                Price = x.Price,
+                ProductID = x.ProductID,
+            }));
+        }
+        catch (DO.EntityAlreadyExistsException exc)
+        {
+            throw new BO.BOEntityAlreadyExistsException();
+        }
+        catch (DO.EntityListIsFullException exc)
+        {
+            throw new BO.BOEntityListIsFullException();
+        }
+        try
+        {
+
+            //cart.Items.ForEach(x => (DO.Product)dal.dalProduct.GetByID(x!.ProductID).InStock -= x!.Quantity);
+            myCart?.Items?.ForEach(x => dal?.dalProduct.Update((DO.Products)dal?.dalProduct?.ReadId(x.ProductID)!));
+        }
+        catch (DO.EntityDoesNotExistException exc)
+        {
+            throw new BO.BOEntityDoesNotExistException();
+        }
+
         Console.WriteLine(myCart);  
         //resetting cart values
-        myCart.Items.Clear(); 
+        myCart!.Items!.Clear(); 
         myCart.TotalPrice = 0;
         myCart.CustomerAddress = "";
         myCart.CustomerEmail = "";

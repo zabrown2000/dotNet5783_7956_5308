@@ -51,7 +51,7 @@ namespace PL
                 //new ErrorWindow("Enter Order ID Window\n", exc.Message).ShowDialog();
                 Close();
             }
-            BO.OrderTrackings orderTracking = new();
+            BO.OrderTracking orderTracking = new();
             orderTracking.ID = order.ID;
             orderTracking.Status = order.Status;
             Close();//close current window                    

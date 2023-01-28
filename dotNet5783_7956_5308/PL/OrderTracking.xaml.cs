@@ -33,7 +33,7 @@ public partial class OrderTracking : Window
     //    DataContext = orderTracking;
     //}
 
-    public OrderTracking(BO.OrderTrackings orderTracking)
+    public OrderTracking(BO.OrderTracking orderTracking)
     {
         //InitializeComponent();
         //bl = BlApi.Factory.Get();
@@ -42,7 +42,7 @@ public partial class OrderTracking : Window
         //r_status.Text = orderTracking.Status.ToString();
         InitializeComponent();
         bl = BlApi.Factory.Get();
-        BO.OrderTrackings track = new();
+        BO.OrderTracking track = new();
         try
         {
             track = bl!.order.GetOrderTracking(orderTracking.ID);

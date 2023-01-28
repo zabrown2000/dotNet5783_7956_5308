@@ -18,15 +18,31 @@ internal class Order : BlApi.IOrder
         IEnumerable<DO.Order?> orders = dal?.dalOrder.ReadAll()!; //getting all DO orders 
         IEnumerable<DO.OrderItem?> orderItems = dal?.dalOrderItem.ReadAll()!; //getting all DO orderItems
         
-        return from DO.Order? o in orders
-               select new BO.OrderForList //for each order we have we add an entry to the OrderForList list
-               {
-                   ID = o?.ID ?? throw new BO.BOEntityDoesNotExistException("Missing order in list"), //if the order id is null then throw an exception
-                   CustomerName = o?.CustomerName,
-                   Status = GetOrderStatus(o.Value),
-                   AmountOfItems = orderItems.Select(orderItems => orderItems?.ID == o?.ID).Count(), //counting amount of orders in the orderitem list and setting that for BO orderForList amount
-                   TotalPrice = (double)(orderItems.Sum(orderItems => orderItems?.Price)!) //summing up each orderitem for this new BO list entry
-               };
+        //-----Note to Grader: When we tried to use LINQ it messed up the screen so we used a foreach loop instead
+        List<BO.OrderForList?>? list = new List<BO.OrderForList?>(); // create a list of BO orders
+        foreach (DO.Order order in orders)
+        {
+            int quantity = 0;
+            double total = 0;
+
+            foreach (DO.OrderItem item in orderItems) // for each order item in DO
+            {
+                if (item.OrderID == order.ID) // if the OrderID of that order item matches with an order ID (meaning it's part of that order)
+                {
+                    quantity++; // increase the amount of items inside of an order
+                    total += item.Price; // increase the total by the price of that item
+                }
+            }
+            list.Add(new BO.OrderForList // add a new BO order to the list created above
+            {
+                ID = order.ID,
+                CustomerName = order.CustomerName,
+                Status = GetOrderStatus(order),
+                AmountOfItems = quantity,
+                TotalPrice = total // set the total price equal to the variable total
+            });
+        }
+        return list!; // return the list of new BO orders
     }
 
     /// <summary>
@@ -199,7 +215,7 @@ internal class Order : BlApi.IOrder
         throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
     }
 
-    public OrderTrackings GetOrderTracking(int orderId)
+    public BO.OrderTracking GetOrderTracking(int orderId)
     {
         DO.Order order = new();
         try
@@ -210,7 +226,7 @@ internal class Order : BlApi.IOrder
         {
             throw new BO.BOEntityDoesNotExistException("The order requested does not exist\n");//order does not exist
         }
-        return new OrderTrackings()
+        return new BO.OrderTracking()
         {
             ID = orderId,
             Status = GetOrderStatus(order),

@@ -68,4 +68,17 @@ public class OutOfStockException : Exception
           System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 
+/// <summary>
+/// Exception class for business logic layer - there are too many orders/products/orderitems
+/// </summary>
+[Serializable]
+public class BOEntityListIsFullException : Exception
+{
+    public BOEntityListIsFullException() { }
+    public BOEntityListIsFullException(string message) : base(message) { }
+    public BOEntityListIsFullException(string message, Exception inner) : base(message, inner) { }
+    protected BOEntityListIsFullException(
+      System.Runtime.Serialization.SerializationInfo info,
+      System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+}
 
