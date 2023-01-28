@@ -1,17 +1,18 @@
 ﻿
 
+using System.ComponentModel;
+
 namespace BO;
+public class OrderTrackings
 
-public class OrderTracking
 {
-    /// <summary>
-    /// unique identifier of the order tracking
-    /// </summary>
-    public int Id { get; set; }
-    /// <summary>
-    /// status of order
-    /// </summary>
-    public Enums.OrderStatus Status { get; set; }
 
-    public override String ToString() => this.ToStringProperty();
+    public int ID { set; get; }
+
+    public BO.Enums.OrderStatus Status { set; get; }
+
+    public List<Tuple<DateTime?, string>>? Tracking { set; get; }
+    public override string ToString() => this.ToStringProperty();
+
 }
+

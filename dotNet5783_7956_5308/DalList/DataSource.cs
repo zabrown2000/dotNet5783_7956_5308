@@ -87,8 +87,8 @@ static internal class DataSource
                 CustomerEmail = CustomerEmail[randNumGen.Next(CustomerEmail.Length)],
                 CustomerAddress = CustomerAddress[randNumGen.Next(CustomerAddress.Length)],
                 OrderDate = DateTime.Now - new TimeSpan(randNumGen.NextInt64(10L * 1000L * 3600L * 24L * 100L)), //using TimeSpan to add an interval chosen at random
-                ShipDate = DateTime.MinValue,
-                DeliveryDate = DateTime.MinValue
+                ShipDate = null,
+                DeliveryDate = null
             };
             if (i < 4) //hardcoding the 20% of current orders to not have been shipped yet 
             {

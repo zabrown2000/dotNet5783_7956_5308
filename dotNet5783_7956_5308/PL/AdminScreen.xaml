@@ -5,13 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         xmlns:local="clr-namespace:PL"
-        xmlns:converter="clr-namespace:PlConverter"
+        xmlns:converter="clr-namespace:Converter"
         Title="AdminScreen" Height="450" Width="800">
-   
     <Window.Resources>
         <converter:FalseToTrueConverter x:Key="convertIsEnabled"/>
     </Window.Resources>
-    
+
     <Grid x:Name="MainGrid">
         <TabControl>
             <!--<Products-->
@@ -71,7 +70,7 @@
 
 
             <!--orders-->
-            <TabItem Header="Orders" Height="20" VerticalAlignment="Top">
+            <TabItem Header="Orders" Height="20" VerticalAlignment="Top" Margin="-2,-1,2,0">
                 <Grid Name="OrderGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" Grid.Column="1"
              VerticalAlignment="Stretch" Width="auto">
 
@@ -115,14 +114,31 @@
 
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button Name="Group" Grid.Column="1" Content="group by status" HorizontalAlignment="Left" Margin="263,306,0,0" VerticalAlignment="Top" Click="GroupByStatus_Click" 
-                            IsEnabled="{Binding ElementName=GroupBack, 
+                    <Button Name="Group"
+                        Content="Group By Status" 
+                        Click="GroupByStatus_Click"
+                        FontSize="15" FontStyle="Normal" FontWeight="Bold" Background="#FF888888" Foreground="White"
+                        Margin="218,182,36,167" Grid.Column="1" 
+                        IsEnabled="{Binding ElementName=GroupBack, 
                                             Path=IsEnabled, 
-                                            Mode=TwoWay,Converter={StaticResource convertIsEnabled}}"/>
+                                            Mode=TwoWay, Converter={StaticResource convertIsEnabled}}" FontFamily="Ariel"/>
 
+                    <Button Name="GroupBack" 
+                        Content="Remove Grouping" 
+                        Click="RemoveGroupings_Click"
+                        FontSize="15" FontStyle="Normal" FontWeight="Bold" Background ="#FF888888" Foreground="White"
+                        Margin="218,245,35,100" Grid.Column="1"
+                        IsEnabled="False" FontFamily="Arial" RenderTransformOrigin="0.5,0.5">
+                        <Button.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="-0.498"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Button.RenderTransform>
 
-                    <Button Name="UndoGroup" Grid.Column="1" Content="no grouping" HorizontalAlignment="Left" Margin="272,342,0,0" VerticalAlignment="Top" Click="RemoveGroupings_Click" IsEnabled="False"/>
-
+                    </Button>
 
 
                 </Grid>

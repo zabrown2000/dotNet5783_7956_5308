@@ -138,7 +138,7 @@ internal class Order : BlApi.IOrder
                 ShipDate = DateTime.Now,
                 Status = GetOrderStatus(o),
                 TotalPrice = tempPrice,
-                DeliveryDate = DateTime.MinValue,
+                DeliveryDate = null,
             }; //new BO Order
         }
         throw new BO.BOEntityDoesNotExistException("Order has already been shipped\n");
@@ -199,7 +199,7 @@ internal class Order : BlApi.IOrder
         throw new BO.BOEntityDoesNotExistException("Order does not exist\n");
     }
 
-    public OrderTracking GetOrderTracking(int orderId)
+    public OrderTrackings GetOrderTracking(int orderId)
     {
         DO.Order order = new();
         try
@@ -210,11 +210,14 @@ internal class Order : BlApi.IOrder
         {
             throw new BO.BOEntityDoesNotExistException("The order requested does not exist\n");//order does not exist
         }
-        return new OrderTracking()
+        return new OrderTrackings()
         {
-            Id = orderId,
+            ID = orderId,
             Status = GetOrderStatus(order),
+            Tracking = new List<Tuple<DateTime?, string>> { new Tuple<DateTime?, string>(order.OrderDate, "Approved"), new Tuple<DateTime?, string>(order.ShipDate, "Sent"),
+            new Tuple<DateTime?, string>(order.DeliveryDate, "Delivered")}
         };//create new order tracking
+
 
     }
 }

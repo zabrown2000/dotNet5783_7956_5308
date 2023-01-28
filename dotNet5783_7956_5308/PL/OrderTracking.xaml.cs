@@ -24,7 +24,7 @@ namespace PL;
 public partial class OrderTracking : Window
 {
     BlApi.IBl? bl = BlApi.Factory.Get();
-    BO.OrderTracking ordTracking = new();
+    OrderTrackings ordTracking = new();
     BO.Cart myCart = new();
 
     //public TrackOrderWindow()
@@ -33,57 +33,33 @@ public partial class OrderTracking : Window
     //    DataContext = orderTracking;
     //}
 
-    public OrderTracking(BO.OrderTracking orderTracking)
+    public OrderTracking(BO.OrderTrackings orderTracking)
     {
+        //InitializeComponent();
+        //bl = BlApi.Factory.Get();
+        //DataContext = orderTracking;
+        //_id.Text = orderTracking.Id.ToString();
+        //r_status.Text = orderTracking.Status.ToString();
         InitializeComponent();
         bl = BlApi.Factory.Get();
-        DataContext = orderTracking;
-        _id.Text = orderTracking.Id.ToString();
-        r_status.Text = orderTracking.Status.ToString();
-        //InitializeComponent();
-        //BO.OrderTracking track = new BO.OrderTracking();
-        //try
-        //{
-        //    track = bl.Order.GetOrderTracking(ID);
-        //}
-        //catch (BO.DoesNotExistException exc)
-        //{
-        //    MessageBox.Show(exc.Message, "Track Order Window", MessageBoxButton.OK, MessageBoxImage.Error);
-        //}
-        //orderTracking = PL.Tools.CastBoOTToPo(track);
-        //DataContext = orderTracking;
-    }
-    /*public OrderTracking(BO.Cart cart, BlApi.IBl? b)//empty ctor
-    {
-        InitializeComponent();
-        bl = b;//new bl
-        myCart = cart;
-        DataContext = orderTracking;
-    }*/
-    /*public OrderTracking(int id, BO.Cart cart, BlApi.IBl? b)
-    {
-        InitializeComponent();
-        bl = b;//new bl
-        myCart = cart;
-        BO.OrderTracking o = new();
+        BO.OrderTrackings track = new();
         try
         {
-            o = bl?.order.GetOrderTracking(id)!;
+            track = bl!.order.GetOrderTracking(orderTracking.ID);
         }
-        catch (BO.BOEntityDoesNotExistException ex)
+        catch (BO.BOEntityDoesNotExistException exc)
         {
-            new ErrorWindow("Order Tracking Window\n", ex.Message).ShowDialog();
+            MessageBox.Show(exc.Message, "Track Order Window", MessageBoxButton.OK, MessageBoxImage.Error);
         }
-        //orderTracking = PL.Tools.CastBoOTToPo(o);//get matching po order tracking
-        DataContext = orderTracking;//set data context
+        DataContext = track;
+    }
 
-    }*/
-
-    /*private void OrderDetails_Click(object sender, RoutedEventArgs e)
+    private void OrderDetails_Click(object sender, RoutedEventArgs e)
     {
-        new OrderWindow(orderTracking.Id, myCart, bl!).ShowDialog();
+        new OrderWindow(ordTracking.ID, myCart, bl!).ShowDialog();
         Close();//close this window
-    }*/
+    }
+
     /*void clickBackBtn(object sender, RoutedEventArgs e)
     {
         new OrderIDWindow(myCart, bl!).ShowDialog();
