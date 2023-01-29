@@ -21,7 +21,6 @@ namespace PL;
 public partial class OrderWindow : Window
 {
     BlApi.IBl? bl = BlApi.Factory.Get();
-    BO.Order o = new();
     BO.Cart myCart = new();
     public OrderWindow(int id, BO.Cart cart, BlApi.IBl? b)
     {
@@ -41,14 +40,13 @@ public partial class OrderWindow : Window
         {
             new ErrorWindow("Order View Window\n", ex.Message).ShowDialog();
         }
-        DataContext = o;
-        ProductItemGrid.DataContext = o.Items;
+        DataContext = ord;
+        ProductItemGrid.DataContext = ord.Items;
 
     }
 
     void clickBackBtn(object sender, RoutedEventArgs e)
     {
-        //new OrderTracking(myCart, bl!).ShowDialog();
-        //Close();//close this window
+        Close();//close this window
     }
 }

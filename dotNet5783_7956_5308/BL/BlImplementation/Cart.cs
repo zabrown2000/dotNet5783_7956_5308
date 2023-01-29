@@ -45,6 +45,7 @@ internal class Cart : ICart
             double unitPrice = product!.Value.Price; //getting price of just one of that product
             myCart.Items[index]!.Price += unitPrice; //adding to the total price of order item
             myCart.TotalPrice += unitPrice;//updating cart price
+            
             return myCart;
         }
         //product not in cart yet

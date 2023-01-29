@@ -101,10 +101,6 @@ public partial class CatalogWindow : Window
         catalogGrid.DataContext = catalog;
     }
 
-    private void ProductsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-
-    }
 
     private void AddToCart_Click(object sender, RoutedEventArgs e)
     {
@@ -131,6 +127,7 @@ public partial class CatalogWindow : Window
     {
         new CartWindow(cart).Show();
         Close();
+        
     }
 
     private void ReturnHome_Click(object sender, RoutedEventArgs e)

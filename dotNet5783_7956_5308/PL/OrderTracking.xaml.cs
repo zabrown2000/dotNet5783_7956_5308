@@ -24,22 +24,11 @@ namespace PL;
 public partial class OrderTracking : Window
 {
     BlApi.IBl? bl = BlApi.Factory.Get();
-    OrderTrackings ordTracking = new();
+    BO.OrderTracking ordTracking = new();
     BO.Cart myCart = new();
-
-    //public TrackOrderWindow()
-    //{
-    //    InitializeComponent();
-    //    DataContext = orderTracking;
-    //}
 
     public OrderTracking(BO.OrderTracking orderTracking)
     {
-        //InitializeComponent();
-        //bl = BlApi.Factory.Get();
-        //DataContext = orderTracking;
-        //_id.Text = orderTracking.Id.ToString();
-        //r_status.Text = orderTracking.Status.ToString();
         InitializeComponent();
         bl = BlApi.Factory.Get();
         BO.OrderTracking track = new();
@@ -52,21 +41,18 @@ public partial class OrderTracking : Window
             MessageBox.Show(exc.Message, "Track Order Window", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         DataContext = track;
+        ordTracking = track;
     }
 
     private void OrderDetails_Click(object sender, RoutedEventArgs e)
     {
         new OrderWindow(ordTracking.ID, myCart, bl!).ShowDialog();
-        Close();//close this window
+        //Close();//close this window
     }
 
-    /*void clickBackBtn(object sender, RoutedEventArgs e)
+    private void ReturnHome_Click(object sender, RoutedEventArgs e)
     {
-        new OrderIDWindow(myCart, bl!).ShowDialog();
-        Close();//close this window
+        new OpeningWindow().Show();
+        Close();
     }
-    private void HomeBtn_Click(object sender, RoutedEventArgs e)
-    {
-        new MainWindow().ShowDialog();//go to home window 
-    }*/
 }

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="OrderIDWindow" Height="450" Width="800">
-    <Grid>
+    <Grid Background="#FFC4FFFF">
         <TextBlock x:Name="EnterOrderID" FontSize="25" TextAlignment="Center" FontWeight="DemiBold" FontFamily="italic" Text="Enter Your Order ID:" Margin="241,80,241,294"/>
         <TextBox x:Name="IDInput" FontSize="25" TextAlignment="Center" FontFamily="italic" Background="GhostWhite" BorderThickness="5" Margin="214,145,214,213" PreviewTextInput="tid_previewtextinput"
                      KeyDown="EnterPressed_KeyDown" MaxLength="4"/>
@@ -14,7 +14,4 @@
                     FontWeight="DemiBold" BorderBrush="Transparent" Click="OKBtn_Click" Margin="342,251,342,107"/>
     </Grid>
 
-    <!--Back Button
-                <Button x:Name="btnBack" Height ="50" Width="74" Margin="-860, -380, -200,-10" Padding="2" Click="clickBackBtn" BorderBrush="Transparent" Background="Red" Content="Back">
-                </Button> -->
 </Window>

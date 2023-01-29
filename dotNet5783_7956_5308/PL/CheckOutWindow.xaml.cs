@@ -32,18 +32,17 @@ public partial class CheckOutWindow : Window
     public CheckOutWindow(BO.Cart myCart)
     {
         InitializeComponent();
+        
+        
         cart.TotalPrice = myCart.TotalPrice;
         cart.Items = new List<OrderItem?>();
         foreach (BO.OrderItem? item in myCart.Items)
-        {
-            cart?.Items?.Add(item);
-        }
+            {
+                cart?.Items?.Add(item);
+            }
+        
+        
     }
-
-    //private void address_previewtextinput(object sender, TextCompositionEventArgs e)
-    //{
-    //    //e.Handled = new Regex().IsMatch(e.Text);//only gets numbers for instock
-    //}
 
     private void email_previewtextinput(object sender, TextCompositionEventArgs e)
     {
@@ -53,7 +52,6 @@ public partial class CheckOutWindow : Window
     {
         e.Handled = new Regex("[^a-z]+[^A-Z]+").IsMatch(e.Text);//only get letters 
     }
-
 
 
     private void name_TextChanged(object sender, TextChangedEventArgs e)

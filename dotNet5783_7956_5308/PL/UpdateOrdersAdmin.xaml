@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
         Title="UpdateOrdersAdmin" Height="450" Width="800">
-    <Grid Background="LightGoldenrodYellow">
+    <Grid Background="#FFC4FFFF">
         <Grid.RowDefinitions>
             <RowDefinition Height="55"/>
             <RowDefinition Height="55"/>

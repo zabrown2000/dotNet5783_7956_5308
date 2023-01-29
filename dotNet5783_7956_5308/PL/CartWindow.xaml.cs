@@ -45,24 +45,7 @@ public partial class CartWindow : Window
             MessageBox.Show("Error", "Cart Window", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         cartGrid.DataContext = items;
-        //PO.OrderItem poItem = new();
-        //foreach(BO.OrderItem item in cart.Items)
-        //{
-        //    //poItem = PL.Tools.CastBoOIToPo(item);
-        //    myCart.orderItems.Add(item);
-        //}
-        //poCart.OrderItems = cart.Items; // MLOWERCASE VS. UPPERCASE
-        //poCart.Price = cart.TotalPrice; // MLOWERCASE VS. UPPERCASE
         TotalPrice.Text = cart.TotalPrice.ToString();
-    }
-
-    private void ProductItemView_click(object sender, RoutedEventArgs e)
-    {
-
-    }
-    private void AddToCart_Click(object sender, RoutedEventArgs e)
-    {
-
     }
 
     private void CheckOut_Click(object sender, RoutedEventArgs e)

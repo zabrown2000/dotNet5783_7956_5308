@@ -5,7 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="CatalogWindow" Height="450" Width="800">
+        Title="CatalogWindow" Height="450" Width="800"
+        xmlns:converter="clr-namespace:Converter"
+>
+
     <Window.Resources>
         <Style  x:Key="GroupHeaderStyle" TargetType="{x:Type GroupItem}">
             <Setter Property="Template">
@@ -23,8 +26,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <converter:FalseToTrueConverter x:Key="convertIsEnabled"/>
+
     </Window.Resources>
-    <Grid>
+    <Grid Background="#FFC4FFFF">
 
         <DataGrid Name="catalogGrid" Grid.Column="0" Width="439" HorizontalAlignment="Left"
                   CanUserAddRows="False"
@@ -44,6 +49,7 @@
                   Foreground="Black"
                   IsReadOnly="True"
                   FontSize="16"
+                  Background="#FFC4FFFF"
                   ItemsSource="{Binding}" MouseDoubleClick="ProductItemView_click" >
             <DataGrid.GroupStyle>
                 <GroupStyle ContainerStyle="{StaticResource ResourceKey=GroupHeaderStyle}">
@@ -86,11 +92,11 @@
         <Button Name="GroupByCategory"
                         Content="Group By Category" 
                         Click="GroupByCategory_Click"
-                        FontSize="15" FontStyle="Normal" FontWeight="Bold" Background="Red" Foreground="White"
+                        FontSize="15" FontStyle="Normal" FontWeight="Bold" Background="#FF18D1F4" Foreground="White"
                         Margin="502,141,140,239" 
                         IsEnabled="{Binding ElementName=GroupBack, 
                                             Path=IsEnabled, 
-                                            Mode=TwoWay}">
+                                            Mode=TwoWay, Converter={StaticResource convertIsEnabled}}">
 
             <Button.Effect>
                 <DropShadowEffect/>
@@ -100,20 +106,13 @@
         <Button Name="GroupBack" 
                         Content="Remove Grouping" 
                         Click="RemoveGroupings_Click"
-                        FontSize="15" FontStyle="Normal" FontWeight="Bold" Background ="Red" Foreground="White"
+                        FontSize="15" FontStyle="Normal" FontWeight="Bold" Background ="#FF18D1F4" Foreground="White"
                         Margin="502,207,140,166"
                         IsEnabled="False">
             <Button.Effect>
                 <DropShadowEffect/>
             </Button.Effect>
         </Button>
-        <!--<ListView x:Name="ProductsListView" d:ItemsSource="{d:SampleData ItemCount=10}" SelectionChanged="ProductsListView_SelectionChanged" Margin="0,31,0,0" MouseDoubleClick="DoubleClickEvent" SelectedItem="">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn/>
-                </GridView>
-            </ListView.View>
-        </ListView>-->
         <ComboBox x:Name ="CategorySelector" SelectionChanged="CategorySelector_SelectionChanged" IsEditable="True" IsReadOnly="True" Text="Select a category" SelectedItem="" Margin="439,0,163,392" RenderTransformOrigin="0.062,0.614"/>
         <Button Content="View Cart" HorizontalAlignment="Right" Margin="0,241,33,119" Padding="5" Click="ViewCart_Click" FontSize="15" FontStyle="Normal" FontWeight="Bold" Foreground="White" Background="Red" RenderTransformOrigin="0.443,-0.035">
             <Button.Effect>

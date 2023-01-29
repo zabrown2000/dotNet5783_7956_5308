@@ -11,12 +11,12 @@
         <converter:FalseToTrueConverter x:Key="convertIsEnabled"/>
     </Window.Resources>
 
-    <Grid x:Name="MainGrid">
+    <Grid x:Name="MainGrid" Background="#FFC4FFFF">
         <TabControl>
             <!--<Products-->
             <TabItem Header="Products">
 
-                <Grid Name="UpGrid" Height="auto" Grid.Row="0" Grid.Column="0" Width="auto">
+                <Grid Name="UpGrid" Height="auto" Grid.Row="0" Grid.Column="0" Width="auto " Background="#FFC4FFFF">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="38*"/>
@@ -27,7 +27,14 @@
                         <ColumnDefinition Width="397*"/>
                     </Grid.ColumnDefinitions >
 
-                    <ComboBox Name="AttributeSelector" HorizontalAlignment= "Left" VerticalAlignment="Top" SelectionChanged="AttributeSelector_SelectionChanged" Text="choose" Grid.Column="5" Margin="160,-2,0,0" Width="226" Height="42" />
+                    <ComboBox Name="AttributeSelector" HorizontalAlignment= "Left" VerticalAlignment="Top" SelectionChanged="AttributeSelector_SelectionChanged" Text="choose" Grid.Column="5" Margin="160,-2,0,0" Width="226" Height="42" >
+                        <ComboBox.Background>
+                            <LinearGradientBrush EndPoint="0,1">
+                                <GradientStop Color="#FFF0F0F0"/>
+                                <GradientStop Color="#FFC4FFFF" Offset="1"/>
+                            </LinearGradientBrush>
+                        </ComboBox.Background>
+                    </ComboBox>
 
 
                     <DataGrid Name="ProductItemGrid" Grid.Column="0"
@@ -62,8 +69,11 @@
 
                         </DataGrid.Columns>
                     </DataGrid>
-                    <Button x:Name="btnAdd" Content="Add Product" FontSize="15" Background="LavenderBlush" FontWeight="Bold" FontStyle="Italic" Grid.Column="5" BorderBrush="Transparent" Click="btnAdd_Click" Margin="160,114,99,208"/>
-
+                    <Button x:Name="btnAdd" Content="Add Product" FontSize="15" Background="LavenderBlush" FontWeight="Bold" FontStyle="Italic" Grid.Column="5" BorderBrush="Transparent" Click="btnAdd_Click" Margin="160,114,99,208">
+                        <Button.Effect>
+                            <DropShadowEffect/>
+                        </Button.Effect>
+                    </Button>
                 </Grid>
 
             </TabItem>
@@ -72,7 +82,7 @@
             <!--orders-->
             <TabItem Header="Orders" Height="20" VerticalAlignment="Top" Margin="-2,-1,2,0">
                 <Grid Name="OrderGrid" HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" Grid.Column="1"
-             VerticalAlignment="Stretch" Width="auto">
+             VerticalAlignment="Stretch" Width="auto" Background="#FFC4FFFF">
 
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -121,7 +131,11 @@
                         Margin="218,182,36,167" Grid.Column="1" 
                         IsEnabled="{Binding ElementName=GroupBack, 
                                             Path=IsEnabled, 
-                                            Mode=TwoWay, Converter={StaticResource convertIsEnabled}}" FontFamily="Ariel"/>
+                                            Mode=TwoWay, Converter={StaticResource convertIsEnabled}}" FontFamily="Ariel">
+                        <Button.Effect>
+                            <DropShadowEffect/>
+                        </Button.Effect>
+                    </Button>
 
                     <Button Name="GroupBack" 
                         Content="Remove Grouping" 
@@ -138,8 +152,10 @@
                             </TransformGroup>
                         </Button.RenderTransform>
 
+                        <Button.Effect>
+                            <DropShadowEffect/>
+                        </Button.Effect>
                     </Button>
-
 
                 </Grid>
 
@@ -147,8 +163,11 @@
         </TabControl>
 
         <!--Home Button-->
-        <Button x:Name="btnHome" Margin="606,78,130,304" Padding="5" Click="clickOnHomeBtn" Background="Red" Content="Back" BorderBrush="Transparent"/>
-
+        <Button x:Name="btnHome" Margin="606,78,130,304" Padding="5" Click="clickOnHomeBtn" Background="Red" Content="Back" BorderBrush="Transparent">
+        <Button.Effect>
+            <DropShadowEffect/>
+        </Button.Effect>
+        </Button>
     </Grid>
 </Window>
 

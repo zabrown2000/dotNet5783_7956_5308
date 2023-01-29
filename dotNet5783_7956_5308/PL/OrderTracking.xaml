@@ -8,9 +8,7 @@
         mc:Ignorable="d"
         Title="OrderTracking" Height="450" Width="800">
 
-
-
-    <Grid>
+    <Grid Background="#FFC4FFFF">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
             <RowDefinition Height="auto"/>
@@ -39,8 +37,16 @@
                 </GridView>
             </ListView.View>
         </ListView>
-        <Button x:Name="OrderDetails" Content="Show Order Details" FontSize="15" Background="LavenderBlush" FontWeight="Bold" FontStyle="Italic" Grid.Column="1" Height="40" Width="200" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="5" Click="OrderDetails_Click" BorderBrush="Transparent" Margin="0,209,0,0" Grid.Row="4"/>
-
+        <Button x:Name="OrderDetails" Content="Show Order Details" FontSize="15" Background="LavenderBlush" FontWeight="Bold" FontStyle="Italic" Grid.Column="1" Height="40" Width="200" HorizontalAlignment="Center" VerticalAlignment="Top" Padding="5" Click="OrderDetails_Click" BorderBrush="Transparent" Margin="0,209,0,0" Grid.Row="4">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
+        <Button x:Name="ReturnHome" Grid.Column="1" Content="Return to Home" HorizontalAlignment="Center" Margin="0,280,0,0" FontSize="15" FontWeight="Bold" Background="Red" Grid.Row="4" Click="ReturnHome_Click" BorderBrush="Transparent" VerticalAlignment="Top" Height="40" Width="200">
+            <Button.Effect>
+                <DropShadowEffect/>
+            </Button.Effect>
+        </Button>
 
     </Grid>
 

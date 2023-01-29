@@ -7,20 +7,7 @@
         mc:Ignorable="d"
         Title="CheckOutWindow" Height="450" Width="800">
     <Grid Background="LightGray">
-        <!--<Grid.RowDefinitions>
-            <RowDefinition Height="55"/>
-            <RowDefinition Height="55"/>
-            <RowDefinition Height="55"/>
-            <RowDefinition Height="55"/>
-            <RowDefinition Height="55"/>
-            <RowDefinition Height="55"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions >-->
-
-
+       
         <Label Name="l1" Content="Customer Details: " FontSize="27"  FontWeight="Bold"
                Height="40" Width="364" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Row="0" Margin="10,10,0,0"/>
         <Label Name="l2" Content="Name:" FontSize="27"  FontWeight="Bold"

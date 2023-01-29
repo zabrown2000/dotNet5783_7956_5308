@@ -47,9 +47,9 @@ public partial class AdminScreen : Window
         {
             new ErrorWindow("List View Window\n", ex.Message).ShowDialog();
         }
-        AttributeSelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.ProdCategory));
-        ProductItemGrid.DataContext = productsForList;
-        ItemGrid.DataContext = ordersForList;
+        AttributeSelector.ItemsSource = Enum.GetValues(typeof(BO.Enums.ProdCategory)); //filter choices
+        ProductItemGrid.DataContext = productsForList; //populate product list
+        ItemGrid.DataContext = ordersForList;  //populate order list
     }
 
 
