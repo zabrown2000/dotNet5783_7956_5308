@@ -68,7 +68,8 @@ public partial class CartWindow : Window
                 //myCart = PL.Tools.CastPoCToBo(poCart);
                 cart = bl!.cart.IncreaseCart(cart, orderItem.ProductID);
             }
-            //poCart = bl.Cart.IncreaseCart(poCart, cartGrid.SelectedItem.ID);
+            new CartWindow(cart).Show();
+            Close();
         }
         catch (BO.OutOfStockException exc)
         {
@@ -80,9 +81,6 @@ public partial class CartWindow : Window
         }
         //cartGrid.DataContext = items;
         
-        
-        new CartWindow(cart).Show();
-        Close();
     }
     private void Decrease_Click(object sender, RoutedEventArgs e)
     {
@@ -92,6 +90,9 @@ public partial class CartWindow : Window
             {
                 cart = bl!.cart.DecreaseCart(cart, orderItem.ProductID);
             }
+
+            new CartWindow(cart).Show();
+            Close();
         }
         catch (BO.BOEntityDoesNotExistException exc)
         {
@@ -99,7 +100,5 @@ public partial class CartWindow : Window
         }
         //cartGrid.DataContext = items;
 
-        new CartWindow(cart).Show();
-        Close();
     }
 }
